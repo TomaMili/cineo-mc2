@@ -1,9 +1,10 @@
 import "./App.css";
+import Inception from "./Inception";
 
 function App() {
   return (
     <>
-      <div></div>
+      <Inception />
       <p></p>
     </>
   );
