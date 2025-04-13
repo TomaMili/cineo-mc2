@@ -1,17 +1,24 @@
-import "./App.css";
 import Inception from "./Inception";
+import MovieCarousel from "./ui/MovieCarousel";
+
+const OPTIONS = { align: "start" };
+const SLIDE_COUNT = 6;
+const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
+
+// const movies = [
+//   { id: "1", title: "Inception", posterUrl: "src/img/inception.jpg" },
+//   { id: "2", title: "Interstellar", posterUrl: "src/img/inception.jpg" },
+//   { id: "3", title: "Tenet", posterUrl: "src/img/inception.jpg" },
+// ];
 
 function App() {
   return (
-    <>
-<<<<<<< HEAD
-      <Inception />
-      <p></p>
-=======
-      <div><h1>BOK</h1></div>
-      <p>ne</p>
->>>>>>> 852c321f6fce5afbcd117a3442112356e3235b6a
-    </>
+    <div className="w-full h-dvh flex justify-center items-center">
+      {/* <Inception /> */}
+      <div className="">
+        <MovieCarousel slides={SLIDES} options={OPTIONS} />
+      </div>
+    </div>
   );
 }
 
