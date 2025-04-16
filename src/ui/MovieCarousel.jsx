@@ -26,11 +26,11 @@ const MovieCarousel = (props) => {
         <div className="embla__container">
           {slides.map((index) => (
             <div
-              className="embla__slide hover:blur-xs transition-all duration-300"
+              className="embla__slide hover:blur-[1px] transition-all duration-300"
               key={index}
             >
               {/* <div className="embla__slide__number">{index + 1}</div> */}
-              <img src="src/img/inception.jpg" alt="aa" width="100%" />
+              <img src="public/inception.jpg" alt="aa" width="100%" />
             </div>
           ))}
         </div>
