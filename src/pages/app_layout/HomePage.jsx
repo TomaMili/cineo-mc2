@@ -1,5 +1,4 @@
-import HeroSection from "../features/homepage/HeroSection";
-import MovieCarousel from "../ui/MovieCarousel";
+import MovieCarousel from "../../ui/MovieCarousel";
 
 const OPTIONS = { align: "start" };
 const SLIDE_COUNT = 6;

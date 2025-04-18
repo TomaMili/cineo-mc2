@@ -1,9 +1,34 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import AppLayout from "./ui/AppLayout";
-import PageNotFound from "./pages/PageNotFound";
-import HomePage from "./pages/HomePage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+import LandingPage from "./pages/LandingPage";
+import Login from "./pages/Login";
+import PageNotFound from "./pages/PageNotFound";
+import WatchTogether from "./pages/WatchTogether";
+import WatchTogetherGroup from "./pages/WatchTogetherGroup";
+
+import RegisterLayout from "./ui/RegisterLayout";
+import RegisterInfo from "./pages/register_layout/RegisterInfo";
+import RegisterGenres from "./pages/register_layout/RegisterGenres";
+import RegisterPlatforms from "./pages/register_layout/RegisterPlatforms";
+import RegisterActors from "./pages/register_layout/RegisterActors";
+import RegisterPaymentPlan from "./pages/register_layout/RegisterPaymentPlan";
+import RegisterFinish from "./pages/register_layout/RegisterFinish";
+
+import AppLayout from "./ui/AppLayout";
+import HomePage from "./pages/app_layout/HomePage";
+import Profile from "./pages/app_layout/Profile";
+import Achievements from "./pages/app_layout/Achievements";
+import Browse from "./pages/app_layout/Browse";
+import Collections from "./pages/app_layout/Collections";
+import MovieDetail from "./pages/app_layout/MovieDetail";
+import SettingsInfo from "./pages/app_layout/SettingsInfo";
+import SettingsPlan from "./pages/app_layout/SettingsPlan";
+import SettingsPlatforms from "./pages/app_layout/SettingsPlatforms";
+import Watched from "./pages/app_layout/Watched";
+import WatchLater from "./pages/app_layout/WatchLater";
+
 // import { useAuth } from "./hooks/useAuth";
 
 const queryClient = new QueryClient({
@@ -24,13 +49,10 @@ function App() {
         <Routes>
           {!user ? (
             <>
-              <Route path="/" element={<LandingPage />} />
+              <Route index element={<Navigate replace to="landing-page" />} />
+              <Route path="landing-page" element={<LandingPage />} />
               <Route path="/login" element={<Login />} />
               <Route element={<RegisterLayout />}>
-                <Route
-                  index
-                  element={<Navigate replace to="register/info" />}
-                />
                 <Route path="register/info" element={<RegisterInfo />} />
                 <Route path="register/genres" element={<RegisterGenres />} />
                 <Route
