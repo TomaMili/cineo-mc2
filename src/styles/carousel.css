@@ -1,5 +1,5 @@
 .embla {
-  max-width: 60rem;
+  max-width: 90rem;
   margin: auto;
   --slide-height: 19rem;
   --slide-spacing: 1rem;
@@ -43,7 +43,7 @@
 }
 @media (min-width: 1200px) {
   .embla__slide {
-    flex: 0 0 calc(100% / 3);
+    flex: 0 0 calc(100% / 5);
     padding-left: 1.2rem;
   }
 }

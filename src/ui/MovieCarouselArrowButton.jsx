@@ -7,10 +7,18 @@ function usePrevNextButtons(emblaApi) {
   const onPrevButtonClick = useCallback(() => {
     if (!emblaApi) return;
     emblaApi.scrollPrev();
+    emblaApi.scrollPrev();
+    emblaApi.scrollPrev();
+    emblaApi.scrollPrev();
+    emblaApi.scrollPrev();
   }, [emblaApi]);
 
   const onNextButtonClick = useCallback(() => {
     if (!emblaApi) return;
+    emblaApi.scrollNext();
+    emblaApi.scrollNext();
+    emblaApi.scrollNext();
+    emblaApi.scrollNext();
     emblaApi.scrollNext();
   }, [emblaApi]);
 

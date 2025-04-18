@@ -6,8 +6,7 @@ import usePrevNextButtons, {
 import useDotButton, { DotButton } from "./MovieCarouselDotButton";
 import "../styles/carousel.css";
 
-const MovieCarousel = (props) => {
-  const { slides, options } = props;
+const MovieCarousel = ({ slides, options }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
@@ -24,13 +23,17 @@ const MovieCarousel = (props) => {
     <section className="embla">
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
-          {slides.map((index) => (
+          {slides.map((movie) => (
             <div
               className="embla__slide hover:blur-[1px] transition-all duration-300"
-              key={index}
+              key={movie.id}
             >
               {/* <div className="embla__slide__number">{index + 1}</div> */}
-              <img src="public/inception.jpg" alt="aa" width="100%" />
+              <img
+                src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                alt={movie.title}
+                className="w-full rounded"
+              />
             </div>
           ))}
         </div>
