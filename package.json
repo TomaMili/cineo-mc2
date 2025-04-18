@@ -17,6 +17,7 @@
     "embla-carousel": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.6.5",
+    "iconify-icon": "^2.3.0",
     "lucide-react": "^0.488.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -25,6 +26,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@iconify-icon/react": "^2.3.0",
+    "@iconify/react": "^5.2.1",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
