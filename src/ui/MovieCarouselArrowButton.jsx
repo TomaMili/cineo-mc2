@@ -19,7 +19,6 @@ function usePrevNextButtons(emblaApi) {
     emblaApi.scrollNext();
     emblaApi.scrollNext();
     emblaApi.scrollNext();
-    emblaApi.scrollNext();
   }, [emblaApi]);
 
   const onSelect = useCallback((emblaApi) => {
