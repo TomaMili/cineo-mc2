@@ -1,4 +1,4 @@
-import { usePopularMovies } from "../../hooks/usePopularMovies";
+import usePopularMovies from "../../hooks/usePopularMovies";
 import MovieCarousel from "../../ui/MovieCarousel";
 
 const OPTIONS = { align: "start" };
