@@ -1,27 +1,52 @@
+// Header.jsx
+import { useState } from "react";
 import Navigation from "./Navigation";
+import Notification from "./Notification";
 import { Icon } from "@iconify-icon/react";
+import { AnimatePresence } from "framer-motion";
+import SearchBar from "./SearchBar";
 
 function Header({ isNavActive, setIsNavActive }) {
+  const [notifOpen, setNotifOpen] = useState(false);
+
   return (
     <>
       <Navigation isNavActive={isNavActive} setIsNavActive={setIsNavActive} />
-      <header className="h-24 bg-bordo-600 w-full flex items-center px-8 justify-between">
-        <div className="h-full flex items-center gap-4 ">
+
+      <header className="relative h-24 bg-bordo-600 w-full flex items-center px-8 justify-between">
+        <div className="h-full flex items-center gap-4">
           <Icon
             onClick={() => setIsNavActive(true)}
             icon="mdi:menu"
             width="42"
             height="42"
-            className=""
+            className="cursor-pointer"
           />
+
           <Icon
-            icon="mdi:bell-outline"
+            onClick={() => setNotifOpen((o) => !o)}
+            icon={notifOpen ? "mdi:bell" : "mdi:bell-outline"}
             width="36"
             height="42"
-            className="pl-0"
+            className="cursor-pointer"
           />
+
+          <AnimatePresence>
+            {notifOpen && (
+              <Notification
+                onEmpty={() => setNotifOpen(false)}
+                className="left-0 md:left-20"
+              />
+            )}
+          </AnimatePresence>
         </div>
-        <Icon icon="jam:search" width="40" height="40" />
+        <SearchBar />
+        {/* <Icon
+          icon="jam:search"
+          width="40"
+          height="40"
+          className="cursor-pointer"
+        /> */}
       </header>
     </>
   );
