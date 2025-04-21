@@ -1,16 +1,17 @@
 import useEmblaCarousel from "embla-carousel-react";
 import usePrevNextButtons, {
-  NextButton,
   PrevButton,
+  NextButton,
 } from "./MovieCarouselArrowButton";
-import useDotButton, { DotButton } from "./MovieCarouselDotButton";
-import "../styles/carousel.css";
+import MovieCard from "./MovieCard";
 
-const MovieCarousel = ({ slides, options }) => {
+export default function MovieCarousel({
+  slides = [],
+  options = {},
+  onWatchLater,
+  onBookmark,
+}) {
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
-
-  const { selectedIndex, scrollSnaps, onDotButtonClick } =
-    useDotButton(emblaApi);
 
   const {
     prevBtnDisabled,
@@ -20,45 +21,34 @@ const MovieCarousel = ({ slides, options }) => {
   } = usePrevNextButtons(emblaApi);
 
   return (
-    <section className="embla">
-      <div className="embla__viewport" ref={emblaRef}>
-        <div className="embla__container">
+    <section className="relative overflow-visible z-10 ">
+      <PrevButton
+        disabled={prevBtnDisabled}
+        onClick={onPrevButtonClick}
+        className="absolute -left-6 top-1/2 -translate-y-1/2 -translate-x-1/2"
+      />
+      <NextButton
+        disabled={nextBtnDisabled}
+        onClick={onNextButtonClick}
+        className="absolute -right-6 top-1/2 -translate-y-1/2 translate-x-1/2"
+      />
+
+      <div ref={emblaRef} className="overflow-hidden w-full">
+        <div className="flex gap-6">
           {slides.map((movie) => (
             <div
-              className="embla__slide hover:blur-[1px] transition-all duration-300"
               key={movie.id}
+              className="flex-none w-40 sm:w-44 lg:w-48 xl:w-52"
             >
-              {/* <div className="embla__slide__number">{index + 1}</div> */}
-              <img
-                src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
-                alt={movie.title}
-                className="w-full rounded"
+              <MovieCard
+                movie={movie}
+                onWatchLater={onWatchLater}
+                onBookmark={onBookmark}
               />
             </div>
           ))}
         </div>
       </div>
-
-      <div className="embla__controls">
-        <div className="embla__buttons">
-          <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
-        </div>
-
-        <div className="embla__dots">
-          {scrollSnaps.map((_, index) => (
-            <DotButton
-              key={index}
-              onClick={() => onDotButtonClick(index)}
-              className={"embla__dot".concat(
-                index === selectedIndex ? " embla__dot--selected" : ""
-              )}
-            />
-          ))}
-        </div>
-      </div>
     </section>
   );
-};
-
-export default MovieCarousel;
+}
