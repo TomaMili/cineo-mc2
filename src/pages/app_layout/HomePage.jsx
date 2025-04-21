@@ -13,10 +13,26 @@ function HomePage() {
   return (
     <>
       <HeroSection />
-      <div className="w-full h-dvh px-20 pt-20">
-        <div className="text-3xl font-medium">OUR TOP PICKS</div>
-        {/* <MovieCarousel slides={data.results} options={OPTIONS} /> */}
-        <div className="">
+      <div className="w-full h-full px-20 pt-20">
+        <div className="pb-30">
+          <div className="text-3xl font-medium">OUR TOP PICKS</div>
+          {/* <MovieCarousel slides={data.results} options={OPTIONS} /> */}
+          <MovieCarousel
+            slides={data.results}
+            options={OPTIONS}
+            // onWatchLater={(m) => addToWatchLater(m)}
+            // onBookmark={(m) => toggleBookmark(m)}
+          />
+          <div className="text-3xl font-medium mt-20">BLAST FROM THE PAST</div>
+          {/* <MovieCarousel slides={data.results} options={OPTIONS} /> */}
+          <MovieCarousel
+            slides={data.results}
+            options={OPTIONS}
+            // onWatchLater={(m) => addToWatchLater(m)}
+            // onBookmark={(m) => toggleBookmark(m)}
+          />
+          <div className="text-3xl font-medium mt-20">ROMANTIC GEMS</div>
+          {/* <MovieCarousel slides={data.results} options={OPTIONS} /> */}
           <MovieCarousel
             slides={data.results}
             options={OPTIONS}
