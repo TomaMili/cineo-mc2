@@ -1,7 +1,5 @@
-/* global process */
 const BASE = "https://api.themoviedb.org/3";
-const APIKEY =
-  import.meta.env.VITE_TMDB_API_KEY || process.env.REACT_APP_TMDB_API_KEY;
+const APIKEY = import.meta.env.VITE_TMDB_API_KEY;
 
 /**
  * Internal helper – attaches the API‑key + extra params and returns a URL.
