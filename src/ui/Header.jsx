@@ -11,7 +11,7 @@ function Header({ isNavActive, setIsNavActive }) {
 
   return (
     <>
-      <header className="relative h-24 bg-bordo-600/0 w-full flex items-center px-8 justify-between z-1">
+      <header className="relative h-24 bg-bordo-600/0 w-full flex items-center px-8 justify-between z-20">
         <Navigation isNavActive={isNavActive} setIsNavActive={setIsNavActive} />
         <div className="h-full flex items-center gap-4">
           <Icon
