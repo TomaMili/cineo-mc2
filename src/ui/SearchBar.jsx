@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Icon } from "@iconify-icon/react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import useDebounce from "../hooks/useDebounce";
 import { searchMovies } from "../services/apiTmdb";

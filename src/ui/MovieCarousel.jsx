@@ -4,6 +4,8 @@ import usePrevNextButtons, {
   NextButton,
 } from "./MovieCarouselArrowButton";
 import MovieCard from "./MovieCard";
+import { useState } from "react";
+import MoviePopup from "./MoviePopup";
 
 export default function MovieCarousel({
   slides = [],
@@ -11,6 +13,7 @@ export default function MovieCarousel({
   onWatchLater,
   onBookmark,
 }) {
+  const [selected, setSelected] = useState(null);
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
   const {
@@ -43,12 +46,14 @@ export default function MovieCarousel({
               <MovieCard
                 movie={movie}
                 onWatchLater={onWatchLater}
+                onClick={() => setSelected(movie)} // ← open popup
                 onBookmark={onBookmark}
               />
             </div>
           ))}
         </div>
       </div>
+      <MoviePopup movie={selected} onClose={() => setSelected(null)} />
     </section>
   );
 }

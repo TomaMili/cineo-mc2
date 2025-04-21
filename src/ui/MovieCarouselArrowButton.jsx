@@ -1,8 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 
-/* ──────────────────────────────────────────────────────────── *\
-  Hook: returns disabled state + click handlers for Embla nav
-\* ──────────────────────────────────────────────────────────── */
 export default function usePrevNextButtons(emblaApi) {
   const [prevBtnDisabled, setPrevDisabled] = useState(true);
   const [nextBtnDisabled, setNextDisabled] = useState(true);
@@ -35,9 +32,6 @@ export default function usePrevNextButtons(emblaApi) {
   };
 }
 
-/* ──────────────────────────────────────────────────────────── *\
-  Arrow Buttons – pure Tailwind, no external CSS
-\* ──────────────────────────────────────────────────────────── */
 const base =
   "flex items-center justify-center w-10 h-10 rounded-full  " +
   "text-white transition-colors cursor-pointer " +

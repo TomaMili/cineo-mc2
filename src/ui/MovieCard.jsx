@@ -6,15 +6,17 @@ export default function MovieCard({
   movie,
   onWatchLater = () => {},
   onBookmark = () => {},
+  onClick = () => {},
 }) {
   return (
-    <div className="w-40 sm:w-44 lg:w-48 xl:w-52 group">
+    <div className="w-40 sm:w-44 lg:w-48 xl:w-52 cursor-pointer">
       <div className="overflow-hidden rounded-lg">
         <img
           src={poster(movie.poster_path, 342)}
           alt={movie.title}
+          onClick={onClick}
           className="w-full transition-transform duration-300 ease-out cursor-pointer
-                     group-hover:scale-105"
+                     hover:scale-105"
         />
       </div>
 
