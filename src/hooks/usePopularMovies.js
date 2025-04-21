@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchPopularMovies } from "../services/apiMovies";
+import { fetchPopularMovies } from "../services/apiTmdb";
 
-export function usePopularMovies(page = 1) {
+export default function usePopularMovies(page = 1) {
   return useQuery({
-    queryKey: ["popularMovies", page],
-    queryFn: () => fetchPopularMovies(page),
-    keepPreviousData: true, // opcionalno, za paginaciju
-    staleTime: 1000 * 60 * 5, // 5 minuta, za cache
+    queryKey: ["popular", page],
+    queryFn: ({ signal }) => fetchPopularMovies(page, signal),
+    staleTime: 1000 * 60 * 10,
   });
 }
