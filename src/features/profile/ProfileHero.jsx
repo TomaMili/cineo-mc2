@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { poster, fetchMovieDetails } from "../../services/apiTmdb";
+import { Icon } from "@iconify-icon/react";
 
 const PERSON_PLACEHOLDER = "https://via.placeholder.com/342x513?text=No+Image";
 const DUMMY_FAV = {
@@ -23,25 +24,25 @@ export default function ProfileHero() {
   const [favDirectorImg, setFavDirectorImg] = useState(null);
   const [favMovieImg, setFavMovieImg] = useState(null);
 
-  useEffect(() => {
-    const ctrl = new AbortController();
-    async function loadFavImages() {
-      try {
-        const [actor, director, movie] = await Promise.all([
-          fetchMovieDetails(DUMMY_FAV.actor.id, ctrl.signal),
-          fetchMovieDetails(DUMMY_FAV.director.id, ctrl.signal),
-          fetchMovieDetails(DUMMY_FAV.movie.id, ctrl.signal),
-        ]);
-        setFavActorImg(actor.profile_path);
-        setFavDirectorImg(director.profile_path);
-        setFavMovieImg(movie.poster_path);
-      } catch (err) {
-        if (err.name !== "AbortError") console.error(err);
-      }
-    }
-    loadFavImages();
-    return () => ctrl.abort();
-  }, []);
+  // useEffect(() => {
+  //   const ctrl = new AbortController();
+  //   async function loadFavImages() {
+  //     try {
+  //       const [actor, director, movie] = await Promise.all([
+  //         fetchMovieDetails(DUMMY_FAV.actor.id, ctrl.signal),
+  //         fetchMovieDetails(DUMMY_FAV.director.id, ctrl.signal),
+  //         fetchMovieDetails(DUMMY_FAV.movie.id, ctrl.signal),
+  //       ]);
+  //       setFavActorImg(actor.profile_path);
+  //       setFavDirectorImg(director.profile_path);
+  //       setFavMovieImg(movie.poster_path);
+  //     } catch (err) {
+  //       if (err.name !== "AbortError") console.error(err);
+  //     }
+  //   }
+  //   loadFavImages();
+  //   return () => ctrl.abort();
+  // }, []);
 
   // chart data
   const donutData = [
@@ -62,22 +63,24 @@ export default function ProfileHero() {
 
   return (
     <div className="gap-6 z-0 bg-[url(/bg-image.jpg)] -mt-24 pt-50 pb-28">
-      <div className="max-w-6xl mx-auto p-6 flex items-center justify-around">
+      <div className="max-w-6xl mx-auto p-6 pt-40 flex items-center justify-around">
         {/* Avatar + stats card */}
-        <div className="relative bg-black/80 rounded-2xl pt-16 px-8 pb-8 w-80">
+        <div className="relative bg-black/80 rounded-2xl px-8 pb-12 w-80">
           <img
-            src={PERSON_PLACEHOLDER}
+            src="/profile-avatar.png"
             alt="avatar"
-            className="w-48 h-48 rounded-full border-4 border-black object-cover mx-auto -mt-24"
+            className="w-68 h-68 rounded-full border-4 border-black object-cover mx-auto -mt-40"
           />
-          <h1 className="mt-4 text-3xl font-bold text-center">Username</h1>
+          <h1 className="mt-4 text-3xl font-medium text-center">USERNAME</h1>
           <p className="text-center text-lg uppercase text-gray-300 mt-2">
             The Adventurer
           </p>
-          <div className="flex justify-center items-center space-x-2 mt-4 text-yellow-400">
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2l3.09 6.26L22 9.27 ... Z" />
-            </svg>
+          <div className="flex flex-col justify-center items-center mt-4 text-yellow-400">
+            <Icon
+              icon="material-symbols:trophy-outline-sharp"
+              width="48"
+              height="48"
+            />
             <span className="text-lg text-gray-200">8/45</span>
           </div>
         </div>

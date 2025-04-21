@@ -1,5 +1,3 @@
-// src/services/profileService.js
-
 import supabase from "./supabase";
 
 /**
