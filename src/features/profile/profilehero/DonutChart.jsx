@@ -1,6 +1,3 @@
-// src/features/profile/DonutChart.jsx
-
-import React from "react";
 import {
   PieChart,
   Pie,
@@ -24,11 +21,11 @@ function CustomTooltip({ active, payload }) {
 export default function DonutChart({
   data = [],
   total = 0,
-  innerRadius = 70,
-  outerRadius = 100,
+  innerRadius = 100,
+  outerRadius = 135,
 }) {
   return (
-    <div className="w-60 h-60 relative overflow-visible">
+    <div className="w-80 h-80 relative overflow-visible">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
@@ -53,10 +50,10 @@ export default function DonutChart({
       </ResponsiveContainer>
 
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="absolute w-[140px] h-[140px] bg-black rounded-full pointer-events-none" />
+        <div className="absolute w-[200px] h-[200px] bg-siva-800 rounded-full pointer-events-none" />
         <div className="relative z-10 flex flex-col items-center">
-          <span className="text-3xl font-bold text-white">{total}</span>
-          <span className="text-xs uppercase text-gray-300">
+          <span className="text-5xl font-semibold text-white">{total}</span>
+          <span className="text-lg uppercase text-gray-300">
             movies watched
           </span>
         </div>

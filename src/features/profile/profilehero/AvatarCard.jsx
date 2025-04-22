@@ -1,7 +1,5 @@
-// src/features/profile/AvatarCard.jsx
-
-import React from "react";
 import { Icon } from "@iconify-icon/react";
+import { useNavigate } from "react-router-dom";
 
 export default function AvatarCard({
   src = "/profile-avatar.png",
@@ -9,12 +7,13 @@ export default function AvatarCard({
   subtitle = "The Adventurer",
   trophyCount = "8/45",
 }) {
+  const navigate = useNavigate();
   return (
-    <div className="relative bg-black rounded-2xl px-8 pb-12 w-72">
+    <div className="relative bg-siva-800 rounded-t-4xl px-8 pb-16 ">
       <img
         src={src}
         alt="avatar"
-        className="w-48 h-48 rounded-full border-4 border-black object-cover mx-auto -mt-24"
+        className="w-68 h-68 rounded-full border-4 border-black object-cover mx-auto -mt-44"
       />
       <h3 className="mt-4 text-2xl font-semibold text-center text-white">
         {name}
@@ -27,6 +26,8 @@ export default function AvatarCard({
           icon="material-symbols:trophy-outline-sharp"
           width="36"
           height="36"
+          onClick={() => navigate(`./achievements`)}
+          className="cursor-pointer"
         />
         <span className="text-lg text-gray-200">{trophyCount}</span>
       </div>

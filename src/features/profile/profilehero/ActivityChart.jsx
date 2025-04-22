@@ -1,5 +1,3 @@
-// src/features/profile/ActivityChart.jsx
-import React from "react";
 import {
   BarChart,
   Bar,
@@ -9,61 +7,90 @@ import {
   Cell,
 } from "recharts";
 
-// map single‐letter day codes to full names
-const dayMap = {
-  M: "Monday",
-  T: "Tuesday",
-  W: "Wednesday",
-  T2: "Thursday",
-  F: "Friday",
-  S: "Saturday",
-  S2: "Sunday",
+// full names for tooltip
+const dayNames = {
+  Mon: "Monday",
+  Tue: "Tuesday",
+  Wed: "Wednesday",
+  Thu: "Thursday",
+  Fri: "Friday",
+  Sat: "Saturday",
+  Sun: "Sunday",
 };
 
-// pick your genre → color mapping
+// genre → colour
 const genreColors = {
   Drama: "#DC2626",
-  "Sci‑Fi": "#FBBF24",
+  "Sci-Fi": "#FBBF24",
+  SciFi: "#FBBF24", // alias so your dummy data works
   Comedy: "#6B21A8",
-  Other: "#D1D5DB",
+  Other: "#9CA3AF",
+};
+
+// -------- custom tooltip UI --------
+const TooltipContent = ({ active, payload, label }) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className="rounded-lg bg-gray-800/90 backdrop-blur px-4 py-2 shadow-lg">
+      <p className="text-xs text-white/70 mb-1">{dayNames[label] || label}</p>
+      {payload.map(
+        (entry) =>
+          entry.value > 0 && (
+            <div key={entry.name} className="flex items-center gap-2 text-sm">
+              <span
+                className="inline-block w-3 h-3 rounded-full"
+                style={{ backgroundColor: genreColors[entry.name] || "#888" }}
+              />
+              <span className="text-white/90">{entry.name}</span>
+              <span className="ml-auto text-white">{entry.value}</span>
+            </div>
+          )
+      )}
+    </div>
+  );
 };
 
 export default function ActivityChart({ data = [] }) {
-  // figure out which keys in your data are genres
-  const genres =
-    data.length > 0 ? Object.keys(data[0]).filter((k) => k !== "day") : [];
+  // genres = every key except "day"
+  const genres = Array.from(
+    new Set(data.flatMap((d) => Object.keys(d).filter((k) => k !== "day")))
+  );
+
+  // ensure missing genre keys are zero so Recharts stacks properly
+  const normalised = data.map((d) =>
+    Object.fromEntries([["day", d.day], ...genres.map((g) => [g, d[g] ?? 0])])
+  );
 
   return (
-    <div className="w-64 h-32 bg-black rounded-lg p-2 overflow-visible">
-      <h3 className="text-white text-center mb-1">ACTIVITY</h3>
+    <div className="w-84 h-52 bg-siva-800 rounded-lg px-3 py-4 overflow-visible shadow-2xl">
+      <h3 className="text-white text-center mb-3 tracking-wide">ACTIVITY</h3>
+
       <ResponsiveContainer width="100%" height="80%">
-        <BarChart data={data}>
+        <BarChart data={normalised} barGap={2}>
           <XAxis
             dataKey="day"
-            tick={{ fill: "white" }}
             axisLine={false}
-            // show full name on hover of the axis label
-            tickFormatter={(d) => d}
+            tickLine={false}
+            tick={{ fill: "#fff", fontSize: 12 }}
           />
 
           <RechartsTooltip
-            // show full Day name
-            labelFormatter={(label) => dayMap[label] || label}
-            // list each genre/value in the default list
-            formatter={(value, name) => [`${value}`, name]}
-            contentStyle={{ backgroundColor: "#1F2937", border: "none" }}
-            itemStyle={{ color: "#fff" }}
-            wrapperStyle={{ zIndex: 999 }}
+            cursor={{ fill: "rgba(255,255,255,0.05)" }}
+            content={<TooltipContent />}
+            wrapperStyle={{ zIndex: 1000 }}
           />
 
           {genres.map((genre) => (
-            <Bar
-              key={genre}
-              dataKey={genre}
-              stackId="a"
-              name={genre}
-              fill={genreColors[genre] || "#888"}
-            />
+            <Bar key={genre} dataKey={genre} stackId="a" radius={[2, 2, 0, 0]}>
+              {normalised.map((_, i) => (
+                <Cell
+                  key={`cell-${i}`}
+                  fill={genreColors[genre] || "#888"}
+                  // bar hover effect
+                  className="transition-all duration-200 hover:opacity-90 hover:drop-shadow-md"
+                />
+              ))}
+            </Bar>
           ))}
         </BarChart>
       </ResponsiveContainer>

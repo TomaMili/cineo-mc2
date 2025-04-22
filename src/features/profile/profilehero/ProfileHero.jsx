@@ -1,13 +1,10 @@
-// src/features/profile/ProfileHero.jsx
-
-import React from "react";
 import AvatarCard from "./AvatarCard";
 import DonutChart from "./DonutChart";
 import ActivityChart from "./ActivityChart";
 
 const donutData = [
   { name: "Drama", value: 30, fill: "#DC2626" },
-  { name: "Sci‐Fi", value: 20, fill: "#FBBF24" },
+  { name: "Sci-Fi", value: 20, fill: "#FBBF24" },
   { name: "Comedy", value: 25, fill: "#6B21A8" },
   { name: "Other", value: 20, fill: "#D1D5DB" },
 ];
@@ -28,8 +25,7 @@ export default function ProfileHero() {
       className="w-full bg-cover bg-center -mt-24"
       style={{ backgroundImage: "url(/bg-image.jpg)" }}
     >
-      {/* Title */}
-      <h2 className="text-4xl font-bold text-white text-center pt-8 pb-20">
+      <h2 className="text-4xl font-medium text-white text-center pt-10 mb-20">
         PROFILE
       </h2>
 
@@ -41,7 +37,7 @@ export default function ProfileHero() {
           trophyCount="8/45"
         />
 
-        <div className="flex flex-col items-center gap-6 pb-40">
+        <div className="flex flex-col items-center gap-6 pb-10">
           <DonutChart data={donutData} total={95} />
           <ActivityChart data={activityData} />
         </div>
