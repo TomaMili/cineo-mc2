@@ -28,7 +28,6 @@ export default function SearchBar({ className = "" }) {
   // Expand & autofocus helper
   const open = () => {
     setExpanded(true);
-    // wait for next paint so the input is in the DOM
     requestAnimationFrame(() => inputRef.current?.focus());
   };
   const close = () => {

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Icon } from "@iconify-icon/react";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 
 const PRESET_NOTIFICATIONS = [

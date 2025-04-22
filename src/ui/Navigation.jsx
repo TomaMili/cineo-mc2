@@ -91,10 +91,8 @@ function Navigation({ isNavActive, setIsNavActive }) {
             <span>Supersuggestion</span>
           </button>
 
-          {/* Separator */}
           <hr className="border-t w-full border-white/50 my-4 mb-8" />
 
-          {/* Secondary actions */}
           <button
             onClick={() => alert("Toggled light mode")}
             className="flex items-center gap-4 mb-6 text-left hover:text-siva-100  cursor-pointer"
@@ -119,10 +117,8 @@ function Navigation({ isNavActive, setIsNavActive }) {
             <span>Settings</span>
           </NavLink>
 
-          {/* Separator */}
           <hr className="border-t w-full border-white/50 my-4 mb-8" />
 
-          {/* Sign out */}
           <button
             onClick={() => alert("Signed out")}
             className="flex items-center gap-4 text-left ml-0 hover:text-siva-100 cursor-pointer"

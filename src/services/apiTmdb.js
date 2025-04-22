@@ -1,4 +1,3 @@
-//apiTmdb.js
 const BASE = "https://api.themoviedb.org/3";
 const APIKEY = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -25,7 +24,7 @@ async function fetchJson(url, abortSignal) {
 }
 
 /* --------------------------------------------------------------------------
-   ▸ Endpoints (extend as needed)
+   Endpoints
    -------------------------------------------------------------------------- */
 export function searchMovies(query, page = 1, abortSignal) {
   return fetchJson(

@@ -1,4 +1,3 @@
-// src/ui/MovieCard.jsx
 import { Icon } from "@iconify-icon/react";
 import { poster } from "../services/apiTmdb";
 
@@ -7,7 +6,7 @@ export default function MovieCard({
   onWatchLater = () => {},
   onBookmark = () => {},
   onClick = () => {},
-  hideActions = false, // <-- default is "false"
+  hideActions = false,
 }) {
   return (
     <div className="w-40 sm:w-44 lg:w-48 xl:w-52 cursor-pointer">

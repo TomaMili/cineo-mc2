@@ -46,7 +46,7 @@ export default function MovieCarousel({
               <MovieCard
                 movie={movie}
                 onWatchLater={onWatchLater}
-                onClick={() => setSelected(movie)} // ← open popup
+                onClick={() => setSelected(movie)} // open popup
                 onBookmark={onBookmark}
               />
             </div>

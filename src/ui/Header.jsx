@@ -40,12 +40,6 @@ function Header({ isNavActive, setIsNavActive }) {
           </AnimatePresence>
         </div>
         <SearchBar />
-        {/* <Icon
-          icon="jam:search"
-          width="40"
-          height="40"
-          className="cursor-pointer"
-        /> */}
       </header>
     </>
   );
