@@ -13,13 +13,13 @@ const donutData = [
 ];
 
 const activityData = [
-  { day: "M", Drama: 2, Comedy: 5 },
-  { day: "T", Drama: 1, SciFi: 2, Comedy: 0 },
-  { day: "W", Drama: 3, Comedy: 5 },
-  { day: "T2", Drama: 1, Other: 2 },
-  { day: "F", Comedy: 4 },
-  { day: "S", SciFi: 6, Comedy: 6 },
-  { day: "S2", Drama: 2, Other: 4 },
+  { day: "Mon", Drama: 2, Comedy: 5 },
+  { day: "Tue", Drama: 1, SciFi: 2, Comedy: 0 },
+  { day: "Wed", Drama: 3, Comedy: 5 },
+  { day: "Thu", Drama: 1, Other: 2 },
+  { day: "Fri", Comedy: 4 },
+  { day: "Sat", SciFi: 6, Comedy: 6 },
+  { day: "Sun", Drama: 2, Other: 4 },
 ];
 
 export default function ProfileHero() {
