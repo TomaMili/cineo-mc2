@@ -1,115 +1,107 @@
-import React, { useEffect, useState } from "react";
+// src/features/profile/ProfileHero.jsx
+import React from "react";
 import {
   PieChart,
   Pie,
   Cell,
+  Tooltip as ReTooltip,
   BarChart,
   Bar,
   XAxis,
-  Tooltip,
+  Tooltip as BTooltip,
   ResponsiveContainer,
 } from "recharts";
-import { poster, fetchMovieDetails } from "../../services/apiTmdb";
 import { Icon } from "@iconify-icon/react";
 
-const PERSON_PLACEHOLDER = "https://via.placeholder.com/342x513?text=No+Image";
-const DUMMY_FAV = {
-  actor: { id: 31, name: "Tom Hanks", count: 7 },
-  director: { id: 181, name: "Guy Ritchie", count: 12 },
-  movie: { id: 497, name: "The Green Mile", count: 3 },
-};
+const donutData = [
+  { name: "Drama", value: 30, fill: "#DC2626" },
+  { name: "Sci‐Fi", value: 20, fill: "#FBBF24" },
+  { name: "Comedy", value: 25, fill: "#6B21A8" },
+  { name: "Other", value: 20, fill: "#D1D5DB" },
+];
+
+const activity = [
+  { day: "M", value: 5, color: "#6B21A8" },
+  { day: "T", value: 2, color: "#D1D5DB" },
+  { day: "W", value: 8, color: "#DC2626" },
+  { day: "T", value: 3, color: "#D1D5DB" },
+  { day: "F", value: 4, color: "#6B21A8" },
+  { day: "S", value: 12, color: "#6B21A8" },
+  { day: "S", value: 6, color: "#FBBF24" },
+];
 
 export default function ProfileHero() {
-  const [favActorImg, setFavActorImg] = useState(null);
-  const [favDirectorImg, setFavDirectorImg] = useState(null);
-  const [favMovieImg, setFavMovieImg] = useState(null);
-
-  // useEffect(() => {
-  //   const ctrl = new AbortController();
-  //   async function loadFavImages() {
-  //     try {
-  //       const [actor, director, movie] = await Promise.all([
-  //         fetchMovieDetails(DUMMY_FAV.actor.id, ctrl.signal),
-  //         fetchMovieDetails(DUMMY_FAV.director.id, ctrl.signal),
-  //         fetchMovieDetails(DUMMY_FAV.movie.id, ctrl.signal),
-  //       ]);
-  //       setFavActorImg(actor.profile_path);
-  //       setFavDirectorImg(director.profile_path);
-  //       setFavMovieImg(movie.poster_path);
-  //     } catch (err) {
-  //       if (err.name !== "AbortError") console.error(err);
-  //     }
-  //   }
-  //   loadFavImages();
-  //   return () => ctrl.abort();
-  // }, []);
-
-  // chart data
-  const donutData = [
-    { name: "Drama", value: 30, fill: "#DC2626" },
-    { name: "Sci‐Fi", value: 20, fill: "#FBBF24" },
-    { name: "Comedy", value: 25, fill: "#6B21A8" },
-    { name: "Other", value: 20, fill: "#D1D5DB" },
-  ];
-  const activity = [
-    { day: "M", value: 5, color: "#6B21A8" },
-    { day: "T", value: 2, color: "#D1D5DB" },
-    { day: "W", value: 8, color: "#DC2626" },
-    { day: "T", value: 3, color: "#D1D5DB" },
-    { day: "F", value: 4, color: "#6B21A8" },
-    { day: "S", value: 12, color: "#6B21A8" },
-    { day: "S", value: 6, color: "#FBBF24" },
-  ];
-
   return (
-    <div className="gap-6 z-0 bg-[url(/bg-image.jpg)] -mt-24 pt-50 pb-28">
-      <div className="max-w-6xl mx-auto p-6 pt-40 flex items-center justify-around">
-        {/* Avatar + stats card */}
-        <div className="relative bg-black/80 rounded-2xl px-8 pb-12 w-80">
+    <div
+      className="w-full bg-cover bg-center -mt-24"
+      style={{ backgroundImage: "url(/bg-image.jpg)" }}
+    >
+      {/* Title */}
+      <h2 className="text-4xl font-bold text-white text-center pt-12">
+        PROFILE
+      </h2>
+
+      <div className="max-w-6xl mx-auto px-6 flex items-center justify-around flex-wrap gap-5 pt-50">
+        {/* Avatar card */}
+        <div className="relative bg-black/80 rounded-2xl px-8 pb-12 w-72 -mb-1">
           <img
             src="/profile-avatar.png"
             alt="avatar"
-            className="w-68 h-68 rounded-full border-4 border-black object-cover mx-auto -mt-40"
+            className="w-48 h-48 rounded-full border-4 border-black object-cover mx-auto -mt-24"
           />
-          <h1 className="mt-4 text-3xl font-medium text-center">USERNAME</h1>
-          <p className="text-center text-lg uppercase text-gray-300 mt-2">
+          <h3 className="mt-4 text-2xl font-semibold text-center text-white">
+            Username
+          </h3>
+          <p className="text-center text-lg uppercase text-gray-300 mt-1">
             The Adventurer
           </p>
-          <div className="flex flex-col justify-center items-center mt-4 text-yellow-400">
+          <div className="mt-4 flex flex-col items-center text-yellow-400">
             <Icon
               icon="material-symbols:trophy-outline-sharp"
-              width="48"
-              height="48"
+              width="36"
+              height="36"
             />
             <span className="text-lg text-gray-200">8/45</span>
           </div>
         </div>
+
         {/* Charts */}
-        <div className="flex space-x-8">
+        <div className="flex flex-col items-center gap-6 ">
+          {/* Interactive Pie (with hover tooltip) */}
           <div className="w-40 h-40 relative">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={donutData}
                   dataKey="value"
+                  nameKey="name"
                   innerRadius={50}
                   outerRadius={80}
                   paddingAngle={2}
                   isAnimationActive
+                >
+                  {donutData.map((e) => (
+                    <Cell key={e.name} fill={e.fill} />
+                  ))}
+                </Pie>
+                {/* Hover tooltip to show name + value */}
+                <ReTooltip
+                  formatter={(value, name) => [`${value}`, name]}
+                  contentStyle={{ backgroundColor: "#1F2937", border: "none" }}
+                  itemStyle={{ color: "#fff" }}
                 />
-                {donutData.map((e) => (
-                  <Cell key={e.name} fill={e.fill} />
-                ))}
               </PieChart>
             </ResponsiveContainer>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <div className="absolute inset-0 flex flex-col items-center justify-center ">
               <span className="text-2xl font-bold text-white">95</span>
               <span className="text-xs uppercase text-gray-300">
                 movies watched
               </span>
             </div>
           </div>
-          <div className="w-64 h-32 bg-black/60 rounded-lg p-2">
+
+          {/* Activity bar */}
+          <div className="w-64 h-32 bg-black/60 rounded-lg p-2 gap-y-6">
             <h3 className="text-white text-center mb-1">ACTIVITY</h3>
             <ResponsiveContainer width="100%" height="80%">
               <BarChart data={activity}>
@@ -118,7 +110,7 @@ export default function ProfileHero() {
                   tick={{ fill: "white" }}
                   axisLine={false}
                 />
-                <Tooltip
+                <BTooltip
                   contentStyle={{ backgroundColor: "#1F2937", border: "none" }}
                   itemStyle={{ color: "#fff" }}
                 />

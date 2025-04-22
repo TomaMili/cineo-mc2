@@ -1,3 +1,4 @@
+//apiTmdb.js
 const BASE = "https://api.themoviedb.org/3";
 const APIKEY = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -86,3 +87,39 @@ export const backdrop = (path, size = 780) =>
      searchMovies(q, 1, signal)
    );
 -------------------------------------------------------------------------- */
+
+/**
+ * Search for a person by name.
+ * e.g. useQuery(["persons", q], ({ signal }) => searchPeople(q, 1, signal))
+ */
+export function searchPeople(query, page = 1, abortSignal) {
+  return fetchJson(
+    makeUrl("search/person", {
+      query,
+      page,
+      include_adult: false,
+      language: "en-US",
+    }),
+    abortSignal
+  );
+}
+
+/**
+ * Fetch detailed person info (bio, profile_path, etc.).
+ * append_to_response can include movie_credits, combined_credits, images, etc.
+ */
+export function fetchPersonDetails(personId, abortSignal) {
+  return fetchJson(
+    makeUrl(`person/${personId}`, {
+      append_to_response: "movie_credits,combined_credits,images",
+      language: "en-US",
+    }),
+    abortSignal
+  );
+}
+
+/**
+ * Build a profile image URL (available sizes: 45, 185, 632, original)
+ */
+export const profileImage = (path, size = 185) =>
+  path ? `${IMG_BASE}/w${size}${path}` : null;
