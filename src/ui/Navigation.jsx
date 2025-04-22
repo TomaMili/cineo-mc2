@@ -27,7 +27,7 @@ function Navigation({ isNavActive, setIsNavActive }) {
         className={`
           fixed inset-y-0 left-0 w-70 max-w-xs
            text-siva-200 text-2xl
-          transform transition-all duration-300 ease-in-out z-10
+          transform transition-all duration-300 ease-in-out z-20
           ${isNavActive ? "translate-x-0" : "-translate-x-full"}
         `}
       >
@@ -131,6 +131,9 @@ function Navigation({ isNavActive, setIsNavActive }) {
             <span>Sign out</span>
           </button>
         </div>
+        <span className="z-20 absolute bottom-2 text-center w-full font-extralight text-sm">
+          © 2025 Cineo - NOPE Team
+        </span>
       </nav>
     </>
   );
