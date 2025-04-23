@@ -19,7 +19,7 @@ export default function RecentlyWatched() {
   return (
     <section className="max-w-6xl mx-auto mt-12 pb-10 text-white">
       <h3 className="text-3xl font-normal mb-6 ml-9">RECENTLY WATCHED</h3>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 justify-items-center">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 justify-items-center">
         {results.map((movie) => {
           if (movie.isLoading || movie.isError) return null; // skip until ready
           return (

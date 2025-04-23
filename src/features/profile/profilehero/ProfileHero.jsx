@@ -25,7 +25,7 @@ export default function ProfileHero() {
       className="w-full bg-cover bg-center -mt-24"
       style={{ backgroundImage: "url(/bg-image.jpg)" }}
     >
-      <h2 className="text-4xl font-medium text-white text-center pt-10 mb-20">
+      <h2 className="text-4xl font-medium text-white text-center pt-10 pb-40 md:pb-0  mb-20 md:mb-10">
         PROFILE
       </h2>
 

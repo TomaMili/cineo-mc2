@@ -120,5 +120,5 @@ export function fetchPersonDetails(personId, abortSignal) {
 /**
  * Build a profile image URL (available sizes: 45, 185, 632, original)
  */
-export const profileImage = (path, size = 185) =>
+export const profileImage = (path, size = 342) =>
   path ? `${IMG_BASE}/w${size}${path}` : null;

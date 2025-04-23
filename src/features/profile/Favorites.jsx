@@ -61,7 +61,7 @@ export default function Favorites() {
 
   return (
     <div
-      className="max-w-5xl mx-auto pb-20 mt-12 grid 
+      className="max-w-5xl mx-auto  my-12 grid 
                     grid-cols-1 md:grid-cols-3 gap-y-8 
                     justify-items-center text-center text-white"
     >
@@ -72,12 +72,12 @@ export default function Favorites() {
             src={
               imgPath
                 ? isPerson
-                  ? profileImage(imgPath, 185)
+                  ? profileImage(imgPath, 342)
                   : poster(imgPath, 342)
                 : PERSON_PLACEHOLDER
             }
             alt={name}
-            className="mx-auto w-full h-90 object-cover rounded-lg"
+            className="mx-auto w-48 h-64 object-cover rounded-lg"
           />
           <p className="mt-1 font-medium">{name}</p>
           <p className="text-sm text-gray-400">{label}</p>

@@ -9,19 +9,19 @@ export default function AvatarCard({
 }) {
   const navigate = useNavigate();
   return (
-    <div className="relative bg-siva-800 rounded-t-4xl px-8 pb-16 ">
+    <div className="relative bg-siva-800 rounded-t-4xl px-8  ">
       <img
         src={src}
         alt="avatar"
         className="w-68 h-68 rounded-full border-4 border-black object-cover mx-auto -mt-44"
       />
-      <h3 className="mt-4 text-2xl font-semibold text-center text-white">
+      <h3 className="mt-4 text-5xl font-semibold text-center text-white">
         {name}
       </h3>
-      <p className="text-center text-lg uppercase text-gray-300 mt-1">
+      <p className="text-center text-lg uppercase text-gray-300 mt-8">
         {subtitle}
       </p>
-      <div className="mt-4 flex flex-col items-center text-yellow-400">
+      <div className="mt-2 flex flex-col items-center text-yellow-400">
         <Icon
           icon="material-symbols:trophy-outline-sharp"
           width="36"

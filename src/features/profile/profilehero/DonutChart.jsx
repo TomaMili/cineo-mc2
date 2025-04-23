@@ -5,6 +5,7 @@ import {
   Tooltip as RechartsTooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useNavigate } from "react-router-dom";
 
 function CustomTooltip({ active, payload }) {
   if (active && payload && payload.length) {
@@ -24,6 +25,8 @@ export default function DonutChart({
   innerRadius = 100,
   outerRadius = 135,
 }) {
+  const navigate = useNavigate();
+
   return (
     <div className="w-80 h-80 relative overflow-visible">
       <ResponsiveContainer width="100%" height="100%">
@@ -49,9 +52,13 @@ export default function DonutChart({
         </PieChart>
       </ResponsiveContainer>
 
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div className="absolute inset-0 flex items-center justify-center">
         <div className="absolute w-[200px] h-[200px] bg-siva-800 rounded-full pointer-events-none" />
-        <div className="relative z-10 flex flex-col items-center">
+        <div
+          className="relative z-10 flex flex-col items-center cursor-pointer"
+          onClick={() => navigate("/watched")}
+          title="Go to Watched List"
+        >
           <span className="text-5xl font-semibold text-white">{total}</span>
           <span className="text-lg uppercase text-gray-300">
             movies watched
