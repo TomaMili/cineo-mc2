@@ -12,7 +12,7 @@ function HeroSection() {
         <h2 className="z-0 text-6xl font-light text-center pt-20">
           Ready for Your Next <br /> Watch?
         </h2>
-        <button className="bg-bordo-600 z-0 px-6 pt-4 pb-3 rounded-4xl font-semibold cursor-pointer hover:bg-bordo-500">
+        <button className="bg-bordo-500 z-0 px-6 pt-4 pb-3 rounded-4xl font-semibold cursor-pointer hover:bg-bordo-400">
           SUPERSUGGESTION
         </button>
       </div>

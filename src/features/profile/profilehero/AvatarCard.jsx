@@ -18,16 +18,20 @@ export default function AvatarCard({
       <h3 className="mt-4 text-5xl font-semibold text-center text-white">
         {name}
       </h3>
-      <p className="text-center text-lg uppercase text-gray-300 mt-8">
+      <p
+        onClick={() => navigate(`./achievements`)}
+        className=" cursor-pointer text-center text-lg uppercase text-gray-300 mt-8"
+      >
         {subtitle}
       </p>
-      <div className="mt-2 flex flex-col items-center text-yellow-400">
+      <div
+        onClick={() => navigate(`./achievements`)}
+        className="cursor-pointer mt-2 flex flex-col items-center text-yellow-400 bg-bordo-500  hover:bg-bordo-400 rounded-lg p-2 w-1/4 mx-auto"
+      >
         <Icon
           icon="material-symbols:trophy-outline-sharp"
           width="36"
           height="36"
-          onClick={() => navigate(`./achievements`)}
-          className="cursor-pointer"
         />
         <span className="text-lg text-gray-200">{trophyCount}</span>
       </div>

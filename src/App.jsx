@@ -1,3 +1,4 @@
+//App.jsx
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -23,9 +24,12 @@ import Achievements from "./pages/app_layout/Achievements";
 import Browse from "./pages/app_layout/Browse";
 import Collections from "./pages/app_layout/Collections";
 import MovieDetail from "./pages/app_layout/MovieDetail";
-import SettingsInfo from "./pages/app_layout/SettingsInfo";
-import SettingsPlan from "./pages/app_layout/SettingsPlan";
-import SettingsPlatforms from "./pages/app_layout/SettingsPlatforms";
+
+import Settings from "./pages/app_layout/Settings";
+import SettingsInfo from "./features/settings/SettingsInfo";
+import SettingsPlatforms from "./features/settings/SettingsPlatforms";
+import SettingsPlan from "./features/settings/SettingsPlan";
+
 import Watched from "./pages/app_layout/Watched";
 import WatchLater from "./pages/app_layout/WatchLater";
 
@@ -82,12 +86,12 @@ function App() {
                 element={<WatchTogetherGroup />}
               />
               <Route path="movie/:id" element={<MovieDetail />} />
-              <Route path="settings/info" element={<SettingsInfo />} />
-              <Route
-                path="settings/platforms"
-                element={<SettingsPlatforms />}
-              />
-              <Route path="settings/plan" element={<SettingsPlan />} />
+              <Route path="settings" element={<Settings />}>
+                <Route index element={<Navigate replace to="info" />} />
+                <Route path="info" element={<SettingsInfo />} />
+                <Route path="platforms" element={<SettingsPlatforms />} />
+                <Route path="plan" element={<SettingsPlan />} />
+              </Route>
               <Route path="browse" element={<Browse />} />
             </Route>
           )}

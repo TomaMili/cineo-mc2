@@ -1,3 +1,4 @@
+//ProfileHero.jsx
 import AvatarCard from "./AvatarCard";
 import DonutChart from "./DonutChart";
 import ActivityChart from "./ActivityChart";
