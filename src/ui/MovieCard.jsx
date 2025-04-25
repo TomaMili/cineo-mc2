@@ -1,5 +1,6 @@
 import { Icon } from "@iconify-icon/react";
 import { poster } from "../services/apiTmdb";
+import PosterPlaceholder from "../utils/posterPlaceholder";
 
 export default function MovieCard({
   movie,
@@ -10,14 +11,18 @@ export default function MovieCard({
 }) {
   return (
     <div className="w-40 sm:w-44 lg:w-48 xl:w-52 cursor-pointer">
-      <div className="overflow-hidden rounded-lg">
-        <img
-          src={poster(movie.poster_path, 342)}
-          alt={movie.title}
-          onClick={onClick}
-          className="w-full transition-transform duration-300 ease-out hover:scale-105"
-        />
-      </div>
+      {movie.poster_path ? (
+        <div className="overflow-hidden rounded-lg">
+          <img
+            src={poster(movie.poster_path, 342)}
+            alt={movie.title}
+            onClick={onClick}
+            className="w-full transition-transform duration-300 ease-out hover:scale-105"
+          />
+        </div>
+      ) : (
+        <PosterPlaceholder title={movie.title} onClick={onClick} />
+      )}
 
       <div className="mt-2 flex items-start justify-between">
         <p className="text-sm font-medium text-white line-clamp-1 mr-1">

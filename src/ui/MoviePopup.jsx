@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { poster, fetchMovieDetails } from "../services/apiTmdb";
 import { useEffect } from "react";
+import PosterPlaceholder from "../utils/posterPlaceholder";
 
 export default function MoviePopup({ movie, onClose }) {
   const navigate = useNavigate();
@@ -54,12 +55,20 @@ export default function MoviePopup({ movie, onClose }) {
           className="flex flex-col sm:flex-row max-w-4xl w-full bg-siva-800 text-white rounded-lg overflow-hidden shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
-          <img
-            src={poster(data.poster_path, 342)}
-            alt={data.title}
-            onClick={() => navigate(`/movie/${movie.id}`)}
-            className="w-full sm:w-60 object-cover cursor-pointer"
-          />
+          {data.poster_path ? (
+            <img
+              src={poster(data.poster_path, 342)}
+              alt={data.title}
+              onClick={() => navigate(`/movie/${movie.id}`)}
+              className="w-full sm:w-60 object-cover cursor-pointer"
+            />
+          ) : (
+            <PosterPlaceholder
+              title={movie.title}
+              onClick={() => navigate(`/movie/${movie.id}`)}
+              className="sm:w-54 object-cover cursor-pointer bg-black/20!"
+            />
+          )}
 
           <div className="flex-1 p-6 space-y-4 overflow-y-auto max-h-[80vh] ">
             <h2

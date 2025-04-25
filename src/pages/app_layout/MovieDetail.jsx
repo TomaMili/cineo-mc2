@@ -43,6 +43,7 @@ export default function MovieDetail() {
     return <p className="p-10 text-red-500">{detailsError.message}</p>;
   if (!details) return <p className="p-10 text-red-500">Movie not found</p>;
 
+  console.log(details);
   return (
     <article className="flex flex-col bg-black">
       <MovieHero details={details} director={director} providers={providers} />
