@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Icon } from "@iconify-icon/react";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import useDebounce from "../hooks/useDebounce";
@@ -19,6 +19,8 @@ const POSTER_BASE = "https://image.tmdb.org/t/p/w92"; // 92px posters
 
 export default function SearchBar({ className = "" }) {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const inputRef = useRef(null);
 
   /* UI state */
@@ -66,6 +68,11 @@ export default function SearchBar({ className = "" }) {
     if (expanded) window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [expanded]);
+
+  useEffect(() => {
+    close();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname + location.search]);
 
   return (
     <motion.div
