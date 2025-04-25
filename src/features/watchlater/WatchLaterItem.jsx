@@ -19,6 +19,7 @@ export default function WatchLaterItem({
       {showRemove && (
         <ConfirmRemoveModal
           movie={movie}
+          listName="watch later"
           onConfirm={() => {
             onRemove(movie);
             setShowRemove(false);

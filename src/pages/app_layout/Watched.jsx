@@ -1,15 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import MovieCard from "../../ui/MovieCard";
 import { Icon } from "@iconify-icon/react";
+import useWatched from "../../hooks/useWatched";
+import WatchedList from "../../features/watched/WatchedList";
 
 export default function Watched() {
+  const { data: movies = [], isLoading } = useWatched();
+  const [items, setItems] = useState([]);
   const [sort, setSort] = useState("date");
-  const dummy = [
-    { id: 4, title: "Brutalist", poster_path: "/brutalist.jpg" },
-    { id: 5, title: "Catch Me If You Can", poster_path: "/catchme.jpg" },
-    { id: 6, title: "Titanic", poster_path: "/titanic.jpg" },
-  ];
+
+  // whenever the query returns, initialize our local list
+  useEffect(() => {
+    setItems(movies);
+  }, [movies]);
+
+  if (isLoading) return <div className="text-white p-8">Loading…</div>;
+
+  const handleRemove = (movie) => {
+    setItems((prev) => prev.filter((m) => m.id !== movie.id));
+  };
 
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -23,7 +32,7 @@ export default function Watched() {
 
   return (
     <div className="min-h-screen bg-black text-white pb-12">
-      <div className="max-w-4xl mx-auto pt-6">
+      <div className="max-w-4xl mx-auto px-6 pt-6">
         <nav className="flex bg-gray-500/40 rounded-full overflow-hidden h-8">
           {[
             ["../watchlater", "Watch later"],
@@ -51,15 +60,10 @@ export default function Watched() {
       <div className="max-w-4xl mx-auto flex justify-end items-center gap-4 mt-4 px-6">
         <button
           onClick={handleShare}
-          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 cursor-pointer"
+          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2"
         >
-          <Icon
-            icon="gridicons:share"
-            width="18"
-            height="18"
-            className="text-white"
-          />
-          <span>Share</span>
+          <Icon icon="gridicons:share" width="18" height="18" />
+          Share
         </button>
         <select
           value={sort}
@@ -67,22 +71,14 @@ export default function Watched() {
           className="bg-gray-800 text-white rounded px-3 py-1"
         >
           <option value="date">Date watched</option>
-          <option value="rating_low_high">Rating (low–high)</option>
-          <option value="rating_high_low">Rating (high–low)</option>
+          <option value="title">Title (A–Z)</option>
+          <option value="genre">Genre (A–Z)</option>
+          <option value="rating">Rating (high-low)</option>
         </select>
       </div>
 
-      <h2 className="text-2xl font-bold mt-8 mb-4 px-6">Your Watched</h2>
-      <div className="max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 px-6">
-        {dummy.map((m) => (
-          <MovieCard
-            key={m.id}
-            movie={m}
-            onWatchLater={() => {}}
-            onBookmark={() => {}}
-            onClick={() => {}}
-          />
-        ))}
+      <div className="max-w-4xl mx-auto mt-8 space-y-8 px-6">
+        <WatchedList movies={items} sortMode={sort} onRemove={handleRemove} />{" "}
       </div>
     </div>
   );
