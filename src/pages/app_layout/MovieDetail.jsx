@@ -1,6 +1,6 @@
 // src/pages/MovieDetail.jsx
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { fetchMovieDetails, findDirector } from "../../services/apiTmdb";
 
@@ -14,8 +14,11 @@ import CastSection from "../../features/movie/CastSection";
 import ReviewsSection from "../../features/movie/ReviewsSection";
 import { useReviews } from "../../hooks/useReviews";
 import SimilarMoviesSection from "../../features/movie/SimilarMovies";
+import Spinner from "../../ui/Spinner";
+import ErrorNotice from "../../ui/ErrorNotice";
 
 export default function MovieDetail() {
+  const queryClient = useQueryClient();
   const { movieId } = useParams();
 
   const {
@@ -38,10 +41,31 @@ export default function MovieDetail() {
 
   const director = findDirector(details?.credits);
 
-  if (loadingDetails) return <p className="p-10 text-white">Loading…</p>;
+  if (loadingDetails)
+    return (
+      <div className="flex items-center justify-center h-screen -mt-24 bg-black">
+        <Spinner size={48} color="text-bordo-400" />
+      </div>
+    );
   if (detailsError)
-    return <p className="p-10 text-red-500">{detailsError.message}</p>;
-  if (!details) return <p className="p-10 text-red-500">Movie not found</p>;
+    return (
+      <div className="flex items-center justify-center h-screen -mt-24 bg-black">
+        <ErrorNotice
+          title="Unable to load movie data"
+          message={detailsError.message}
+          onRetry={() =>
+            queryClient.invalidateQueries({ queryKey: ["movie", movieId] })
+          }
+        />
+      </div>
+    );
+
+  if (!details)
+    return (
+      <div className="flex items-center justify-center h-screen -mt-24 bg-black">
+        <ErrorNotice title="Movie not found" />
+      </div>
+    );
 
   console.log(details);
   return (
