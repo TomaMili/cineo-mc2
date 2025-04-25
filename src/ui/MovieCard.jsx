@@ -1,6 +1,7 @@
 import { Icon } from "@iconify-icon/react";
-import { poster } from "../services/apiTmdb";
+import { fetchMovieDetails, poster } from "../services/apiTmdb";
 import PosterPlaceholder from "../utils/posterPlaceholder";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function MovieCard({
   movie,
@@ -9,6 +10,16 @@ export default function MovieCard({
   onClick = () => {},
   hideActions = false,
 }) {
+  const queryClient = useQueryClient();
+
+  function prefetch() {
+    queryClient.prefetchQuery({
+      queryKey: ["movie", movie.id],
+      queryFn: ({ signal }) => fetchMovieDetails(movie.id, signal),
+      staleTime: 600_000, // 10min
+    });
+  }
+
   return (
     <div className="w-40 sm:w-44 lg:w-48 xl:w-52 cursor-pointer">
       {movie.poster_path ? (
@@ -16,6 +27,7 @@ export default function MovieCard({
           <img
             src={poster(movie.poster_path, 342)}
             alt={movie.title}
+            onMouseEnter={prefetch}
             onClick={onClick}
             className="w-full transition-transform duration-300 ease-out hover:scale-105"
           />
