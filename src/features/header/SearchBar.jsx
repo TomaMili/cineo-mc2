@@ -4,16 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
-import useDebounce from "../hooks/useDebounce";
-import { searchMovies } from "../services/apiTmdb";
-
-/**********************************************************************
- *  <SearchBar />
- *  ------------------------------------------------------------------
- *  Default ➜ compact circle with a search icon (header friendly).
- *  On click ➜ smoothly expands into the full autocomplete bar you
- *  already had. Close with the ⨉ icon or blur‑away.
- *********************************************************************/
+import useDebounce from "../../hooks/useDebounce";
+import { searchMovies } from "../../services/apiTmdb";
 
 const POSTER_BASE = "https://image.tmdb.org/t/p/w92"; // 92px posters
 
@@ -23,11 +15,9 @@ export default function SearchBar({ className = "" }) {
 
   const inputRef = useRef(null);
 
-  /* UI state */
   const [expanded, setExpanded] = useState(false);
   const [query, setQuery] = useState("");
 
-  // Expand & autofocus helper
   const open = () => {
     setExpanded(true);
     requestAnimationFrame(() => inputRef.current?.focus());
@@ -37,11 +27,9 @@ export default function SearchBar({ className = "" }) {
     setQuery("");
   };
 
-  /* Debounce ───────────────────────────────────────────────────────*/
   const [debounced, setDebounced] = useState("");
   useDebounce(() => setDebounced(query.trim()), 350, [query]);
 
-  /* Fetch ─ react‑query */
   const { data, isFetching } = useQuery({
     queryKey: ["tmdb-search", debounced],
     queryFn: ({ signal }) => searchMovies(debounced, 1, signal),
@@ -51,7 +39,6 @@ export default function SearchBar({ className = "" }) {
 
   const results = data?.results?.slice(0, 3) ?? [];
 
-  /* Handlers */
   const onSubmit = (e) => {
     e.preventDefault();
     const trimmed = query.trim();
@@ -80,7 +67,6 @@ export default function SearchBar({ className = "" }) {
       animate={{ width: expanded ? "40%" : "3.5rem" }} /* 14px * 3.5 = 56px */
       transition={{ type: "spring", stiffness: 260, damping: 26 }}
     >
-      {/* Collapsed circle */}
       {!expanded && (
         <button
           onClick={open}
@@ -95,7 +81,6 @@ export default function SearchBar({ className = "" }) {
         </button>
       )}
 
-      {/* Expanded bar */}
       {expanded && (
         <form onSubmit={onSubmit} className="relative">
           <input
@@ -107,14 +92,12 @@ export default function SearchBar({ className = "" }) {
             onBlur={() => !query && close() /* blur cancels if empty */}
             className="w-full h-14 pl-16 pr-12 rounded-full bg-black/70 text-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-bordo-400"
           />
-          {/* search icon (visual only) */}
           <Icon
             icon="jam:search"
             width="32"
             height="32"
             className="absolute left-5 top-1/2 -translate-y-1/2 text-white/75 pointer-events-none"
           />
-          {/* close icon */}
           <Icon
             icon="mdi:close"
             width="22"
@@ -125,7 +108,6 @@ export default function SearchBar({ className = "" }) {
         </form>
       )}
 
-      {/* ▼ Dropdown autocomplete */}
       <AnimatePresence>
         {expanded && results.length > 0 && query && (
           <motion.ul
@@ -200,7 +182,6 @@ export default function SearchBar({ className = "" }) {
         )}
       </AnimatePresence>
 
-      {/* spinner */}
       {isFetching && expanded && (
         <Icon
           icon="mingcute:loading-fill"

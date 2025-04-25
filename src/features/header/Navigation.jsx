@@ -5,7 +5,6 @@ import { useEffect } from "react";
 function Navigation({ isNavActive, setIsNavActive }) {
   const location = useLocation();
 
-  // Whenever the URL changes, close the nav
   useEffect(() => {
     setIsNavActive(false);
   }, [location.pathname, setIsNavActive]);
