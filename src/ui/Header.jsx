@@ -1,10 +1,9 @@
-// Header.jsx
 import { useState } from "react";
-import Navigation from "./Navigation";
-import Notification from "./Notification";
+import Navigation from "../features/header/Navigation";
+import Notification from "../features/header/Notification";
 import { Icon } from "@iconify-icon/react";
 import { AnimatePresence } from "framer-motion";
-import SearchBar from "./SearchBar";
+import SearchBar from "../features/header/SearchBar";
 
 function Header({ isNavActive, setIsNavActive }) {
   const [notifOpen, setNotifOpen] = useState(false);

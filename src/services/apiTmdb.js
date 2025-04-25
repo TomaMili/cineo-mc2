@@ -122,3 +122,54 @@ export function fetchPersonDetails(personId, abortSignal) {
  */
 export const profileImage = (path, size = 342) =>
   path ? `${IMG_BASE}/w${size}${path}` : null;
+
+/* Movie page */
+
+export function fetchMovieRecommendations(movieId, page = 1, abortSignal) {
+  return fetchJson(
+    makeUrl(`movie/${movieId}/recommendations`, {
+      page,
+      language: "en-US",
+    }),
+    abortSignal
+  );
+}
+
+export function fetchMovieReviews(movieId, page = 1, abortSignal) {
+  return fetchJson(
+    makeUrl(`movie/${movieId}/reviews`, { page, language: "en-US" }),
+    abortSignal
+  );
+}
+
+/* OPTIONAL: if you prefer credits & videos separated */
+export const fetchMovieCredits = (movieId, abortSignal) =>
+  fetchJson(
+    makeUrl(`movie/${movieId}/credits`, { language: "en-US" }),
+    abortSignal
+  );
+
+export const fetchMovieVideos = (movieId, abortSignal) =>
+  fetchJson(
+    makeUrl(`movie/${movieId}/videos`, { language: "en-US" }),
+    abortSignal
+  );
+
+export function findDirector(credits) {
+  if (!credits) return null;
+
+  // credits can be `{crew:[…]}` or `{credits:{crew:[…]}}`
+  const crewArray = Array.isArray(credits)
+    ? credits
+    : credits.crew ?? credits?.credits?.crew ?? [];
+
+  return crewArray.find((person) => person.job === "Director") || null;
+}
+
+/* Watch Providers -------------------------------------------------------- */
+export function fetchMovieProviders(movieId, region = "US", abortSignal) {
+  return fetchJson(
+    makeUrl(`movie/${movieId}/watch/providers`),
+    abortSignal
+  ).then((json) => json.results?.[region] ?? null);
+}
