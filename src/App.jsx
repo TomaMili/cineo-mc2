@@ -85,7 +85,7 @@ function App() {
                 path="watch-together/:groupId"
                 element={<WatchTogetherGroup />}
               />
-              <Route path="movie/:id" element={<MovieDetail />} />
+              <Route path="movie/:movieId" element={<MovieDetail />} />
               <Route path="settings" element={<Settings />}>
                 <Route index element={<Navigate replace to="info" />} />
                 <Route path="info" element={<SettingsInfo />} />
