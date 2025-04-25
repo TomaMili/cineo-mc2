@@ -21,15 +21,15 @@ export default function MovieCard({
   }
 
   return (
-    <div className="w-40 sm:w-44 lg:w-48 xl:w-52 cursor-pointer">
+    <div className="w-40 sm:w-44 lg:w-48 xl:w-52 cursor-pointer ">
       {movie.poster_path ? (
-        <div className="overflow-hidden rounded-lg">
+        <div className="overflow-hidden rounded-lg aspect-[2/3]">
           <img
             src={poster(movie.poster_path, 342)}
             alt={movie.title}
             onMouseEnter={prefetch}
             onClick={onClick}
-            className="w-full transition-transform duration-300 ease-out hover:scale-105"
+            className="w-full h-full transition-transform duration-300 ease-out hover:scale-105"
           />
         </div>
       ) : (

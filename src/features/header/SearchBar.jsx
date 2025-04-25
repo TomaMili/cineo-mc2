@@ -170,7 +170,7 @@ export default function SearchBar({ className = "" }) {
             ))}
             <li className="text-center border-t border-white/10">
               <button
-                className="w-full py-3 font-medium hover:bg-white/5"
+                className="w-full py-3 font-medium hover:bg-white/5 cursor-pointer"
                 onMouseDown={() =>
                   navigate(`/browse?query=${encodeURIComponent(query.trim())}`)
                 }
