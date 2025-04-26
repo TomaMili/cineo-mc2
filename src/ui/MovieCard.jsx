@@ -25,7 +25,7 @@ export default function MovieCard({
       {movie.poster_path ? (
         <div className="overflow-hidden rounded-lg aspect-[2/3]">
           <img
-            src={poster(movie.poster_path, 342)}
+            src={poster(movie.poster_path)}
             alt={movie.title}
             onMouseEnter={prefetch}
             onClick={onClick}

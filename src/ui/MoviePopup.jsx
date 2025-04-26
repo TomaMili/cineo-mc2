@@ -57,7 +57,7 @@ export default function MoviePopup({ movie, onClose }) {
         >
           {data.poster_path ? (
             <img
-              src={poster(data.poster_path, 342)}
+              src={poster(data.poster_path)}
               alt={data.title}
               onClick={() => navigate(`/movie/${movie.id}`)}
               className="w-full sm:w-60 object-cover cursor-pointer"

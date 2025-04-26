@@ -16,7 +16,7 @@ export default function CastCard({
           <img
             src={
               cast.profile_path
-                ? profileImage(cast.profile_path, 342)
+                ? profileImage(cast.profile_path)
                 : "/fallback-person.png"
             }
             alt={cast.name}
