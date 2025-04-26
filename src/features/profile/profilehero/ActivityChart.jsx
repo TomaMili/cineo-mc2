@@ -7,7 +7,6 @@ import {
   Cell,
 } from "recharts";
 
-// full names for tooltip
 const dayNames = {
   Mon: "Monday",
   Tue: "Tuesday",
@@ -18,16 +17,14 @@ const dayNames = {
   Sun: "Sunday",
 };
 
-// genre → colour
 const genreColors = {
   Drama: "#DC2626",
   "Sci-Fi": "#FBBF24",
-  SciFi: "#FBBF24", // alias so your dummy data works
+  SciFi: "#FBBF24",
   Comedy: "#6B21A8",
   Other: "#9CA3AF",
 };
 
-// -------- custom tooltip UI --------
 const TooltipContent = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
@@ -50,8 +47,7 @@ const TooltipContent = ({ active, payload, label }) => {
   );
 };
 
-export default function ActivityChart({ data = [] }) {
-  // genres = every key except "day"
+function ActivityChart({ data = [] }) {
   const genres = Array.from(
     new Set(data.flatMap((d) => Object.keys(d).filter((k) => k !== "day")))
   );
@@ -86,7 +82,6 @@ export default function ActivityChart({ data = [] }) {
                 <Cell
                   key={`cell-${i}`}
                   fill={genreColors[genre] || "#888"}
-                  // bar hover effect
                   className="transition-all duration-200 hover:opacity-90 hover:drop-shadow-md"
                 />
               ))}
@@ -97,3 +92,5 @@ export default function ActivityChart({ data = [] }) {
     </div>
   );
 }
+
+export default ActivityChart;

@@ -1,4 +1,3 @@
-//ProfileHero.jsx
 import AvatarCard from "./AvatarCard";
 import DonutChart from "./DonutChart";
 import ActivityChart from "./ActivityChart";
@@ -20,7 +19,7 @@ const activityData = [
   { day: "Sun", Drama: 2, Other: 4 },
 ];
 
-export default function ProfileHero() {
+function ProfileHero() {
   return (
     <div
       className="w-full bg-cover bg-center -mt-24"
@@ -46,3 +45,5 @@ export default function ProfileHero() {
     </div>
   );
 }
+
+export default ProfileHero;

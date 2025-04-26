@@ -19,7 +19,7 @@ function CustomTooltip({ active, payload }) {
   return null;
 }
 
-export default function DonutChart({
+function DonutChart({
   data = [],
   total = 0,
   innerRadius = 100,
@@ -68,3 +68,5 @@ export default function DonutChart({
     </div>
   );
 }
+
+export default DonutChart;

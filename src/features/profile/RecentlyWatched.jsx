@@ -1,11 +1,14 @@
 import { useQueries } from "@tanstack/react-query";
 import { fetchMovieDetails } from "../../services/apiTmdb";
 import MovieCard from "../../ui/MovieCard";
-import { useNavigate } from "react-router-dom";
+import MoviePopup from "../../ui/MoviePopup";
+import { useState } from "react";
 
 const RECENT_IDS = [858, 743, 200, 349]; // example TMDB IDs
 
 export default function RecentlyWatched() {
+  const [selected, setSelected] = useState(null);
+
   const results = useQueries({
     queries: RECENT_IDS.map((id) => ({
       queryKey: ["movie", id],
@@ -14,21 +17,22 @@ export default function RecentlyWatched() {
     })),
   });
 
-  const navigate = useNavigate();
-
   return (
     <section className="max-w-6xl mx-auto mt-12 pb-10 text-white">
       <h3 className="text-3xl font-normal mb-6 ml-9">RECENTLY WATCHED</h3>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 justify-items-center">
         {results.map((movie) => {
-          if (movie.isLoading || movie.isError) return null; // skip until ready
+          if (movie.isLoading || movie.isError) return null;
           return (
-            <MovieCard
-              key={movie.data.id}
-              movie={movie.data}
-              onClick={() => navigate(`/movie/${movie.data.id}`)}
-              hideActions={true} // hide watch‑later/bookmark icons
-            />
+            <>
+              <MovieCard
+                key={movie.data.id}
+                movie={movie.data}
+                onClick={() => setSelected(movie.data)}
+                hideActions={true}
+              />
+              <MoviePopup movie={selected} onClose={() => setSelected(null)} />
+            </>
           );
         })}
       </div>
