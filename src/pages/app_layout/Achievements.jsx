@@ -1,4 +1,3 @@
-///Achievements.jsx
 import { Icon } from "@iconify-icon/react";
 
 const dummyAchievements = [
@@ -78,15 +77,17 @@ export default function Achievements() {
     .slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-black text-white px-6 py-8">
-      <h1 className="text-4xl font-bold mb-4">ACHIEVEMENTS</h1>
+    <div className="min-h-screen -mt-24 bg-siva-800 text-white px-6 py-8">
+      <h2 className="text-4xl uppercase font-medium text-white text-center pt-10 pb-40 md:pb-0  mb-20 md:mb-10">
+        achievements
+      </h2>
 
-      <h2 className="text-xl mb-3">Rarest achievements:</h2>
-      <div className="flex flex-wrap gap-6 mb-12 items-center justify-center">
+      <h3 className="text-2xl font-light mb-3 mt-20">Rarest achievements:</h3>
+      <div className="flex flex-wrap gap-6 my-12 items-center justify-center">
         {rarest.map((ach) => (
           <div
             key={ach.id}
-            className="bg-red-700 rounded-lg p-5 w-64 space-y-2"
+            className="bg-bordo-500 rounded-lg p-5 w-64 space-y-2"
           >
             <div className="flex justify-center">
               <Icon
@@ -106,12 +107,12 @@ export default function Achievements() {
         ))}
       </div>
 
-      <div className="mb-6 text-lg">
+      <div className="mb-6 text-2xl font-light">
         Your achievement progress:{" "}
         <span className="font-bold">
           {completedCount}/{total}
-        </span>{" "}
-        ({completionPct}%)
+        </span>
+        <span className="text-lg ml-1">({completionPct}%)</span>
       </div>
 
       <div className="space-y-2 w-3/4  mx-auto">
@@ -119,7 +120,7 @@ export default function Achievements() {
           <div
             key={ach.id}
             className={`flex items-center justify-between rounded-lg p-4 ${
-              ach.completed ? "bg-red-700" : "bg-gray-800"
+              ach.completed ? "bg-bordo-500" : "bg-siva-300/10"
             }`}
           >
             <div className="flex items-center gap-4">
