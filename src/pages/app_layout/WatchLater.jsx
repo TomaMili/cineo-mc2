@@ -1,3 +1,4 @@
+// src/features/watchlater/WatchLaterPage.jsx
 import React, { useState, useEffect } from "react";
 import useWatchLater from "../../hooks/useWatchLater";
 import WatchLaterList from "../../features/watchlater/WatchLaterList";
@@ -5,13 +6,12 @@ import MoviePopup from "../../ui/MoviePopup";
 import { NavLink } from "react-router-dom";
 import { Icon } from "@iconify-icon/react";
 
-export default function WatchLaterPage() {
+export default function WatchLater() {
   const { data: fetched = [], isLoading } = useWatchLater();
   const [movies, setMovies] = useState([]);
-  const [sort, setSort] = useState("date");
+  const [sort, setSort] = useState("genre"); // default to genre
   const [selected, setSelected] = useState(null);
 
-  // initialize local movies state once data arrives
   useEffect(() => {
     setMovies(fetched);
   }, [fetched]);
@@ -23,34 +23,29 @@ export default function WatchLaterPage() {
     const t = document.createElement("div");
     t.innerText = "Link copied to the clipboard!";
     t.className =
-      "fixed bottom-4 right-4 bg-bordo-500 text-white px-4 py-2 rounded border border-bordo-400 shadow-lg";
+      "fixed bottom-4 right-4 bg-bordo-500 text-white px-4 py-2 rounded shadow-lg";
     document.body.appendChild(t);
     setTimeout(() => document.body.removeChild(t), 1500);
   };
 
-  const handleRemove = (m) => {
+  const handleRemove = (m) =>
     setMovies((prev) => prev.filter((x) => x.id !== m.id));
-  };
-
-  const handleMarkWatched = (m) => {
-    // remove from this list
+  const handleMarkWatched = (m, rating) => {
     setMovies((prev) => prev.filter((x) => x.id !== m.id));
+    // TODO: add to watched with rating
     return Promise.resolve();
   };
-
-  const handleToggleWL = (m) => {
-    // if present remove, else add
+  const handleToggleWL = (m) =>
     setMovies((prev) =>
-      prev.find((x) => x.id === m.id)
+      prev.some((x) => x.id === m.id)
         ? prev.filter((x) => x.id !== m.id)
         : [...prev, m]
     );
-  };
 
   return (
     <div className="min-h-screen bg-black text-white pb-12">
       {/* tabs */}
-      <div className="max-w-4xl mx-auto px-6 pt-6">
+      <div className="w-full mx-auto px-6 pt-6">
         <nav className="flex bg-gray-500/40 rounded-full overflow-hidden h-8">
           {[
             ["", "Watch later"],
@@ -76,17 +71,12 @@ export default function WatchLaterPage() {
       </div>
 
       {/* share + sort */}
-      <div className="max-w-4xl mx-auto flex justify-end items-center gap-4 mt-4 px-6">
+      <div className="w-full mx-auto flex justify-end items-center gap-4 mt-4 px-6">
         <button
           onClick={handleShare}
-          className="bg-bordo-500 hover:bg-red-700 px-4 py-2 rounded flex items-center gap-2"
+          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2"
         >
-          <Icon
-            icon="gridicons:share"
-            width="18"
-            height="18"
-            className="text-white"
-          />
+          <Icon icon="gridicons:share" width="18" height="18" />
           <span>Share</span>
         </button>
         <select
@@ -100,8 +90,8 @@ export default function WatchLaterPage() {
         </select>
       </div>
 
-      {/* list */}
-      <div className="max-w-4xl mx-auto mt-8 space-y-8 px-6">
+      {/* grouped, scrollable rows */}
+      <div className="w-full mx-auto mt-8 space-y-8 px-6  ">
         <WatchLaterList
           movies={movies}
           sortMode={sort}
@@ -112,7 +102,6 @@ export default function WatchLaterPage() {
         />
       </div>
 
-      {/* popup */}
       <MoviePopup movie={selected} onClose={() => setSelected(null)} />
     </div>
   );

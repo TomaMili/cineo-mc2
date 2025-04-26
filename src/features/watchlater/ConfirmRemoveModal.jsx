@@ -26,11 +26,12 @@ export default function ConfirmRemoveModal({
           className="bg-gray-800 text-white rounded-lg p-6 max-w-sm w-full space-y-4"
           onClick={(e) => e.stopPropagation()}
         >
-          <h3 className="text-xl font-regular text-center">
-            Remove <strong>{movie.title}</strong> from your{" "}
-            <span className="underline ">{listName.toUpperCase()}</span> list?
+          <h3 className="text-xl text-center">
+            Remove <strong>{movie.title}</strong> from your <br />{" "}
+            <span className="underline">{listName.toUpperCase()}</span> <br />
+            list?
           </h3>
-          <div className="flex justify-end space-x-4 pt-4">
+          <div className="flex justify-center space-x-4 pt-4">
             <button
               onClick={onCancel}
               className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-500"
