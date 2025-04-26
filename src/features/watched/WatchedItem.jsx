@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Icon } from "@iconify-icon/react";
 import { poster } from "../../services/apiTmdb";
 import RatingOverlay from "./RatingOverlay";
-import ConfirmRemoveModal from "../watchlater/ConfirmRemoveModal";
+import ConfirmRemoveModal from "../../ui/ConfirmRemoveModal";
 
 export default function WatchedItem({ movie, onRemove }) {
   const [showRemove, setShowRemove] = useState(false);

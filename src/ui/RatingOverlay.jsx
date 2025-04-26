@@ -1,4 +1,4 @@
-// src/features/watchlater/RatingOverlay.jsx
+//src/ui/RatingOverlay.jsx
 import React, { useState } from "react";
 import { Icon } from "@iconify-icon/react";
 

@@ -1,9 +1,9 @@
 // src/features/watchlater/WatchLaterItem.jsx
 import { useState } from "react";
 import MovieCard from "../../ui/MovieCard";
-import ConfirmRemoveModal from "./ConfirmRemoveModal";
+import ConfirmRemoveModal from "../../ui/ConfirmRemoveModal";
 import { Icon } from "@iconify-icon/react";
-import RatingOverlay from "./RatingOverlay";
+import RatingOverlay from "../../ui/RatingOverlay";
 
 export default function WatchLaterItem({
   movie,
