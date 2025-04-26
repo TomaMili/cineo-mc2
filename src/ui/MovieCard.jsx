@@ -1,3 +1,4 @@
+// src/ui/MovieCard.jsx
 import { Icon } from "@iconify-icon/react";
 import { fetchMovieDetails, poster } from "../services/apiTmdb";
 import PosterPlaceholder from "../utils/posterPlaceholder";
@@ -6,6 +7,8 @@ import { useMoviePopup } from "../context/MoviePopupContext";
 
 export default function MovieCard({
   movie,
+  isSaved = false, // ← new
+  isWatched = false, // ← new
   onWatchLater = () => {},
   onBookmark = () => {},
   onClick,
@@ -18,12 +21,12 @@ export default function MovieCard({
     queryClient.prefetchQuery({
       queryKey: ["movie", movie.id],
       queryFn: ({ signal }) => fetchMovieDetails(movie.id, signal),
-      staleTime: 600_000, // 10min
+      staleTime: 600_000,
     });
   }
 
   return (
-    <div className="w-40 sm:w-44 lg:w-48 xl:w-52 cursor-pointer ">
+    <div className="w-40 sm:w-44 lg:w-48 xl:w-52 cursor-pointer">
       {movie.poster_path ? (
         <div className="overflow-hidden rounded-lg aspect-[2/3]">
           <img
@@ -46,18 +49,29 @@ export default function MovieCard({
         {!hideActions && (
           <div className="flex gap-2 flex-shrink-0">
             <button
-              title="Watch later"
+              title={isWatched ? "Remove from Watched" : "Mark watched"}
               onClick={() => onWatchLater(movie)}
               className="text-white hover:text-bordo-400 cursor-pointer"
             >
-              <Icon icon="mdi:eye-plus-outline" width="18" height="18" />
+              <Icon
+                icon={isWatched ? "mdi:eye-check" : "mdi:eye-plus-outline"}
+                width="18"
+                height="18"
+              />
             </button>
+
             <button
-              title="Bookmark"
+              title={isSaved ? "Remove from Watch-Later" : "Add to Watch-Later"}
               onClick={() => onBookmark(movie)}
               className="text-white hover:text-bordo-400 cursor-pointer"
             >
-              <Icon icon="mdi:bookmark-outline" width="18" height="18" />
+              <Icon
+                icon={
+                  isSaved ? "material-symbols:bookmark" : "mdi:bookmark-outline"
+                }
+                width="18"
+                height="18"
+              />
             </button>
           </div>
         )}

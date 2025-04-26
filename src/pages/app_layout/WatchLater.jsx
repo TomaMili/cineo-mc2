@@ -82,7 +82,7 @@ export default function WatchLater() {
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
-          className="bg-gray-800 text-white rounded px-3 py-1"
+          className="bg-bordo-500 px-4 py-2 gap-2"
         >
           <option value="date">Date added</option>
           <option value="title">Title (A–Z)</option>
