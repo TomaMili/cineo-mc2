@@ -31,7 +31,9 @@ import SettingsPlan from "./features/settings/SettingsPlan";
 
 import Watched from "./pages/app_layout/Watched";
 import WatchLater from "./pages/app_layout/WatchLater";
+
 import { MoviePopupProvider } from "./context/MoviePopupContext";
+import { SuperSuggestProvider } from "./context/SuperSuggestContext";
 
 // import { useAuth } from "./hooks/useAuth";
 
@@ -51,53 +53,70 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <MoviePopupProvider>
-          <Routes>
-            {!user ? (
-              <>
-                <Route index element={<Navigate replace to="landing-page" />} />
-                <Route path="landing-page" element={<LandingPage />} />
-                <Route path="/login" element={<Login />} />
-                <Route element={<RegisterLayout />}>
-                  <Route path="register/info" element={<RegisterInfo />} />
-                  <Route path="register/genres" element={<RegisterGenres />} />
+          <SuperSuggestProvider>
+            <Routes>
+              {!user ? (
+                <>
                   <Route
-                    path="register/platforms"
-                    element={<RegisterPlatforms />}
+                    index
+                    element={<Navigate replace to="landing-page" />}
                   />
-                  <Route path="register/actors" element={<RegisterActors />} />
+                  <Route path="landing-page" element={<LandingPage />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route element={<RegisterLayout />}>
+                    <Route path="register/info" element={<RegisterInfo />} />
+                    <Route
+                      path="register/genres"
+                      element={<RegisterGenres />}
+                    />
+                    <Route
+                      path="register/platforms"
+                      element={<RegisterPlatforms />}
+                    />
+                    <Route
+                      path="register/actors"
+                      element={<RegisterActors />}
+                    />
+                    <Route
+                      path="register/payment-plan"
+                      element={<RegisterPaymentPlan />}
+                    />
+                    <Route
+                      path="register/finish"
+                      element={<RegisterFinish />}
+                    />
+                  </Route>
+                </>
+              ) : (
+                <Route element={<AppLayout />}>
+                  <Route index element={<Navigate replace to="homepage" />} />
+                  <Route path="homepage" element={<HomePage />} />
+                  <Route path="profile" element={<Profile />} />
                   <Route
-                    path="register/payment-plan"
-                    element={<RegisterPaymentPlan />}
+                    path="profile/achievements"
+                    element={<Achievements />}
                   />
-                  <Route path="register/finish" element={<RegisterFinish />} />
+                  <Route path="watchlater" element={<WatchLater />} />
+                  <Route path="watched" element={<Watched />} />
+                  <Route path="collections" element={<Collections />} />
+                  <Route path="watch-together" element={<WatchTogether />} />
+                  <Route
+                    path="watch-together/:groupId"
+                    element={<WatchTogetherGroup />}
+                  />
+                  <Route path="movie/:movieId" element={<MovieDetail />} />
+                  <Route path="settings" element={<Settings />}>
+                    <Route index element={<Navigate replace to="info" />} />
+                    <Route path="info" element={<SettingsInfo />} />
+                    <Route path="platforms" element={<SettingsPlatforms />} />
+                    <Route path="plan" element={<SettingsPlan />} />
+                  </Route>
+                  <Route path="browse" element={<Browse />} />
                 </Route>
-              </>
-            ) : (
-              <Route element={<AppLayout />}>
-                <Route index element={<Navigate replace to="homepage" />} />
-                <Route path="homepage" element={<HomePage />} />
-                <Route path="profile" element={<Profile />} />
-                <Route path="profile/achievements" element={<Achievements />} />
-                <Route path="watchlater" element={<WatchLater />} />
-                <Route path="watched" element={<Watched />} />
-                <Route path="collections" element={<Collections />} />
-                <Route path="watch-together" element={<WatchTogether />} />
-                <Route
-                  path="watch-together/:groupId"
-                  element={<WatchTogetherGroup />}
-                />
-                <Route path="movie/:movieId" element={<MovieDetail />} />
-                <Route path="settings" element={<Settings />}>
-                  <Route index element={<Navigate replace to="info" />} />
-                  <Route path="info" element={<SettingsInfo />} />
-                  <Route path="platforms" element={<SettingsPlatforms />} />
-                  <Route path="plan" element={<SettingsPlan />} />
-                </Route>
-                <Route path="browse" element={<Browse />} />
-              </Route>
-            )}
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
+              )}
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </SuperSuggestProvider>
         </MoviePopupProvider>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />

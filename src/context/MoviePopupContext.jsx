@@ -18,8 +18,5 @@ export function MoviePopupProvider({ children }) {
 }
 
 export function useMoviePopup() {
-  const ctx = useContext(PopupCtx);
-  if (!ctx)
-    throw new Error("useMoviePopup must be used inside <MoviePopupProvider>");
-  return ctx;
+  return useContext(PopupCtx) ?? { open: () => {}, close: () => {} };
 }
