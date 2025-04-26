@@ -1,14 +1,10 @@
 import { useQueries } from "@tanstack/react-query";
 import { fetchMovieDetails } from "../../services/apiTmdb";
 import MovieCard from "../../ui/MovieCard";
-import MoviePopup from "../../ui/MoviePopup";
-import { useState } from "react";
 
 const RECENT_IDS = [858, 743, 200, 349]; // example TMDB IDs
 
 export default function RecentlyWatched() {
-  const [selected, setSelected] = useState(null);
-
   const results = useQueries({
     queries: RECENT_IDS.map((id) => ({
       queryKey: ["movie", id],
@@ -24,15 +20,11 @@ export default function RecentlyWatched() {
         {results.map((movie) => {
           if (movie.isLoading || movie.isError) return null;
           return (
-            <>
-              <MovieCard
-                key={movie.data.id}
-                movie={movie.data}
-                onClick={() => setSelected(movie.data)}
-                hideActions={true}
-              />
-              <MoviePopup movie={selected} onClose={() => setSelected(null)} />
-            </>
+            <MovieCard
+              key={movie.data.id}
+              movie={movie.data}
+              hideActions={true}
+            />
           );
         })}
       </div>

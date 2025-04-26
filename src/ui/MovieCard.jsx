@@ -2,15 +2,17 @@ import { Icon } from "@iconify-icon/react";
 import { fetchMovieDetails, poster } from "../services/apiTmdb";
 import PosterPlaceholder from "../utils/posterPlaceholder";
 import { useQueryClient } from "@tanstack/react-query";
+import { useMoviePopup } from "../context/MoviePopupContext";
 
 export default function MovieCard({
   movie,
   onWatchLater = () => {},
   onBookmark = () => {},
-  onClick = () => {},
+  onClick,
   hideActions = false,
 }) {
   const queryClient = useQueryClient();
+  const { open } = useMoviePopup();
 
   function prefetch() {
     queryClient.prefetchQuery({
@@ -28,7 +30,7 @@ export default function MovieCard({
             src={poster(movie.poster_path)}
             alt={movie.title}
             onMouseEnter={prefetch}
-            onClick={onClick}
+            onClick={onClick ?? (() => open(movie))}
             className="w-full h-full transition-transform duration-300 ease-out hover:scale-105"
           />
         </div>

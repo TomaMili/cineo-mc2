@@ -2,7 +2,7 @@ import { createPortal } from "react-dom";
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify-icon/react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { poster, fetchMovieDetails } from "../services/apiTmdb";
 import { useEffect } from "react";
@@ -10,6 +10,14 @@ import PosterPlaceholder from "../utils/posterPlaceholder";
 
 export default function MoviePopup({ movie, onClose }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  function goToFullPage() {
+    const target = `/movie/${movie.id}`;
+    onClose(); // always close modal
+    if (location.pathname !== target) {
+      navigate(target);
+    }
+  }
 
   const { data: details, isLoading } = useQuery({
     queryKey: ["movie", movie?.id],
@@ -18,7 +26,6 @@ export default function MoviePopup({ movie, onClose }) {
     staleTime: 1_800_000,
   });
 
-  // ESC key closes
   useEffect(() => {
     if (!movie) return;
     const handler = (e) => e.key === "Escape" && onClose();
@@ -31,7 +38,6 @@ export default function MoviePopup({ movie, onClose }) {
 
   return createPortal(
     <AnimatePresence>
-      {/* BACKDROP */}
       <motion.div
         key="backdrop"
         initial={{ opacity: 0 }}
@@ -40,7 +46,6 @@ export default function MoviePopup({ movie, onClose }) {
         className="fixed inset-0 bg-black backdrop-blur-sm z-40"
       />
 
-      {/* FLEX WRAPPER (no click handler – let backdrop handle) */}
       <motion.div
         key="modal"
         onClick={onClose}
@@ -50,33 +55,34 @@ export default function MoviePopup({ movie, onClose }) {
         transition={{ type: "spring", stiffness: 260, damping: 22 }}
         className="fixed inset-0 flex items-center justify-center z-50 p-4"
       >
-        {/* CARD – stop propagation only here */}
         <div
-          className="flex flex-col sm:flex-row max-w-4xl w-full bg-siva-800 text-white rounded-lg overflow-hidden shadow-2xl"
+          className="flex flex-col sm:flex-row max-w-4xl w-full
+                     bg-siva-800 text-white rounded-lg overflow-hidden shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           {data.poster_path ? (
             <img
               src={poster(data.poster_path)}
               alt={data.title}
-              onClick={() => navigate(`/movie/${movie.id}`)}
+              onClick={goToFullPage}
               className="w-full sm:w-60 object-cover cursor-pointer"
             />
           ) : (
             <PosterPlaceholder
               title={movie.title}
-              onClick={() => navigate(`/movie/${movie.id}`)}
-              className="sm:w-54 object-cover cursor-pointer bg-black/20!"
+              onClick={goToFullPage}
+              className="sm:w-60 object-cover cursor-pointer bg-black/20!"
             />
           )}
 
-          <div className="flex-1 p-6 space-y-4 overflow-y-auto max-h-[80vh] ">
+          <div className="flex-1 p-6 space-y-4 overflow-y-auto max-h-[80vh]">
             <h2
               className="text-4xl font-medium cursor-pointer"
-              onClick={() => navigate(`/movie/${movie.id}`)}
+              onClick={goToFullPage}
             >
               {data.title}
             </h2>
+
             <div className="flex items-center gap-0 text-sm">
               <span className="text-siva-300 font-light pr-3">
                 {data.release_date?.slice(0, 4)}
@@ -104,6 +110,7 @@ export default function MoviePopup({ movie, onClose }) {
             <p className="text-siva-200 font-light">
               {isLoading ? "Loading…" : data.overview}
             </p>
+
             <p>
               <span className="font-light text-siva-200">Starring:</span>
               {data.credits
@@ -127,12 +134,13 @@ export default function MoviePopup({ movie, onClose }) {
               <span className="text-xs px-2 py-1 bg-neutral-700 rounded">
                 18+
               </span>
+
               <button
-                onClick={() => navigate(`/movie/${movie.id}`)}
-                className="px-4  text-sm rounded cursor-pointer"
+                onClick={goToFullPage}
+                className="px-4 text-sm rounded cursor-pointer"
               >
                 <div className="flex flex-col items-center pt-10 text-siva-200 font-light">
-                  <p className=""> SHOW MORE</p>
+                  <p>SHOW MORE</p>
                   <Icon
                     icon="weui:arrow-filled"
                     width="26"
@@ -141,6 +149,7 @@ export default function MoviePopup({ movie, onClose }) {
                   />
                 </div>
               </button>
+
               <div className="flex items-center gap-3">
                 <Icon
                   icon="mdi:eye-outline"
