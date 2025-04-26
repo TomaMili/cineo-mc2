@@ -1,59 +1,78 @@
-import { useQuery } from "@tanstack/react-query";
-import {
-  poster,
-  profileImage,
-  fetchMovieDetails,
-  fetchPersonDetails,
-} from "../../services/apiTmdb";
+import { poster, profileImage } from "../../services/apiTmdb";
+import usePerson from "../../hooks/usePerson";
+import useMovie from "../../hooks/useMovie";
+import ErrorNotice from "../../ui/ErrorNotice";
+import SkeletonPoster from "../../ui/SkeletonPoster";
 
 const PERSON_PLACEHOLDER = "https://via.placeholder.com/342x513?text=No+Image";
 
-const DUMMY = {
-  actor: { id: 31, name: "Tom Hanks", count: 7 },
-  director: { id: 956, name: "Guy Ritchie", count: 12 },
-  movie: { id: 497, name: "The Green Mile", count: 3 },
-};
+function Favorites() {
+  const {
+    data: actor,
+    isLoading: actorLoading,
+    isError: actorErr,
+    error: actorErrObj,
+  } = usePerson(31);
 
-function usePerson(id) {
-  return useQuery({
-    queryKey: ["person", id],
-    queryFn: ({ signal }) => fetchPersonDetails(id, signal),
-    staleTime: 1000 * 60 * 5,
-  });
-}
+  const {
+    data: director,
+    isLoading: directorLoading,
+    isError: directorErr,
+    error: directorErrObj,
+  } = usePerson(956);
 
-function useMovie(id) {
-  return useQuery({
-    queryKey: ["movie", id],
-    queryFn: ({ signal }) => fetchMovieDetails(id, signal),
-    staleTime: 1000 * 60 * 5,
-  });
-}
+  const {
+    data: movie,
+    isLoading: movieLoading,
+    isError: movieErr,
+    error: movieErrObj,
+  } = useMovie(497);
 
-export default function Favorites() {
-  const { data: actor } = usePerson(DUMMY.actor.id);
-  const { data: director } = usePerson(DUMMY.director.id);
-  const { data: movie } = useMovie(DUMMY.movie.id);
+  const isLoading = actorLoading || directorLoading || movieLoading;
+  const isError = actorErr || directorErr || movieErr;
+
+  const errMsg =
+    actorErrObj?.message || directorErrObj?.message || movieErrObj?.message;
+
+  console.log(movie);
+
+  if (isLoading)
+    return (
+      <>
+        <div className="max-w-5xl mx-auto mt-13 mb-25 space-y-2 flex justify-around text-center text-white">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <SkeletonPoster key={i} />
+          ))}
+        </div>
+      </>
+    );
+
+  if (isError)
+    return (
+      <div className="flex items-center justify-center h-full mt-24 mb-45.5">
+        <ErrorNotice title="Unable to load data" message={errMsg} />
+      </div>
+    );
 
   const items = [
     {
       title: "FAVOURITE ACTOR",
-      name: DUMMY.actor.name,
-      label: `${DUMMY.actor.count} movies watched`,
+      name: actor?.name,
+      label: `13 movies watched`,
       imgPath: actor?.profile_path,
       isPerson: true,
     },
     {
       title: "FAVOURITE DIRECTOR",
-      name: DUMMY.director.name,
-      label: `${DUMMY.director.count} movies watched`,
+      name: director?.name,
+      label: `4 movies watched`,
       imgPath: director?.profile_path,
       isPerson: true,
     },
     {
       title: "FAVOURITE MOVIE",
-      name: DUMMY.movie.name,
-      label: `${DUMMY.movie.count} times watched`,
+      name: movie?.title,
+      label: `13 times watched`,
       imgPath: movie?.poster_path,
       isPerson: false,
     },
@@ -72,8 +91,8 @@ export default function Favorites() {
             src={
               imgPath
                 ? isPerson
-                  ? profileImage(imgPath, 342)
-                  : poster(imgPath, 342)
+                  ? profileImage(imgPath)
+                  : poster(imgPath)
                 : PERSON_PLACEHOLDER
             }
             alt={name}
@@ -86,3 +105,5 @@ export default function Favorites() {
     </div>
   );
 }
+
+export default Favorites;
