@@ -64,17 +64,17 @@ export function fetchTrending(window = "week", abortSignal) {
    -------------------------------------------------------------------------- */
 const IMG_BASE = "https://image.tmdb.org/t/p";
 
-/**
- * Build a poster URL (sizes: 92, 154, 185, 342, 500, 780, original)
- */
-export const poster = (path, size = 342) =>
+// 92, 154, 185, 342, 500, 780, original
+export const poster = (path, size = 780) =>
   path ? `${IMG_BASE}/w${size}${path}` : null;
 
-/**
- * Build a backdrop URL (sizes: 300, 780, 1280, original)
- */
-export const backdrop = (path, size = 780) =>
+// 300, 780, 1280, original
+export const backdrop = (path, size = 1280) =>
   path ? `${IMG_BASE}/w${size}${path}` : null;
+
+// 45, 185, 632, original
+export const profileImage = (path, size = 632) =>
+  path ? `${IMG_BASE}/h${size}${path}` : null;
 
 /* --------------------------------------------------------------------------
    ▸ Usage example (React‑Query):
@@ -116,12 +116,6 @@ export function fetchPersonDetails(personId, abortSignal) {
     abortSignal
   );
 }
-
-/**
- * Build a profile image URL (available sizes: 45, 185, 632, original)
- */
-export const profileImage = (path, size = 342) =>
-  path ? `${IMG_BASE}/w${size}${path}` : null;
 
 /* Movie page */
 
@@ -167,7 +161,7 @@ export function findDirector(credits) {
 }
 
 /* Watch Providers -------------------------------------------------------- */
-export function fetchMovieProviders(movieId, region = "US", abortSignal) {
+export function fetchMovieProviders(movieId, region = "HR", abortSignal) {
   return fetchJson(
     makeUrl(`movie/${movieId}/watch/providers`),
     abortSignal

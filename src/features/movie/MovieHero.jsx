@@ -35,14 +35,14 @@ export default function MovieHero({ details, director, providers }) {
     <header
       className="relative isolate h-[90vh] -mt-24 text-white flex"
       style={{
-        backgroundImage: `url(${backdrop(backdrop_path, 1280)})`,
+        backgroundImage: `url(${backdrop(backdrop_path)})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
       <div className="absolute inset-0 bg-gradient-to-t from-black/100 via-black/62 to-black/80 " />
 
-      <div className="z-10 mx-[calc(2rem+2vw)] md:mx-[calc(2rem+3vw)] pb-14 px-6 mt-30 flex flex-col justify-between">
+      <div className="z-10 w-full mx-[calc(2rem+2vw)] md:mx-[calc(2rem+3vw)] pb-14 px-6 mt-30 flex flex-col justify-between">
         <div>
           <ul className="flex mt-5 mb-4 flex-wrap">
             {genreChips.map((g) => (
@@ -119,7 +119,7 @@ export default function MovieHero({ details, director, providers }) {
           </ul>
           <div className="flex gap-5 items-end mb-1">
             <button
-              title="Watch later"
+              title="Notify me"
               // onClick={() => onWatchLater(movie)}
               className="text-white gap-1 backdrop-blur-xl transition-all hover:text-bordo-400 cursor-pointer flex h-14 leading-0 rounded-lg w-40 pl-1.5 items-center bg-white/3"
             >
