@@ -8,7 +8,7 @@ const dummyAchievements = [
     date: "02/04/2025",
     percent: 8.6,
     completed: true,
-    rarity: 8.6, // % of users who have it
+    rarity: 8.6,
   },
   {
     id: 2,
