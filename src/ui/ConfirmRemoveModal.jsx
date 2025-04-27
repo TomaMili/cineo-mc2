@@ -1,4 +1,4 @@
-//src/ui/RatingOverlay.jsx
+//src/ui/ConfirmRemoveModal.jsx
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 

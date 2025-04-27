@@ -5,16 +5,21 @@ import NewCollectionModal from "./NewCollectionModal";
 import { Icon } from "@iconify-icon/react";
 import useCollections from "../../hooks/useCollections";
 
-export default function CollectionsPage() {
-  const { data: collections = [], isLoading } = useCollections();
+export default function CollectionsPage({
+  collections,
+  onRemoveMovie,
+  onAddMovie,
+  onDeleteCollection,
+  onShareCollection,
+  onCreateCollection,
+  onShareAll,
+}) {
   const [showNew, setShowNew] = useState(false);
 
-  if (isLoading) return <div className="text-white p-8">Loading…</div>;
-
   return (
-    <div className="min-h-screen bg-black text-white pb-12">
+    <div className="min-h-screen text-white pb-12">
       {/* Tabs */}
-      <div className="max-w-4xl mx-auto px-6 pt-6">
+      <div className="w-full mx-auto px-6 pt-6">
         <nav className="flex bg-gray-500/40 rounded-full overflow-hidden h-8">
           {[
             ["../watchlater", "Watch later"],
@@ -40,13 +45,13 @@ export default function CollectionsPage() {
       </div>
 
       {/* Actions */}
-      <div className="max-w-4xl mx-auto flex justify-end items-center gap-4 mt-4 px-6">
+      <div className="w-full mx-auto flex justify-end items-center gap-4 mt-4 px-6">
         <button
-          onClick={() => navigator.clipboard.writeText(window.location.href)}
+          onClick={onShareAll}
           className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2"
         >
           <Icon icon="gridicons:share" width="18" height="18" />
-          <span>Share all</span>
+          <span>Share all collections</span>
         </button>
         <button
           onClick={() => setShowNew(true)}
@@ -56,32 +61,24 @@ export default function CollectionsPage() {
           <span>New collection</span>
         </button>
       </div>
-
-      {/* Carousels */}
-      <div className="max-w-4xl mx-auto mt-8 space-y-12 px-6">
-        <CollectionsList
-          collections={collections}
-          onRemoveMovie={(colId, movieId) => {
-            // just filter out locally (for demo)
-            console.log(`Remove ${movieId} from ${colId}`);
-          }}
-          onAddMovie={(colId) => {
-            console.log("Add movie to", colId);
-          }}
-        />
-      </div>
-
-      {showNew && (
-        <NewCollectionModal
-          onCreate={(name, ids) => {
-            console.log("create", name, ids);
-            setShowNew(false);
-          }}
-          onCancel={() => setShowNew(false)}
-        />
-      )}
-
-      {/* nested routes if you choose to render `<Outlet/>` here */}
+      <section className="min-h-screen px-6 xl:px-12 pb-32 text-white">
+        {/* Carousels */}
+        <div className="w-full mx-auto mt-8 space-y-12 px-6">
+          <CollectionsList
+            collections={collections}
+            onRemoveMovie={onRemoveMovie}
+            onAddMovie={onAddMovie}
+            onDeleteCollection={onDeleteCollection}
+            onShareCollection={onShareCollection}
+          />
+        </div>
+        {showNew && (
+          <NewCollectionModal
+            onCreate={onCreateCollection}
+            onCancel={() => setShowNew(false)}
+          />
+        )}
+      </section>
       <Outlet />
     </div>
   );

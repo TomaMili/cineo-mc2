@@ -22,6 +22,7 @@ import Profile from "./pages/app_layout/Profile";
 import Achievements from "./pages/app_layout/Achievements";
 import Browse from "./pages/app_layout/Browse";
 import Collections from "./pages/app_layout/Collections";
+import CollectionDetail from "./features/collections/CollectionDetail";
 import MovieDetail from "./pages/app_layout/MovieDetail";
 
 import Settings from "./pages/app_layout/Settings";
@@ -99,6 +100,10 @@ function App() {
                   <Route path="watchlater" element={<WatchLater />} />
                   <Route path="watched" element={<Watched />} />
                   <Route path="collections" element={<Collections />} />
+                  <Route
+                    path="/collections/:id"
+                    element={<CollectionDetail />}
+                  />
                   <Route path="watch-together" element={<WatchTogether />} />
                   <Route
                     path="watch-together/:groupId"
