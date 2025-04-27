@@ -7,8 +7,8 @@ import { useMoviePopup } from "../context/MoviePopupContext";
 
 export default function MovieCard({
   movie,
-  isSaved = false, // ← new
-  isWatched = false, // ← new
+  isSaved = false,
+  isWatched = false,
   onWatchLater = () => {},
   onBookmark = () => {},
   onClick,

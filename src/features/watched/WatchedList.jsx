@@ -1,8 +1,8 @@
-//WatchedList.jsx
+// src/features/watched/WatchedList.jsx
 import React, { useMemo } from "react";
 import WatchedItem from "./WatchedItem";
 
-export default function WatchedList({ movies, sortMode }) {
+export default function WatchedList({ movies, sortMode, onRemove }) {
   const groups = useMemo(() => {
     let arr = [...movies];
     if (sortMode === "rating") {
@@ -29,12 +29,11 @@ export default function WatchedList({ movies, sortMode }) {
         return acc;
       }, {});
     }
-    // default: by watchedDate descending, grouped by day label
     arr.sort((a, b) => new Date(b.watchedDate) - new Date(a.watchedDate));
     return arr.reduce((acc, m) => {
       const d = new Date(m.watchedDate);
       const today = new Date();
-      let label =
+      const label =
         d.toDateString() === today.toDateString()
           ? "Today"
           : `${d.getDate()}. ${d.toLocaleString("default", { month: "long" })}`;
@@ -44,17 +43,19 @@ export default function WatchedList({ movies, sortMode }) {
   }, [movies, sortMode]);
 
   return (
-    <>
+    <section className="min-h-screen bg-black px-6 xl:px-12 pb-32 text-white">
       {Object.entries(groups).map(([group, items]) => (
-        <div key={group}>
-          {group && <h2 className="text-2xl font-bold mb-4">{group}</h2>}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        <section key={group} className="mb-12">
+          {group && (
+            <h2 className="text-2xl font-bold text-white mb-4">{group}</h2>
+          )}
+          <div className="flex flex-wrap gap-6">
             {items.map((m) => (
-              <WatchedItem key={m.id} movie={m} />
+              <WatchedItem key={m.id} movie={m} onRemove={onRemove} />
             ))}
           </div>
-        </div>
+        </section>
       ))}
-    </>
+    </section>
   );
 }

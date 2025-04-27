@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { PrevButton, NextButton } from "../../ui/MovieCarouselArrowButton";
 import MovieCard from "../../ui/MovieCard";
-import ConfirmRemoveModal from "../watchlater/ConfirmRemoveModal";
+import ConfirmRemoveModal from "../../ui/ConfirmRemoveModal";
 
 export default function CollectionRow({
   collection,
