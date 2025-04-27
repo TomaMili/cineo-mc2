@@ -42,7 +42,7 @@ export default function MovieCard({
       )}
 
       <div className="mt-2 flex items-start justify-between">
-        <p className="text-sm font-medium text-white line-clamp-1 mr-1">
+        <p className="text-sm font-medium text-white line-clamp-1 mr-1 hover:text-bordo-400  cursor-pointer transition-all">
           {movie.title}
         </p>
 

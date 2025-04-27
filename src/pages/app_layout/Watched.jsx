@@ -30,7 +30,7 @@ export default function Watched() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white pb-12">
+    <div className="min-h-screen bg-siva-800 text-white pb-12">
       {/* tabs */}
       <div className="w-full mx-auto px-6 pt-6">
         <nav className="flex bg-gray-500/40 rounded-full overflow-hidden h-8">

@@ -66,7 +66,7 @@ export default function WatchedItem({ movie, onRemove }) {
 
       <button
         onClick={() => open(movie)}
-        className="mt-2 text-sm font-medium text-white line-clamp-1 text-left hover:text-bordo-500  cursor-pointer transition-all"
+        className="mt-2 text-sm font-medium text-white line-clamp-1 text-left hover:text-bordo-400  cursor-pointer transition-all"
         style={{ width: "100%" }}
         title={movie.title}
       >

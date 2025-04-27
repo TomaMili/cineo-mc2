@@ -43,7 +43,7 @@ export default function WatchedList({ movies, sortMode, onRemove }) {
   }, [movies, sortMode]);
 
   return (
-    <section className="min-h-screen bg-black px-6 xl:px-12 pb-32 text-white">
+    <section className="min-h-screen  px-6 xl:px-12 pb-32 text-white">
       {Object.entries(groups).map(([group, items]) => (
         <section key={group} className="mb-12">
           {group && (
