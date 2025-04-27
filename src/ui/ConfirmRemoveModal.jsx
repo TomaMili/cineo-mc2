@@ -23,7 +23,7 @@ export default function ConfirmRemoveModal({
         className="fixed inset-0 flex items-center justify-center z-50 p-4"
       >
         <div
-          className="bg-gray-800 text-white rounded-lg p-6 max-w-sm w-full space-y-4"
+          className="bg-siva-800 text-white rounded-lg p-6 max-w-sm w-full space-y-4"
           onClick={(e) => e.stopPropagation()}
         >
           <h3 className="text-xl text-center">
@@ -31,10 +31,10 @@ export default function ConfirmRemoveModal({
             <span className="underline">{listName.toUpperCase()}</span> <br />
             list?
           </h3>
-          <div className="flex justify-center space-x-4 pt-4">
+          <div className="flex justify-center font-bold space-x-4 pt-4">
             <button
               onClick={onCancel}
-              className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-500"
+              className="px-4 py-2 bg-gray-500/40 rounded hover:bg-gray-500"
             >
               Cancel
             </button>

@@ -23,7 +23,7 @@ export default function WatchLater() {
     const t = document.createElement("div");
     t.innerText = "Link copied to the clipboard!";
     t.className =
-      "fixed bottom-4 right-4 bg-bordo-500 text-white px-4 py-2 rounded shadow-lg";
+      "fixed bottom-15 right-15 bg-bordo-500 text-white px-4 py-2 rounded shadow-lg";
     document.body.appendChild(t);
     setTimeout(() => document.body.removeChild(t), 1500);
   };
