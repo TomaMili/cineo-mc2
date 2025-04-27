@@ -8,6 +8,7 @@ import AddMovieModal from "./AddMovieModal";
 import { useMoviePopup } from "../../context/MoviePopupContext";
 import { PrevButton, NextButton } from "../../ui/MovieCarouselArrowButton";
 import usePopularMovies from "../../hooks/usePopularMovies";
+import { handleShare } from "../../utils/share";
 
 export default function CollectionRow({
   collection,
@@ -37,18 +38,11 @@ export default function CollectionRow({
     return () => emblaApi.off("select", update);
   }, [emblaApi]);
 
-  // SHARE handler za kolekciju
-  const handleShare = () => {
-    navigator.clipboard.writeText(
-      window.location.origin + `/collections/${collection.id}`
+  const handleShareClick = () =>
+    handleShare(
+      window.location.origin + `/collections/${collection.id}`,
+      `Link for "${collection.name}" copied to the clipboard!`
     );
-    const t = document.createElement("div");
-    t.innerText = "Link copied to the clipboard!";
-    t.className =
-      "fixed bottom-4 right-4 bg-bordo-500 text-white px-4 py-2 rounded shadow-lg";
-    document.body.appendChild(t);
-    setTimeout(() => document.body.removeChild(t), 1500);
-  };
 
   if (loadingPopular) {
     return <div className="text-white p-8">Loading popular movies…</div>;
@@ -75,7 +69,7 @@ export default function CollectionRow({
         </button>
         <button
           className="flex items-center gap-1 bg-bordo-500 hover:bg-bordo-400 text-white text-sm px-3 py-1 rounded"
-          onClick={handleShare}
+          onClick={handleShareClick}
         >
           <Icon icon="gridicons:share" width="18" height="18" />
           Share

@@ -5,6 +5,7 @@ import WatchLaterList from "../../features/watchlater/WatchLaterList";
 import MoviePopup from "../../ui/MoviePopup";
 import { NavLink } from "react-router-dom";
 import { Icon } from "@iconify-icon/react";
+import { handleShare } from "../../utils/share";
 
 export default function WatchLater() {
   const { data: fetched = [], isLoading } = useWatchLater();
@@ -18,15 +19,11 @@ export default function WatchLater() {
 
   if (isLoading) return <div className="text-white p-8">Loading…</div>;
 
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    const t = document.createElement("div");
-    t.innerText = "Link copied to the clipboard!";
-    t.className =
-      "fixed bottom-15 right-15 bg-bordo-500 text-white px-4 py-2 rounded shadow-lg";
-    document.body.appendChild(t);
-    setTimeout(() => document.body.removeChild(t), 1500);
-  };
+  const handleShareClick = () =>
+    handleShare(
+      window.location.href,
+      "WATCH LATER list link copied to the clipboard!"
+    );
 
   const handleRemove = (m) =>
     setMovies((prev) => prev.filter((x) => x.id !== m.id));
@@ -73,7 +70,7 @@ export default function WatchLater() {
       {/* share + sort */}
       <div className="w-full mx-auto flex justify-end items-center gap-4 mt-4 px-6">
         <button
-          onClick={handleShare}
+          onClick={handleShareClick}
           className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2"
         >
           <Icon icon="gridicons:share" width="18" height="18" />

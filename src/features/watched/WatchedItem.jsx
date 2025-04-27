@@ -4,6 +4,7 @@ import ConfirmRemoveModal from "../../ui/ConfirmRemoveModal";
 import RatingOverlay from "../../ui/RatingOverlay";
 import { Icon } from "@iconify-icon/react";
 import { useMoviePopup } from "../../context/MoviePopupContext";
+import { handleShare } from "../../utils/share";
 
 export default function WatchedItem({ movie, onRemove }) {
   const [showRemove, setShowRemove] = useState(false);
@@ -90,17 +91,12 @@ export default function WatchedItem({ movie, onRemove }) {
           )}
         </div>
         <button
-          onClick={() => {
-            navigator.clipboard.writeText(
-              window.location.origin + `/movie/${movie.id}`
-            );
-            const t = document.createElement("div");
-            t.innerText = "Link copied!";
-            t.className =
-              "fixed bottom-15 right-15 bg-bordo-500 text-white px-4 py-2 rounded shadow-lg";
-            document.body.appendChild(t);
-            setTimeout(() => document.body.removeChild(t), 1500);
-          }}
+          onClick={() =>
+            handleShare(
+              window.location.origin + `/movie/${movie.id}`,
+              "Link copied!"
+            )
+          }
           className="text-gray-300 hover:text-white p-1 hover:bg-bordo-500  flex items-center justify-center  rounded-full transition-all duration-300"
           aria-label="Share movie"
         >
