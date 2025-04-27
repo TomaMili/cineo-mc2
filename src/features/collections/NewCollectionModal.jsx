@@ -22,14 +22,14 @@ export default function NewCollectionModal({
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/70" onClick={onCancel} />
-      <div className="relative bg-gray-900 rounded-lg p-6 max-w-xl w-full text-white z-10">
+      <div className="relative bg-siva-800 rounded-lg p-10  w-3/4 text-white z-10">
         <button
           onClick={onCancel}
           className="absolute top-3 right-3 text-gray-400 hover:text-white"
         >
           <Icon icon="gridicons:cross-circle" width="24" height="24" />
         </button>
-        <h2 className="text-2xl mb-4">Create a collection</h2>
+        <h2 className="text-2xl mb-4 text-center">Create a collection</h2>
         <label className="block mb-4">
           <span>Collection name</span>
           <input

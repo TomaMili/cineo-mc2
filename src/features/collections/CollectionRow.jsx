@@ -51,7 +51,7 @@ export default function CollectionRow({
   return (
     <div className="mb-12">
       {/* Naslov i gumbi */}
-      <div className="flex items-center gap-3 mb-2">
+      <div className="flex items-center gap-3 mb-5">
         <h3 className="text-2xl font-semibold text-white hover:text-bordo-400 cursor-pointer transition-all">
           <Link
             to={`/collections/${collection.id}`}
@@ -61,18 +61,28 @@ export default function CollectionRow({
           </Link>
         </h3>
         <button
-          className="flex items-center gap-1 bg-red-700 hover:bg-red-800 text-white text-sm px-3 py-1 rounded"
+          className="flex items-center gap-2 bg-bordo-500 hover:bg-bordo-400 text-white text-sm px-3 py-2 rounded leading-none"
           onClick={() => setShowDelete(true)}
         >
-          <Icon icon="mdi:delete" width="18" height="18" />
-          Delete
+          <Icon
+            icon="material-symbols:delete-outline"
+            width="18"
+            height="18"
+            className="align-middle"
+          />
+          <span className="align-">Delete</span>
         </button>
         <button
-          className="flex items-center gap-1 bg-bordo-500 hover:bg-bordo-400 text-white text-sm px-3 py-1 rounded"
+          className="flex items-center gap-2 bg-bordo-500 hover:bg-bordo-400 text-white text-sm px-3 py-2 rounded leading-none"
           onClick={handleShareClick}
         >
-          <Icon icon="gridicons:share" width="18" height="18" />
-          Share
+          <Icon
+            icon="gridicons:share"
+            width="18"
+            height="18"
+            className="align-middle"
+          />
+          <span className="align-middle">Share</span>
         </button>
       </div>
 
