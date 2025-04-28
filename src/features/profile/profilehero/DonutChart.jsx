@@ -46,24 +46,24 @@ function DonutChart({
             ))}
           </Pie>
           <RechartsTooltip
-            content={<CustomTooltip />}
+            content={CustomTooltip}
             wrapperStyle={{ zIndex: 999 }}
           />
         </PieChart>
       </ResponsiveContainer>
-
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="absolute w-[200px] h-[200px] bg-siva-800 rounded-full pointer-events-none" />
-        <div
-          className="relative z-10 flex flex-col items-center cursor-pointer"
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="absolute w-[200px] h-[200px] bg-siva-800 rounded-full pointer-events-none z-0" />
+        <button
+          className="relative z-10 flex flex-col items-center cursor-pointer pointer-events-auto border-none bg-transparent p-0 m-0"
           onClick={() => navigate("/watched")}
           title="Go to Watched List"
+          style={{ outline: "none" }}
         >
           <span className="text-5xl font-semibold text-white">{total}</span>
           <span className="text-lg uppercase text-gray-300">
             movies watched
           </span>
-        </div>
+        </button>
       </div>
     </div>
   );

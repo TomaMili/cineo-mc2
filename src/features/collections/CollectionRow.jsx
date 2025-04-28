@@ -91,12 +91,12 @@ export default function CollectionRow({
         <PrevButton
           disabled={prevDisabled}
           onClick={() => emblaApi && emblaApi.scrollPrev()}
-          className="absolute -left-6 top-1/2 -translate-y-1/2 -translate-x-1/2 z-20"
+          className="absolute -left-6 top-1/2 -translate-y-1/2 -translate-x-1/2 z-2"
         />
         <NextButton
           disabled={nextDisabled}
           onClick={() => emblaApi && emblaApi.scrollNext()}
-          className="absolute -right-6 top-1/2 -translate-y-1/2 translate-x-1/2 z-20"
+          className="absolute -right-6 top-1/2 -translate-y-1/2 translate-x-1/2 z-2"
         />
         <div ref={emblaRef} className="overflow-hidden">
           <div className="flex gap-6">
