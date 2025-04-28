@@ -1,13 +1,59 @@
+import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Icon } from "@iconify-icon/react";
-import { useEffect } from "react";
 
+function IconWithSkeleton({
+  icon,
+  width = 28,
+  height = 28,
+  className = "",
+  ...props
+}) {
+  const [loaded, setLoaded] = useState(false);
+
+  // Fallback loader: skeleton nestaje nakon 180ms
+  useEffect(() => {
+    const t = setTimeout(() => setLoaded(true), 180);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <span
+      className={`inline-flex items-center justify-center min-w-[${width}px] min-h-[${height}px] relative ${className}`}
+    >
+      {!loaded && (
+        <span className="absolute left-0 top-0 w-full h-full flex items-center justify-center z-10">
+          <span
+            className={`block w-[${width - 6}px] h-[${
+              height - 6
+            }px] rounded-full bg-gray-700 animate-pulse`}
+          />
+        </span>
+      )}
+      <Icon
+        icon={icon}
+        width={width}
+        height={height}
+        {...props}
+        style={{
+          opacity: loaded ? 1 : 0,
+          transition: "opacity 0.2s",
+          zIndex: 20,
+        }}
+      />
+    </span>
+  );
+}
+
+const ICON_SIZE = 30;
+
+// ---- NAVIGATION ----
 function Navigation({ isNavActive, setIsNavActive }) {
   const location = useLocation();
 
   useEffect(() => {
-    setIsNavActive(false);
-  }, [location.pathname, setIsNavActive]);
+    if (isNavActive) setIsNavActive(false);
+  }, [location.pathname]);
 
   return (
     <>
@@ -24,105 +70,134 @@ function Navigation({ isNavActive, setIsNavActive }) {
       />
       <nav
         className={`
-          fixed inset-y-0 left-0 w-70 max-w-xs
-           text-siva-200 text-2xl
+          fixed inset-y-0 left-0 w-64 max-w-xs
+          text-siva-200 text-lg
           transform transition-all duration-300 ease-in-out z-20
           ${isNavActive ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="flex items-start flex-col h-full bg-siva-800 text-2xl pt-8 pb-10 px-8">
-          <Icon
-            onClick={() => setIsNavActive(false)}
-            icon="mdi:menu"
-            width="36"
-            height="36"
-            className="cursor-pointer pb-10"
-          />
-          <NavLink
-            to="/homepage"
-            className="flex items-center gap-4 mb-6 hover:text-siva-100"
-          >
-            <Icon icon="codicon:home" width="36" height="36" />
-            <span className="pt-2 ">Home</span>
-          </NavLink>
+        <div className="flex flex-col items-start  h-full bg-siva-800 text-xl pt-6 pb-6 px-5">
+          {/* Menu IconWithSkeleton in fixed slot */}
+          <div className="flex items-center justify-center min-w-[30px] min-h-[30px] h-10 mb-6">
+            <IconWithSkeleton
+              icon="mdi:menu"
+              width={36}
+              height={36}
+              onClick={() => setIsNavActive(false)}
+              className="cursor-pointer"
+            />
+          </div>
 
           <NavLink
-            to="/watchlater"
-            className="flex items-center gap-4 mb-6 hover:text-siva-100"
+            to="/homepage"
+            className="flex items-center gap-3 mb-4 hover:text-siva-100 h-10"
           >
-            <Icon
+            <IconWithSkeleton
+              icon="codicon:home"
+              width={ICON_SIZE}
+              height={ICON_SIZE}
+            />
+            <span className="pt-1">Home</span>
+          </NavLink>
+          <NavLink
+            to="/watchlater"
+            className="flex items-center gap-3 mb-4 hover:text-siva-100 h-10"
+          >
+            <IconWithSkeleton
               icon="material-symbols:bookmark-outline"
-              width="36"
-              height="36"
+              width={ICON_SIZE}
+              height={ICON_SIZE}
             />
             <span>Watch later</span>
           </NavLink>
-
           <NavLink
             to="/watched"
-            className="flex items-center gap-4 mb-6 hover:text-siva-100"
+            className="flex items-center gap-3 mb-4 hover:text-siva-100 h-10"
           >
-            <Icon icon="mdi:eye-outline" width="36" height="36" />
+            <IconWithSkeleton
+              icon="mdi:eye-outline"
+              width={ICON_SIZE}
+              height={ICON_SIZE}
+            />
             <span>Watched</span>
           </NavLink>
-
           <NavLink
             to="/watch-together"
-            className="flex items-center gap-4 mb-6 text-left hover:text-siva-100"
+            className="flex items-center gap-3 mb-4 text-left hover:text-siva-100 h-10"
           >
-            <Icon icon="mingcute:group-line" width="36" height="36" />
+            <IconWithSkeleton
+              icon="mingcute:group-line"
+              width={ICON_SIZE}
+              height={ICON_SIZE}
+            />
             <span>Watch together</span>
           </NavLink>
-
           <NavLink
             to="/collections"
-            className="flex items-center gap-4 mb-6 hover:text-siva-100"
+            className="flex items-center gap-3 mb-4 hover:text-siva-100 h-10"
           >
-            <Icon icon="proicons:library" width="36" height="36" />
+            <IconWithSkeleton
+              icon="proicons:library"
+              width={ICON_SIZE}
+              height={ICON_SIZE}
+            />
             <span>Collections</span>
           </NavLink>
-
           <button
             onClick={() => alert("Superpreporuka")}
-            className="flex items-center gap-4 mb-6 text-left hover:text-siva-100 cursor-pointer"
+            className="flex items-center gap-3 mb-4 text-left hover:text-siva-100 cursor-pointer h-10"
           >
-            <Icon icon="hugeicons:ai-idea" width="36" height="36" />
+            <IconWithSkeleton
+              icon="hugeicons:ai-idea"
+              width={ICON_SIZE}
+              height={ICON_SIZE}
+            />
             <span>Supersuggestion</span>
           </button>
-
-          <hr className="border-t w-full border-white/50 my-4 mb-8" />
-
+          <hr className="border-t w-full border-white/50 my-3 mb-5" />
           <button
             onClick={() => alert("Toggled light mode")}
-            className="flex items-center gap-4 mb-6 text-left hover:text-siva-100  cursor-pointer"
+            className="flex items-center gap-3 mb-4 text-left hover:text-siva-100 cursor-pointer h-10"
           >
-            <Icon icon="flowbite:sun-outline" width="36" height="36" />
+            <IconWithSkeleton
+              icon="flowbite:sun-outline"
+              width={ICON_SIZE}
+              height={ICON_SIZE}
+            />
             <span>Light mode</span>
           </button>
-
           <NavLink
             to="/profile"
-            className="flex items-center gap-4 mb-6 hover:text-siva-100"
+            className="flex items-center gap-3 mb-4 hover:text-siva-100 h-10"
           >
-            <Icon icon="ix:user-profile" width="36" height="36" />
+            <IconWithSkeleton
+              icon="ix:user-profile"
+              width={ICON_SIZE}
+              height={ICON_SIZE}
+            />
             <span>Profile</span>
           </NavLink>
-
           <NavLink
             to="/settings/info"
-            className="flex items-center gap-4 mb-6 hover:text-siva-100 cursor-pointer"
+            className="flex items-center gap-3 mb-4 hover:text-siva-100 cursor-pointer h-10"
           >
-            <Icon icon="pajamas:settings" width="36" height="30" />
+            <IconWithSkeleton
+              icon="pajamas:settings"
+              width={ICON_SIZE}
+              height={ICON_SIZE}
+            />
             <span>Settings</span>
           </NavLink>
-
-          <hr className="border-t w-full border-white/50 my-4 mb-8" />
-
+          <hr className="border-t w-full border-white/50 my-3 mb-5" />
           <button
             onClick={() => alert("Signed out")}
-            className="flex items-center gap-4 text-left ml-0 hover:text-siva-100 cursor-pointer"
+            className="flex items-center gap-3 text-left ml-0 hover:text-siva-100 cursor-pointer h-10 mb-2"
           >
-            <Icon icon="ic:twotone-logout" width="34" height="36" />
+            <IconWithSkeleton
+              icon="ic:twotone-logout"
+              width={ICON_SIZE}
+              height={ICON_SIZE}
+            />
             <span>Sign out</span>
           </button>
         </div>
