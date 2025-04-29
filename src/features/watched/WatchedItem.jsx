@@ -1,20 +1,18 @@
 import React, { useState } from "react";
 import MovieCard from "../../ui/MovieCard";
-import ConfirmRemoveModal from "../../ui/ConfirmRemoveModal";
 import RatingOverlay from "../../ui/RatingOverlay";
 import { Icon } from "@iconify-icon/react";
 import { useMoviePopup } from "../../context/MoviePopupContext";
 import { handleShare } from "../../utils/share";
 
 export default function WatchedItem({ movie, onRemove }) {
-  const [showRemove, setShowRemove] = useState(false);
+  // const [showRemove, setShowRemove] = useState(false);
   const [showRating, setShowRating] = useState(false);
   const { open } = useMoviePopup();
 
   return (
     <div className="relative group w-40 sm:w-44 lg:w-48 xl:w-52">
-      {/* Remove confirmation */}
-      {showRemove && (
+      {/* {showRemove && (
         <ConfirmRemoveModal
           movie={movie}
           listName="watched"
@@ -24,11 +22,11 @@ export default function WatchedItem({ movie, onRemove }) {
           }}
           onCancel={() => setShowRemove(false)}
         />
-      )}
+      )} */}
 
       {/* ✕ remove button on hover */}
       <button
-        onClick={() => setShowRemove(true)}
+        // onClick={() => setShowRemove(true)}
         className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all bg-black/50 p-1 rounded-full hover:bg-bordo-500 z-10 flex items-center justify-center"
       >
         <Icon

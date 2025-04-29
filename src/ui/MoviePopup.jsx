@@ -1,40 +1,53 @@
 import { createPortal } from "react-dom";
-// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify-icon/react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+
 import { poster, fetchMovieDetails } from "../services/apiTmdb";
-import { useEffect } from "react";
 import PosterPlaceholder from "../utils/posterPlaceholder";
+import { useIsInWatchLater, useToggleWatchLater } from "../hooks/useWatchLater";
+import { useEffect } from "react";
 
 export default function MoviePopup({ movie, onClose }) {
   const navigate = useNavigate();
   const location = useLocation();
-  function goToFullPage() {
-    const target = `/movie/${movie.id}`;
-    onClose(); // always close modal
-    if (location.pathname !== target) {
-      navigate(target);
-    }
+
+  // TODO: swap the stub for the real session id
+  const userId = 1;
+
+  const savedWL = useIsInWatchLater(movie?.id, userId);
+  const toggleWL = useToggleWatchLater(userId);
+
+  const saved = savedWL;
+
+  function handleBookmark() {
+    if (!userId) return; // not signed-in
+    toggleWL(movie, saved);
   }
 
   const { data: details, isLoading } = useQuery({
     queryKey: ["movie", movie?.id],
     queryFn: ({ signal }) => fetchMovieDetails(movie.id, signal),
     enabled: !!movie,
-    staleTime: 1_800_000,
+    staleTime: 30 * 60 * 1000,
   });
 
   useEffect(() => {
     if (!movie) return;
-    const handler = (e) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    const h = (e) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
   }, [movie, onClose]);
 
   if (!movie) return null;
   const data = details || movie;
+
+  function goToFullPage() {
+    const target = `/movie/${movie.id}`;
+    onClose();
+    if (location.pathname !== target) navigate(target);
+  }
 
   return createPortal(
     <AnimatePresence>
@@ -56,9 +69,9 @@ export default function MoviePopup({ movie, onClose }) {
         className="fixed inset-0 flex items-center justify-center z-50 p-4"
       >
         <div
+          onClick={(e) => e.stopPropagation()}
           className="flex flex-col sm:flex-row max-w-4xl w-full
                      bg-siva-800 text-white rounded-lg overflow-hidden shadow-2xl"
-          onClick={(e) => e.stopPropagation()}
         >
           {data.poster_path ? (
             <img
@@ -69,7 +82,7 @@ export default function MoviePopup({ movie, onClose }) {
             />
           ) : (
             <PosterPlaceholder
-              title={movie.title}
+              title={data.title}
               onClick={goToFullPage}
               className="sm:w-60 object-cover cursor-pointer bg-black/20!"
             />
@@ -110,7 +123,6 @@ export default function MoviePopup({ movie, onClose }) {
             <p className="text-siva-200 font-light">
               {isLoading ? "Loading…" : data.overview}
             </p>
-
             <p>
               <span className="font-light text-siva-200">Starring:</span>
               {data.credits
@@ -158,10 +170,16 @@ export default function MoviePopup({ movie, onClose }) {
                   className="cursor-pointer hover:text-bordo-400"
                 />
                 <Icon
-                  icon="mdi:bookmark-outline"
+                  icon={
+                    saved ? "material-symbols:bookmark" : "mdi:bookmark-outline"
+                  }
                   width="24"
                   height="24"
                   className="cursor-pointer hover:text-bordo-400"
+                  title={
+                    saved ? "Remove from Watch-Later" : "Add to Watch-Later"
+                  }
+                  onClick={handleBookmark}
                 />
               </div>
             </div>

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import useEmblaCarousel from "embla-carousel-react";
 import { Icon } from "@iconify-icon/react";
-import ConfirmRemoveModal from "../../ui/ConfirmRemoveModal";
+// import ConfirmRemoveModal from "../../ui/ConfirmRemoveModal";
 import AddMovieCard from "./AddMovieCard";
 import AddMovieModal from "./AddMovieModal";
 import { useMoviePopup } from "../../context/MoviePopupContext";
@@ -12,7 +12,7 @@ import { handleShare } from "../../utils/share";
 
 export default function CollectionRow({
   collection,
-  onRemoveMovie,
+  // onRemoveMovie,
   onAddMovie,
   onDeleteCollection,
 }) {
@@ -23,7 +23,7 @@ export default function CollectionRow({
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start" });
   const [prevDisabled, setPrevDisabled] = useState(true);
   const [nextDisabled, setNextDisabled] = useState(false);
-  const [toRemove, setToRemove] = useState(null);
+  // const [toRemove, setToRemove] = useState(null);
   const [showDelete, setShowDelete] = useState(false);
   const { open } = useMoviePopup();
 

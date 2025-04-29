@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import { backdrop } from "../../services/apiTmdb";
 import { Icon } from "@iconify-icon/react";
+import {
+  useIsInWatchLater,
+  useToggleWatchLater,
+} from "../../hooks/useWatchLater";
 
 export default function MovieHero({ details, director, providers }) {
   const {
@@ -30,6 +34,20 @@ export default function MovieHero({ details, director, providers }) {
       (p, idx, arr) =>
         arr.findIndex((q) => q.provider_id === p.provider_id) === idx
     );
+
+  // TODO: swap the stub for the real session id
+  const userId = 1;
+
+  /* ─── watch-later state & toggler ─────────────────────────── */
+  const savedWL = useIsInWatchLater(details?.id, userId);
+  const toggleWL = useToggleWatchLater(userId);
+
+  const saved = savedWL; // no extra prop override
+
+  function handleBookmark() {
+    if (!userId) return; // not signed-in
+    toggleWL(details, saved);
+  }
 
   return (
     <header
@@ -134,11 +152,17 @@ export default function MovieHero({ details, director, providers }) {
               <Icon icon="mdi:eye-plus-outline" width="38" height="38" />
             </button>
             <button
-              title="Bookmark"
-              // onClick={() => onBookmark(movie)}
+              title={saved ? "Remove from Watch-Later" : "Add to Watch-Later"}
+              onClick={handleBookmark}
               className="text-white hover:text-bordo-400 cursor-pointer h-14 leading-0 backdrop-blur-xl transition-all bg-white/3 w-14 rounded-lg"
             >
-              <Icon icon="mdi:bookmark-outline" width="38" height="38" />
+              <Icon
+                icon={
+                  saved ? "material-symbols:bookmark" : "mdi:bookmark-outline"
+                }
+                width="38"
+                height="38"
+              />
             </button>
           </div>
         </div>

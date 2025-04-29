@@ -76,11 +76,7 @@ export default function MovieDetail() {
       <hr className="mb-30 border-0.5 border-siva-300/30 mx-10" />
       <CastSection slides={details.credits?.cast ?? []} />
       <ReviewsSection reviews={reviews?.results ?? []} />
-      <SimilarMoviesSection
-        movieId={movieId}
-        onWatchLater={(m) => console.log("Watch later:", m)}
-        onBookmark={(m) => console.log("Bookmark:", m)}
-      />
+      <SimilarMoviesSection movieId={movieId} />
     </article>
   );
 }
