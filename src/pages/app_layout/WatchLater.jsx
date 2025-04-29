@@ -1,11 +1,6 @@
-/* -------------------------------- WatchLater.jsx ------------------------------ */
 import { useMemo, useState } from "react";
 import { Icon } from "@iconify-icon/react";
-import {
-  useWatchLater,
-  useAddToWatchLater,
-  useRemoveFromWatchLater,
-} from "../../hooks/useWatchLater";
+import { useWatchLater, useToggleWatchLater } from "../../hooks/useWatchLater";
 // import { useSession } from "@supabase/auth-helpers-react";
 
 import WatchLaterList from "../../features/watchlater/WatchLaterList";
@@ -19,14 +14,11 @@ export default function WatchLater() {
   const share = useShare();
   // const session = useSession();
   // const userId = session?.user?.id;
-  const userId = 1;
+  const userId = 1; // TODO: replace with real session
 
-  /* ─── react-query data ──────────────────────────────────────── */
   const { data: movies = [], isLoading } = useWatchLater(userId);
-  const { mutate: addMovie } = useAddToWatchLater(userId);
-  const { mutate: removeMovie } = useRemoveFromWatchLater(userId);
+  const toggleWatchLater = useToggleWatchLater(userId);
 
-  /* ─── local UI state ───────────────────────────────────────── */
   const [sort, setSort] = useState("genre");
   const [selected, setSelected] = useState(null);
 
@@ -38,14 +30,13 @@ export default function WatchLater() {
     return movies;
   }, [movies, sort]);
 
-  /* ─── early-out if nobody logged in ─────────────────────────── */
   if (!userId)
     return (
       <div className="flex items-center justify-center h-screen bg-black">
         <ErrorNotice title="Couldn't load Watch-Later" message="No user" />
       </div>
     );
-  /* ─── loading state ────────────────────────────────────────── */
+
   if (isLoading)
     return (
       <>
@@ -64,10 +55,8 @@ export default function WatchLater() {
       </>
     );
 
-  /* ─── page ─────────────────────────────────────────────────── */
   return (
     <div className="min-h-screen bg-siva-800 text-white pb-12">
-      {/* top nav */}
       <div className="w-full mx-auto px-6 pt-6">
         <TabNav
           tabs={[
@@ -78,7 +67,6 @@ export default function WatchLater() {
         />
       </div>
 
-      {/* share + sort */}
       <div className="w-full mx-auto flex justify-end items-center gap-4 mt-4 px-6">
         <button
           onClick={() => share("WATCH LATER list link copied to clipboard!")}
@@ -99,14 +87,12 @@ export default function WatchLater() {
         </select>
       </div>
 
-      {/* list */}
       <div className="w-full mx-auto mt-8 space-y-8 px-6">
         <WatchLaterList
           movies={sorted}
           sortMode={sort}
           onSelect={setSelected}
-          onAdd={addMovie}
-          onRemove={removeMovie}
+          onToggleWL={toggleWatchLater}
         />
       </div>
 

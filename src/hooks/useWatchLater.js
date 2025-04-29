@@ -23,7 +23,7 @@ export function useWatchLater(userId) {
       /* step-A  fetch api_id + created_at */
       const { data, error } = await supabase
         .from("watch_later")
-        .select("created_at, movies ( api_id )")
+        .select("created_at, movies ( id, api_id )")
         .eq("user_id", userId)
         .order("created_at", { ascending: false });
 
@@ -37,6 +37,7 @@ export function useWatchLater(userId) {
       /* step-C  preserve addedAt for “Date added” sort */
       return details.map((m, i) => ({
         ...m,
+        dbId: data[i].movies.id,
         addedAt: data[i].created_at,
       }));
     },
@@ -73,6 +74,20 @@ export function useIsInWatchLater(movieId, userId) {
 export function useToggleWatchLater(userId) {
   const add = useAddToWatchLater(userId);
   const remove = useRemoveFromWatchLater(userId);
-  return (movie, isSaved) =>
-    isSaved ? remove.mutate(movie.id) : add.mutate(movie);
+  const { data: list = [] } = useWatchLater(userId);
+
+  return (movie, isSaved) => {
+    if (isSaved) {
+      let dbId = movie.dbId;
+      if (!dbId) {
+        const hit = list.find((m) => m.id === movie.id);
+        dbId = hit?.dbId;
+      }
+
+      if (dbId) remove.mutate(dbId);
+      // (optional) else toast “Couldn’t remove – try again”
+    } else {
+      add.mutate(movie);
+    }
+  };
 }
