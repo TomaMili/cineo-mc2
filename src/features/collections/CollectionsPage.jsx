@@ -4,9 +4,11 @@ import CollectionsList from "./CollectionsList";
 import NewCollectionModal from "./NewCollectionModal";
 import { Icon } from "@iconify-icon/react";
 import useCollections from "../../hooks/useCollections";
+import TabNav from "../../ui/TabNav";
+import ErrorNotice from "../../ui/ErrorNotice";
+import Spinner from "../../ui/Spinner";
 
 export default function CollectionsPage({
-  collections,
   onRemoveMovie,
   onAddMovie,
   onDeleteCollection,
@@ -14,55 +16,74 @@ export default function CollectionsPage({
   onCreateCollection,
   onShareAll,
 }) {
+  const { data: collections = [], isLoading, isError } = useCollections();
+
   const [showNew, setShowNew] = useState(false);
+
+  // const session = useSession();
+  // const userId = session?.user?.id;
+  const userId = 1; // TODO: replace with real session
+
+  if (!userId)
+    return (
+      <div className="flex items-center justify-center h-screen bg-black">
+        <ErrorNotice title="Couldn't load Collections" message="No user" />
+      </div>
+    );
+  if (isError)
+    return (
+      <div className="flex items-center justify-center h-screen bg-black">
+        <ErrorNotice title="Couldn't load Collections" message="Error 404" />
+      </div>
+    );
+
+  if (isLoading)
+    return (
+      <>
+        <div className="w-full mx-auto px-6 pt-6">
+          <TabNav
+            tabs={[
+              ["../watchlater", "Watch later"],
+              ["../watched", "Watched"],
+              ["", "Collections"],
+            ]}
+          />
+        </div>
+        <div className="h-screen -m-24 flex justify-center items-center">
+          <Spinner size={46} />
+        </div>
+      </>
+    );
 
   return (
     <div className="min-h-screen text-white pb-12">
-      {/* Tabs */}
       <div className="w-full mx-auto px-6 pt-6">
-        <nav className="flex bg-gray-500/40 rounded-full overflow-hidden h-8">
-          {[
+        <TabNav
+          tabs={[
             ["../watchlater", "Watch later"],
             ["../watched", "Watched"],
             ["", "Collections"],
-          ].map(([to, label]) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={to === ""}
-              className={({ isActive }) =>
-                `flex-1 text-center leading-8 transition-colors ${
-                  isActive
-                    ? "bg-bordo-500 text-white"
-                    : "text-gray-300 hover:bg-bordo-400 hover:text-white"
-                }`
-              }
-            >
-              {label}
-            </NavLink>
-          ))}
-        </nav>
+          ]}
+        />
       </div>
 
-      {/* Actions */}
       <div className="w-full mx-auto flex justify-end items-center gap-4 mt-4 px-6">
         <button
           onClick={onShareAll}
-          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2"
+          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 cursor-pointer transition-colors duration-200"
         >
           <Icon icon="gridicons:share" width="18" height="18" />
           <span>Share all collections</span>
         </button>
         <button
           onClick={() => setShowNew(true)}
-          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2"
+          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 cursor-pointer transition-colors duration-200"
         >
           <Icon icon="mdi:plus" width="18" height="18" />
           <span>New collection</span>
         </button>
       </div>
       <section className="min-h-screen px-6 xl:px-12 pb-32 text-white">
-        {/* Carousels */}
         <div className="w-full mx-auto mt-8 space-y-12 px-6">
           <CollectionsList
             collections={collections}

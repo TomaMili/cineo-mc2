@@ -9,7 +9,7 @@ export default function TabNav({ tabs }) {
           to={to}
           end={to === ""}
           className={({ isActive }) =>
-            `flex-1 text-center leading-9 transition-colors text-sm
+            `flex-1 text-center leading-9 transition-colors text-md
              ${
                isActive
                  ? "bg-bordo-500 text-white"
