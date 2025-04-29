@@ -28,33 +28,16 @@ export default function Watched() {
 
   return (
     <div className="min-h-screen bg-siva-800 text-white pb-12">
-      {/* tabs */}
       <div className="w-full mx-auto px-6 pt-6">
-        <nav className="flex bg-gray-500/40 rounded-full overflow-hidden h-8">
-          {[
-            ["../watchlater", "Watch later"],
-            ["", "Watched"],
+        <TabNav
+          tabs={[
+            ["", "Watch later"],
+            ["../watched", "Watched"],
             ["../collections", "Collections"],
-          ].map(([to, label]) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={to === ""}
-              className={({ isActive }) =>
-                `flex-1 text-center leading-8 transition-colors ${
-                  isActive
-                    ? "bg-bordo-500 text-white"
-                    : "text-gray-300 hover:bg-bordo-400 hover:text-white"
-                }`
-              }
-            >
-              {label}
-            </NavLink>
-          ))}
-        </nav>
+          ]}
+        />
       </div>
 
-      {/* share + sort */}
       <div className="w-full mx-auto flex justify-end items-center gap-4 mt-4 px-6">
         <button
           onClick={handleShareClick}

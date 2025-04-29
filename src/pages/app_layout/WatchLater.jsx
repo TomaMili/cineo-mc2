@@ -70,7 +70,7 @@ export default function WatchLater() {
       <div className="w-full mx-auto flex justify-end items-center gap-4 mt-4 px-6">
         <button
           onClick={() => share("WATCH LATER list link copied to clipboard!")}
-          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2"
+          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 cursor-pointer transition-colors duration-200"
         >
           <Icon icon="gridicons:share" width="18" height="18" />
           Share
@@ -79,11 +79,13 @@ export default function WatchLater() {
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
-          className="bg-bordo-500 px-4 py-2 rounded text-sm"
+          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2.5 rounded flex items-center gap-2 cursor-pointer transition-colors duration-200"
         >
           <option value="date">Date added</option>
           <option value="title">Title (A–Z)</option>
+          <option value="title-desc">Title (Z–A)</option>
           <option value="genre">Genre (A–Z)</option>
+          <option value="genre-desc">Genre (Z–A)</option>
         </select>
       </div>
 

@@ -18,12 +18,30 @@ export default function WatchLaterList({
         return acc;
       }, {});
     }
+    if (sortMode === "title-desc") {
+      arr.sort((a, b) => b.title.localeCompare(a.title));
+      return arr.reduce((acc, m) => {
+        push(acc, m.title?.[0]?.toUpperCase() || "#", m);
+        return acc;
+      }, {});
+    }
 
     if (sortMode === "genre") {
       arr.sort((a, b) => {
         const ga = a.genres?.[0]?.name || "";
         const gb = b.genres?.[0]?.name || "";
         return ga.localeCompare(gb) || a.title.localeCompare(b.title);
+      });
+      return arr.reduce((acc, m) => {
+        push(acc, m.genres?.[0]?.name || "Other", m);
+        return acc;
+      }, {});
+    }
+    if (sortMode === "genre-desc") {
+      arr.sort((a, b) => {
+        const ga = a.genres?.[0]?.name || "";
+        const gb = b.genres?.[0]?.name || "";
+        return gb.localeCompare(ga) || b.title.localeCompare(a.title);
       });
       return arr.reduce((acc, m) => {
         push(acc, m.genres?.[0]?.name || "Other", m);
