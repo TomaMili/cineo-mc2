@@ -70,3 +70,30 @@ export function useToggleWatched(userId) {
     }
   };
 }
+
+/* ---------------------------------------------------------------------------
+ * 4️⃣  last-N recently watched  (for profile page)
+ * ------------------------------------------------------------------------- */
+export function useRecentlyWatched(userId, limit = 4) {
+  return useQuery({
+    queryKey: ["recently-watched", userId, limit],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("watched")
+        .select("created_at, movies ( id, api_id )")
+        .eq("users_id", userId)
+        .order("created_at", { ascending: false })
+        .limit(limit);
+
+      if (error) throw error;
+
+      const details = await Promise.all(
+        data.map(({ movies }) => fetchMovieDetails(movies.api_id))
+      );
+
+      return details;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}

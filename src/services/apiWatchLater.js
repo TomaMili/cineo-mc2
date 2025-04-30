@@ -1,63 +1,74 @@
 import supabase from "./supabase";
+import { fetchMovieDetails } from "./apiTmdb";
 
-function mapMovieForDB(tmdb) {
+/**
+ * Map a TMDB movie object into our `movies` table format,
+ * fetching full details if needed to include credits with images.
+ */
+async function mapMovieForDB(tmdb) {
+  let full = tmdb;
+  if (!tmdb.credits || !Array.isArray(tmdb.credits.cast)) {
+    full = await fetchMovieDetails(tmdb.id);
+  }
   return {
-    api_id: tmdb.id, // UNIQUE
-    title: tmdb.title,
-    overview: tmdb.overview,
-    release_date: tmdb.release_date // ↳ smallint YEAR?
-      ? Number(tmdb.release_date.slice(0, 4))
+    api_id: full.id, // UNIQUE
+    title: full.title,
+    overview: full.overview,
+    release_date: full.release_date
+      ? Number(full.release_date.slice(0, 4))
       : null,
-    poster: tmdb.poster_path,
-    backdrop: tmdb.backdrop_path,
-    tagline: tmdb.tagline,
-    duration: tmdb.runtime, // minutes
-    imdb_rating: tmdb.vote_average
-      ? tmdb.vote_average / 2 // 0-10 ➜ 0-5
-      : null,
-    genres: tmdb.genres, // JSON[]
-    actors: tmdb.credits?.cast
-      ?.slice(0, 10) // JSON[]
-      .map(({ id, name }) => ({ id, name })),
-    directors: tmdb.credits?.crew
+    poster: full.poster_path,
+    backdrop: full.backdrop_path,
+    tagline: full.tagline,
+    duration: full.runtime, // minutes
+    imdb_rating: full.vote_average ? full.vote_average / 2 : null,
+    genres: full.genres, // JSON[]
+    actors: full.credits?.cast
+      ?.slice(0, 10)
+      .map(({ id, name, profile_path }) => ({ id, name, profile_path })),
+    directors: full.credits?.crew
       ?.filter((p) => p.job === "Director")
-      .map(({ id, name }) => ({ id, name })),
-    writers: tmdb.credits?.crew
+      .map(({ id, name, profile_path }) => ({ id, name, profile_path })),
+    writers: full.credits?.crew
       ?.filter((p) => p.job === "Writer")
       .map(({ id, name }) => ({ id, name })),
   };
 }
 
+/**
+ * Upsert a movie row, returning the DB record (including generated id).
+ */
 export async function upsertMovie(tmdbMovie) {
-  const prepared = mapMovieForDB(tmdbMovie);
-
+  const row = await mapMovieForDB(tmdbMovie);
   const { data, error } = await supabase
     .from("movies")
-    .upsert(prepared, { onConflict: "api_id" })
+    .upsert(row, { onConflict: "api_id" })
     .select()
     .single();
-
   if (error) throw error;
   return data;
 }
 
-export async function addToWatchLater(userId, movie) {
-  const movieRow = await upsertMovie(movie);
-
+/**
+ * Add a movie to the user's Watch-Later list
+ */
+export async function addToWatchLater(userId, tmdbMovie) {
+  const movieRow = await upsertMovie(tmdbMovie);
   const { error } = await supabase
     .from("watch_later")
-    .insert([{ user_id: userId, movie_id: movieRow.id }]);
-
+    .insert({ user_id: userId, movie_id: movieRow.id });
   if (error) throw error;
   return movieRow;
 }
 
+/**
+ * Remove a movie from the user's Watch-Later list
+ */
 export async function removeFromWatchLater(userId, movieId) {
   const { error } = await supabase
     .from("watch_later")
     .delete()
     .eq("user_id", userId)
     .eq("movie_id", movieId);
-
   if (error) throw error;
 }
