@@ -1,8 +1,5 @@
 import supabase from "./supabase";
 
-/* ──────────────────────────────────────────────────────────────
- * basic list + single row (unchanged)
- * ──────────────────────────────────────────────────────────── */
 export async function getUsers() {
   const { data, error, count } = await supabase
     .from("users")
@@ -49,6 +46,7 @@ export async function getUserProfile(id) {
     .select(
       `
             created_at,
+            user_rating,
               movies (
               title,
               poster,
@@ -64,7 +62,7 @@ export async function getUserProfile(id) {
   /* D. build maps & stats ---------------------------------------------- */
   const actorMap = new Map(); // name → { n , img }
   const directorMap = new Map(); // name → { n , img }
-  const movieMap = new Map(); // title → { n , poster , backdrop } // title → { n , poster }
+  const movieMap = new Map(); // title → { n , poster }
 
   const genreMap = new Map(); // name → n
   const activity = new Map(
@@ -125,8 +123,19 @@ export async function getUserProfile(id) {
   const pick = (map) => [...map].sort((a, b) => b[1].n - a[1].n)[0] ?? [];
   const [favActor, actObj] = pick(actorMap);
   const [favDirector, dirObj] = pick(directorMap);
-  const [favMovie, movObj] =
-    [...movieMap].sort((a, b) => b[1].n - a[1].n)[0] ?? [];
+  const rated = watchedRows
+    .filter((r) => r.user_rating != null)
+    .sort((a, b) => b.user_rating - a.user_rating);
+  let favMovie, movObj;
+  if (rated.length) {
+    favMovie = rated[0].movies.title;
+    movObj = {
+      n: rated[0].user_rating,
+      poster: rated[0].movies.poster || rated[0].movies.backdrop,
+    };
+  } else {
+    [favMovie, movObj] = [...movieMap].sort((a, b) => b[1].n - a[1].n)[0] ?? [];
+  }
 
   /* donut + activity arrays -------------------------------------------- */
   const palette = [
@@ -202,9 +211,6 @@ export async function getUserProfile(id) {
   };
 }
 
-/* ──────────────────────────────────────────────────────────────
- * helper to update username / avatar / prefs
- * ──────────────────────────────────────────────────────────── */
 export async function updateUser(id, patch) {
   const { data, error } = await supabase
     .from("users")
