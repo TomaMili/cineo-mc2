@@ -1,13 +1,34 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  ACHIEVEMENT_DEFINITIONS,
+  getUserAchievements,
+  syncAchievements,
+} from "../services/apiAchievements";
 
-export function useAchievements() {
-  const [data, setData] = useState({ rarest: [], all: [] });
-  useEffect(() => {
-    // replace with fetch from Supabase
+export function useUserAchievements(userId) {
+  useQuery({
+    queryKey: ["syncAchievements", userId],
+    queryFn: () => syncAchievements(userId),
+    enabled: !!userId,
+  });
 
-    setTimeout(() => {
-      setData({ rarest: fake.slice(0, 3), all: fake.concat(fake, fake) });
-    }, 300);
-  }, []);
-  return data;
+  const {
+    data = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["achievements", userId],
+    queryFn: () => getUserAchievements(userId),
+    enabled: !!userId,
+  });
+
+  const completed = new Set(data.map((r) => r.achivement_name));
+  const items = ACHIEVEMENT_DEFINITIONS.map((def) => ({
+    ...def,
+    completed: completed.has(def.key),
+    date:
+      data.find((r) => r.achivement_name === def.key)?.date_achieved || null,
+  }));
+
+  return { items, isLoading, error };
 }

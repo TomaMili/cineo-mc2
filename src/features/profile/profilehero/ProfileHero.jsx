@@ -2,10 +2,14 @@ import AvatarCard from "./AvatarCard";
 import DonutChart from "./DonutChart";
 import ActivityChart from "./ActivityChart";
 import { useUserProfile } from "../../../hooks/useUsers";
+import { useUserAchievements } from "../../../hooks/useAchievements";
 
 export default function ProfileHero() {
   const userId = 1; // TODO real session
   const { data: profile, isLoading } = useUserProfile(userId);
+
+  const { items } = useUserAchievements(userId);
+  const completed = items.filter((a) => a.completed).length;
 
   if (isLoading || !profile)
     return (
@@ -28,7 +32,7 @@ export default function ProfileHero() {
           // src={profile.avatarUrl || "/profile-avatar.png"}
           name={profile.username.toUpperCase() || "Anonymous"}
           // subtitle={`Favourite actor: ${profile.favActor ?? "—"}`}
-          // trophyCount={`${profile.watchedCount}/${profile.watchLaterCount}`}
+          trophyCount={`${completed}/${19}`}
         />
 
         <div className="flex flex-col items-center gap-6 pb-10">
