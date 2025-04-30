@@ -1,63 +1,46 @@
-import React, { useState } from "react";
-import MovieCard from "../../ui/MovieCard";
-import RatingOverlay from "../../ui/RatingOverlay";
+import { useState } from "react";
 import { Icon } from "@iconify-icon/react";
+import RatingOverlay from "../../ui/RatingOverlay";
 import { useMoviePopup } from "../../context/MoviePopupContext";
 import { handleShare } from "../../utils/share";
+import { useToggleWatched } from "../../hooks/useWatched";
 
-export default function WatchedItem({ movie, onRemove }) {
-  // const [showRemove, setShowRemove] = useState(false);
-  const [showRating, setShowRating] = useState(false);
+export default function WatchedItem({ movie }) {
   const { open } = useMoviePopup();
 
+  // TODO: swap the stub for the real session id
+  const userId = 1;
+  const toggleWatched = useToggleWatched(userId);
+
+  const [showRating, setShowRating] = useState(false);
+  const [localRating, setLocalRating] = useState(movie.userRating ?? null);
+
+  const posterSrc = movie.poster_path
+    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    : "/placeholder.jpg";
+
+  function saveRating(stars) {
+    toggleWatched(movie, false, stars);
+    setLocalRating(stars);
+    setShowRating(false);
+  }
+
   return (
-    <div className="relative group w-40 sm:w-44 lg:w-48 xl:w-52">
-      {/* {showRemove && (
-        <ConfirmRemoveModal
-          movie={movie}
-          listName="watched"
-          onConfirm={() => {
-            onRemove(movie);
-            setShowRemove(false);
-          }}
-          onCancel={() => setShowRemove(false)}
-        />
-      )} */}
-
-      {/* ✕ remove button on hover */}
-      <button
-        // onClick={() => setShowRemove(true)}
-        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all bg-black/50 p-1 rounded-full hover:bg-bordo-500 z-10 flex items-center justify-center"
-      >
-        <Icon
-          icon="gridicons:cross-circle"
-          width="24"
-          height="24"
-          className="text-white"
-        />
-      </button>
-
-      {/* Poster with hover & rating */}
+    <div className="relative  w-40 sm:w-44 lg:w-48 xl:w-52">
       <div className="overflow-hidden rounded-lg relative aspect-[2/3]">
         <img
-          src={
-            movie.poster_path
-              ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-              : "/placeholder.jpg"
-          }
+          src={posterSrc}
           alt={movie.title}
-          className="w-full h-full object-cover transition-all duration-300 ease-out group-hover:blur-[3px] group-hover:scale-105"
-          onClick={() => setShowRating(true)}
-          style={{ cursor: "pointer" }}
+          className="w-full h-full object-cover transition-all duration-300 ease-out hover:scale-105 cursor-pointer"
+          onClick={() => open(movie)}
         />
+
         {showRating && (
           <div className="absolute inset-0 flex items-center justify-center z-20">
             <RatingOverlay
-              onRate={(stars) => {
-                movie.userRating = stars;
-                setShowRating(false);
-              }}
-              onRateLater={() => setShowRating(false)}
+              onRate={(stars) => saveRating(stars)}
+              onRateLater={() => saveRating(null)}
+              onClose={() => setShowRating(false)}
             />
           </div>
         )}
@@ -65,8 +48,7 @@ export default function WatchedItem({ movie, onRemove }) {
 
       <button
         onClick={() => open(movie)}
-        className="mt-2 text-sm font-medium text-white line-clamp-1 text-left hover:text-bordo-400  cursor-pointer transition-all"
-        style={{ width: "100%" }}
+        className="mt-2 text-sm font-medium text-white line-clamp-1 text-left hover:text-bordo-400 transition-all w-full cursor-pointer"
         title={movie.title}
       >
         {movie.title}
@@ -74,28 +56,29 @@ export default function WatchedItem({ movie, onRemove }) {
 
       <div className="mt-2 flex items-center justify-between text-sm text-white">
         <div className="flex items-center space-x-1 text-yellow-400">
-          {movie.userRating ? (
-            Array.from({ length: movie.userRating }).map((_, i) => (
+          {localRating ? (
+            Array.from({ length: localRating }).map((_, i) => (
               <Icon key={i} icon="mdi:star" width="16" height="16" />
             ))
           ) : (
             <button
               onClick={() => setShowRating(true)}
-              className="text-white hover:text-bordo-400 flex items-center justify-center"
+              className="text-white hover:text-bordo-400 flex items-center justify-center cursor-pointer"
               aria-label="Rate movie"
             >
               <Icon icon="mdi:star-outline" width="20" height="20" />
             </button>
           )}
         </div>
+
         <button
           onClick={() =>
             handleShare(
-              window.location.origin + `/movie/${movie.id}`,
+              `${window.location.origin}/movie/${movie.id}`,
               "Link copied!"
             )
           }
-          className="text-gray-300 hover:text-white p-1 hover:bg-bordo-500  flex items-center justify-center  rounded-full transition-all duration-300"
+          className="text-gray-300 hover:text-white p-1 rounded-full transition-all cursor-pointer"
           aria-label="Share movie"
         >
           <Icon icon="gridicons:share" width="18" height="18" />

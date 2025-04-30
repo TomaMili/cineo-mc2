@@ -22,7 +22,11 @@ function WatchLaterItem({ movie, onSelect, onMarkWatched = () => {} }) {
 
       {showRating && (
         <div className="absolute inset-0 flex items-center justify-center z-20">
-          <RatingOverlay onRate={handleRate} onRateLater={handleRateLater} />
+          <RatingOverlay
+            onRate={handleRate}
+            onRateLater={handleRateLater}
+            onClose={() => setShowRating(false)}
+          />
         </div>
       )}
     </div>

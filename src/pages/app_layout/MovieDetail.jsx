@@ -1,4 +1,3 @@
-// src/pages/MovieDetail.jsx
 import { useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -67,7 +66,6 @@ export default function MovieDetail() {
       </div>
     );
 
-  console.log(details);
   return (
     <article className="flex flex-col bg-black">
       <MovieHero details={details} director={director} providers={providers} />

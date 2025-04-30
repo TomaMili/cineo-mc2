@@ -1,4 +1,6 @@
 import { createPortal } from "react-dom";
+import { useState } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify-icon/react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -6,48 +8,50 @@ import { useQuery } from "@tanstack/react-query";
 
 import { poster, fetchMovieDetails } from "../services/apiTmdb";
 import PosterPlaceholder from "../utils/posterPlaceholder";
+import RatingOverlay from "./RatingOverlay";
+import { useIsWatched, useToggleWatched } from "../hooks/useWatched";
 import { useIsInWatchLater, useToggleWatchLater } from "../hooks/useWatchLater";
-import { useEffect } from "react";
 
 export default function MoviePopup({ movie, onClose }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // TODO: swap the stub for the real session id
-  const userId = 1;
+  const userId = 1; // TODO: real session id
+
+  const watched = useIsWatched(movie?.id, userId);
+  const toggleWat = useToggleWatched(userId);
 
   const savedWL = useIsInWatchLater(movie?.id, userId);
   const toggleWL = useToggleWatchLater(userId);
 
-  const saved = savedWL;
+  const [showRating, setShowRating] = useState(false);
+  const handleEye = () => {
+    if (!watched) setShowRating(true);
+    else toggleWat(movie, true);
+  };
+  const saveRating = (stars) => {
+    toggleWat(movie, false, stars);
+    setShowRating(false);
+  };
 
-  function handleBookmark() {
-    if (!userId) return; // not signed-in
-    toggleWL(movie, saved);
-  }
-
-  const { data: details, isLoading } = useQuery({
+  const { data: details } = useQuery({
     queryKey: ["movie", movie?.id],
     queryFn: ({ signal }) => fetchMovieDetails(movie.id, signal),
     enabled: !!movie,
     staleTime: 30 * 60 * 1000,
   });
-
-  useEffect(() => {
-    if (!movie) return;
-    const h = (e) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", h);
-    return () => window.removeEventListener("keydown", h);
-  }, [movie, onClose]);
+  const data = details || movie;
 
   if (!movie) return null;
-  const data = details || movie;
 
   function goToFullPage() {
     const target = `/movie/${movie.id}`;
     onClose();
     if (location.pathname !== target) navigate(target);
   }
+
+  const releaseYear = data.release_date?.slice(0, 4) || "—";
+  const voteFive = (data.vote_average || 0) / 2;
 
   return createPortal(
     <AnimatePresence>
@@ -57,7 +61,18 @@ export default function MoviePopup({ movie, onClose }) {
         animate={{ opacity: 0.8 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 bg-black backdrop-blur-sm z-40"
+        onClick={onClose}
       />
+
+      {showRating && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center">
+          <RatingOverlay
+            onRate={(s) => saveRating(s)}
+            onRateLater={() => saveRating(null)}
+            onClose={() => setShowRating(false)}
+          />
+        </div>
+      )}
 
       <motion.div
         key="modal"
@@ -98,15 +113,15 @@ export default function MoviePopup({ movie, onClose }) {
 
             <div className="flex items-center gap-0 text-sm">
               <span className="text-siva-300 font-light pr-3">
-                {data.release_date?.slice(0, 4)}
+                {releaseYear}
               </span>
               {Array.from({ length: 5 }).map((_, i) => (
                 <Icon
                   key={i}
                   icon={
-                    data.vote_average / 2 >= i + 1
+                    voteFive >= i + 1
                       ? "mdi:star"
-                      : data.vote_average / 2 >= i + 0.5
+                      : voteFive >= i + 0.5
                       ? "mdi:star-half-full"
                       : "mdi:star-outline"
                   }
@@ -116,31 +131,30 @@ export default function MoviePopup({ movie, onClose }) {
                 />
               ))}
               <span className="ml-2 text-xs text-siva-200 font-light">
-                {(data.vote_average / 2).toFixed(1)}/5
+                {voteFive.toFixed(1)}/5
               </span>
             </div>
 
             <p className="text-siva-200 font-light">
-              {isLoading ? "Loading…" : data.overview}
+              {details ? data.overview : "Loading…"}
             </p>
-            <p>
-              <span className="font-light text-siva-200">Starring:</span>
-              {data.credits
-                ? " " +
-                  data.credits.cast
+
+            {data.credits && (
+              <>
+                <p>
+                  <span className="font-light text-siva-200">Starring:</span>{" "}
+                  {data.credits.cast
                     .slice(0, 3)
                     .map((c) => c.name)
-                    .join(", ")
-                : " —"}
-            </p>
-            <p>
-              <span className="font-light text-siva-200">Director:</span>
-              {data.credits
-                ? " " +
-                  (data.credits.crew.find((p) => p.job === "Director")?.name ||
-                    "—")
-                : " —"}
-            </p>
+                    .join(", ")}
+                </p>
+                <p>
+                  <span className="font-light text-siva-200">Director:</span>{" "}
+                  {data.credits.crew.find((p) => p.job === "Director")?.name ||
+                    "—"}
+                </p>
+              </>
+            )}
 
             <div className="flex items-end justify-between pt-2">
               <span className="text-xs px-2 py-1 bg-neutral-700 rounded">
@@ -164,22 +178,26 @@ export default function MoviePopup({ movie, onClose }) {
 
               <div className="flex items-center gap-3">
                 <Icon
-                  icon="mdi:eye-outline"
+                  icon={watched ? "mdi:eye-check" : "mdi:eye-plus-outline"}
                   width="24"
                   height="24"
                   className="cursor-pointer hover:text-bordo-400"
+                  title={watched ? "Remove from Watched" : "Mark watched"}
+                  onClick={handleEye}
                 />
                 <Icon
                   icon={
-                    saved ? "material-symbols:bookmark" : "mdi:bookmark-outline"
+                    savedWL
+                      ? "material-symbols:bookmark"
+                      : "mdi:bookmark-outline"
                   }
                   width="24"
                   height="24"
                   className="cursor-pointer hover:text-bordo-400"
                   title={
-                    saved ? "Remove from Watch-Later" : "Add to Watch-Later"
+                    savedWL ? "Remove from Watch-Later" : "Add to Watch-Later"
                   }
-                  onClick={handleBookmark}
+                  onClick={() => toggleWL(movie, savedWL)}
                 />
               </div>
             </div>

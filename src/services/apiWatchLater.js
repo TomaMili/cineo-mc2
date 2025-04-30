@@ -1,9 +1,7 @@
 import supabase from "./supabase";
 
-// src/services/apiWatchLater.js
 function mapMovieForDB(tmdb) {
   return {
-    /* columns that actually exist */
     api_id: tmdb.id, // UNIQUE
     title: tmdb.title,
     overview: tmdb.overview,
@@ -27,7 +25,6 @@ function mapMovieForDB(tmdb) {
     writers: tmdb.credits?.crew
       ?.filter((p) => p.job === "Writer")
       .map(({ id, name }) => ({ id, name })),
-    /* leave out id & created_at – DB handles those */
   };
 }
 
@@ -41,20 +38,18 @@ export async function upsertMovie(tmdbMovie) {
     .single();
 
   if (error) throw error;
-  return data; // ← row incl. generated `id`
+  return data;
 }
 
 export async function addToWatchLater(userId, movie) {
-  //  cache / update the movie itself
   const movieRow = await upsertMovie(movie);
 
-  //  connect the movie to the user
   const { error } = await supabase
     .from("watch_later")
     .insert([{ user_id: userId, movie_id: movieRow.id }]);
 
   if (error) throw error;
-  return movieRow; // handy for optimistic updates
+  return movieRow;
 }
 
 export async function removeFromWatchLater(userId, movieId) {

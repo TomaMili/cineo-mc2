@@ -1,4 +1,3 @@
-// src/features/watched/WatchedList.jsx
 import React, { useMemo } from "react";
 import WatchedItem from "./WatchedItem";
 
@@ -29,9 +28,9 @@ export default function WatchedList({ movies, sortMode, onRemove }) {
         return acc;
       }, {});
     }
-    arr.sort((a, b) => new Date(b.watchedDate) - new Date(a.watchedDate));
+    arr.sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
     return arr.reduce((acc, m) => {
-      const d = new Date(m.watchedDate);
+      const d = new Date(m.addedAt);
       const today = new Date();
       const label =
         d.toDateString() === today.toDateString()
@@ -51,7 +50,7 @@ export default function WatchedList({ movies, sortMode, onRemove }) {
           )}
           <div className="flex flex-wrap gap-6">
             {items.map((m) => (
-              <WatchedItem key={m.id} movie={m} onRemove={onRemove} />
+              <WatchedItem key={m.dbId} movie={m} onRemove={onRemove} />
             ))}
           </div>
         </section>
