@@ -8,7 +8,7 @@ export default function RecentlyWatched() {
   if (isLoading) return null;
 
   return (
-    <section className="max-w-6xl mx-auto mt-12 pb-10 text-white">
+    <section className="max-w-6xl mx-auto mt-12 pb-10 text-siva-100">
       <h3 className="text-3xl font-normal mb-6 ml-9">RECENTLY WATCHED</h3>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 justify-items-center">

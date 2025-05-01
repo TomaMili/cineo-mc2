@@ -67,7 +67,7 @@ export default function WatchLater() {
         />
       </div>
 
-      <div className="w-full mx-auto flex justify-end items-center gap-4 mt-4 px-6">
+      <div className="w-full mx-auto  flex justify-end items-center gap-4 mt-4 px-6">
         <button
           onClick={() => share("WATCH LATER list link copied to clipboard!")}
           className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 cursor-pointer transition-colors duration-200"

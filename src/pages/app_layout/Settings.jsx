@@ -33,7 +33,7 @@ export default function Settings() {
                 `flex-1 text-center py-2 transition-colors ${
                   isActive
                     ? "bg-bordo-500 text-white"
-                    : "text-gray-300 hover:bg-bordo-400 hover:text-white"
+                    : "text-siva-300 hover:bg-bordo-400 hover:text-white"
                 }`
               }
             >

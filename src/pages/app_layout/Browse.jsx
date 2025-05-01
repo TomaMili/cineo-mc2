@@ -42,7 +42,7 @@ export default function BrowsePage() {
     );
 
   return (
-    <section className="min-h-screen -mt-24 bg-black px-6 xl:px-12 pb-32 text-white">
+    <section className="min-h-screen -mt-24 bg-black px-6 xl:px-12 pb-32 text-siva-100">
       <h1 className="text-4xl font-semibold pt-24 pb-10">
         Results for “{query || "…"}”
       </h1>

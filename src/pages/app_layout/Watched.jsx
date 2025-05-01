@@ -48,7 +48,7 @@ export default function Watched() {
     );
 
   return (
-    <div className="min-h-screen bg-siva-800 text-white pb-12">
+    <div className="min-h-screen bg-siva-800  pb-12">
       <div className="w-full mx-auto px-6 pt-6">
         <TabNav
           tabs={[
@@ -59,7 +59,7 @@ export default function Watched() {
         />
       </div>
 
-      <div className="w-full mx-auto flex justify-end items-center gap-4 mt-4 px-6">
+      <div className="w-full mx-auto flex justify-end  text-white items-center gap-4 mt-4 px-6">
         <button
           onClick={shareLink}
           className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 transition-colors duration-200 cursor-pointer"

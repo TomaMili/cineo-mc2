@@ -42,13 +42,13 @@ export default function WatchedList({ movies, sortMode, onRemove }) {
   }, [movies, sortMode]);
 
   return (
-    <section className="min-h-screen  px-6 xl:px-12 pb-32 text-white">
+    <section className="min-h-screen  px-6 xl:px-12 pb-32 text-siva-100">
       {Object.entries(groups).map(([group, items]) => (
         <section key={group} className="mb-12">
           {group && (
-            <h2 className="text-2xl font-bold text-white mb-4">{group}</h2>
+            <h2 className="text-2xl font-bold text-siva-100 mb-4">{group}</h2>
           )}
-          <div className="flex flex-wrap gap-6">
+          <div className="flex flex-wrap gap-6 ">
             {items.map((m) => (
               <WatchedItem key={m.dbId} movie={m} onRemove={onRemove} />
             ))}

@@ -10,7 +10,7 @@ export default function SettingsAvatar({
         alt="avatar"
         className="w-68 h-68 rounded-full border-4 border-black object-cover mx-auto -mt-24"
       />
-      <h3 className="mt-4 text-5xl font-semibold text-center text-white">
+      <h3 className="mt-4 text-5xl font-semibold text-center text-siva-100">
         {name}
       </h3>
       <label className="block text-center mt-15 ">

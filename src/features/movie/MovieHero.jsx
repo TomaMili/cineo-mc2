@@ -60,7 +60,7 @@ export default function MovieHero({ details, director, providers }) {
 
   return (
     <header
-      className="relative isolate h-[90vh] -mt-24 text-white flex"
+      className="relative isolate h-[95vh] -mt-24  text-white flex bg-black"
       style={{
         backgroundImage: `url(${backdrop(backdrop_path)})`,
         backgroundSize: "cover",
@@ -79,7 +79,7 @@ export default function MovieHero({ details, director, providers }) {
         </div>
       )}
 
-      <div className="z-10 w-full mx-[calc(2rem+2vw)] md:mx-[calc(2rem+3vw)] pb-14 px-6 mt-30 flex flex-col justify-between">
+      <div className="z-10 w-full mx-[calc(2rem+2vw)] md:mx-[calc(2rem+3vw)] pb-30 px-6 mt-30 flex flex-col justify-between">
         <div>
           <ul className="flex mt-5 mb-4 flex-wrap">
             {genreChips.map((g) => (
@@ -98,7 +98,7 @@ export default function MovieHero({ details, director, providers }) {
               icon="gridicons:share"
               width="32"
               height="32"
-              className="text-siva-200"
+              className="text-white"
             />
           </span>
 
@@ -134,13 +134,13 @@ export default function MovieHero({ details, director, providers }) {
           </div>
 
           {overview && (
-            <p className="italic text-2xl font-light text-siva-200 mt-6 max-w-2/3">{`"${overview}"`}</p>
+            <p className="italic text-2xl font-light text-white mt-6 max-w-2/3">{`"${overview}"`}</p>
           )}
         </div>
 
         <div className="flex gap-4 justify-between">
           <ul className="flex flex-wrap mt-5 mb-4">
-            <li className="pr-3 py-1 rounded-lg text-md text-siva-200 font-light">
+            <li className="pr-3 py-1 rounded-lg text-md text-white font-light">
               {providersList.length > 0
                 ? "Platforms:"
                 : "Not available in your country"}

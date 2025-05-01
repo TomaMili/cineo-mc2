@@ -73,7 +73,7 @@ export default function SuperSuggestionPopup({ onClose }) {
         onClick={(e) => e.stopPropagation()}
         className="fixed left-1/2 top-24 -translate-x-1/2
                    w-full max-w-[540px] bg-siva-800/95 rounded-2xl p-8
-                   text-white z-50 shadow-2xl"
+                   text-siva-100 z-50 shadow-2xl"
       >
         {/* nav pills */}
         <div className="flex mb-4 gap-2">
@@ -87,7 +87,7 @@ export default function SuperSuggestionPopup({ onClose }) {
               className={`flex-1 py-2 rounded-full transition-colors text-sm
                           ${
                             t === tab
-                              ? "bg-bordo-500 text-white"
+                              ? "bg-bordo-500 text-siva-100"
                               : "bg-siva-700 hover:bg-siva-600"
                           }`}
             >

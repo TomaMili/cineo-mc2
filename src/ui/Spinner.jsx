@@ -2,7 +2,7 @@ function Spinner({
   size = 24,
   stroke = 3,
   className = "",
-  color = "text-white",
+  color = "text-siva-100",
 }) {
   return (
     <svg

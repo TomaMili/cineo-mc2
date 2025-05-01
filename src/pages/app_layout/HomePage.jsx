@@ -18,7 +18,7 @@ export default function HomePage() {
     return (
       <>
         <HeroSection />
-        <div className="px-20 pt-32 bg-black">
+        <div className="px-20 pt-32 bg-black text-white">
           <div className="grid grid-cols-[repeat(auto-fill,minmax(192px,1fr))] gap-6">
             {Array.from({ length: 8 }).map((_, i) => (
               <SkeletonPoster key={i} />

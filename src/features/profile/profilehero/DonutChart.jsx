@@ -11,7 +11,7 @@ function CustomTooltip({ active, payload }) {
   if (active && payload && payload.length) {
     const { name, value } = payload[0];
     return (
-      <div className="bg-[#1F2937] text-white text-sm px-2 py-1 rounded z-50">
+      <div className="bg-[#1F2937] text-siva-100 text-sm px-2 py-1 rounded z-50">
         {`${name}: ${value}`}
       </div>
     );
@@ -59,8 +59,8 @@ function DonutChart({
           title="Go to Watched List"
           style={{ outline: "none" }}
         >
-          <span className="text-5xl font-semibold text-white">{total}</span>
-          <span className="text-lg uppercase text-gray-300">
+          <span className="text-5xl font-semibold text-siva-100">{total}</span>
+          <span className="text-lg uppercase text-siva-300">
             movies watched
           </span>
         </button>

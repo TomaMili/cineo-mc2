@@ -45,14 +45,14 @@ export default function CollectionRow({
     );
 
   if (loadingPopular) {
-    return <div className="text-white p-8">Loading popular movies…</div>;
+    return <div className="text-siva-100 p-8">Loading popular movies…</div>;
   }
 
   return (
     <div className="mb-12">
       {/* Naslov i gumbi */}
       <div className="flex items-center gap-3 mb-5">
-        <h3 className="text-2xl font-semibold text-white hover:text-bordo-400 cursor-pointer transition-all">
+        <h3 className="text-2xl font-semibold text-siva-100 hover:text-bordo-400 cursor-pointer transition-all">
           <Link
             to={`/collections/${collection.id}`}
             className="hover:underline focus:outline-none"
@@ -121,7 +121,7 @@ export default function CollectionRow({
                 {/* Naziv filma kao popup trigger */}
                 <button
                   onClick={() => open(movie)}
-                  className="mt-2 text-sm font-medium text-white line-clamp-1 text-left hover:text-bordo-400 cursor-pointer transition-all"
+                  className="mt-2 text-sm font-medium text-siva-100 line-clamp-1 text-left hover:text-bordo-400 cursor-pointer transition-all"
                   title={movie.title}
                 >
                   {movie.title}

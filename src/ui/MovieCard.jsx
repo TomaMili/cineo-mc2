@@ -59,7 +59,7 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
         ) : (
           <div
             onClick={handlePosterClick}
-            className="w-full h-full bg-gray-700 flex items-center justify-center text-sm text-white cursor-pointer"
+            className="w-full h-full bg-gray-700 flex items-center justify-center text-sm  cursor-pointer"
           >
             {movie.title}
           </div>
@@ -79,7 +79,7 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
       <div className="mt-2 flex items-start justify-between">
         <p
           onClick={handlePosterClick}
-          className="text-sm font-medium text-white line-clamp-1 mr-1 hover:text-bordo-400 cursor-pointer"
+          className="text-sm font-medium  line-clamp-1 mr-1 hover:text-bordo-400 cursor-pointer"
         >
           {movie.title}
         </p>
@@ -89,7 +89,7 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
             <button
               title={watched ? "Remove from Watched" : "Mark watched"}
               onClick={handleEye}
-              className="text-white hover:text-bordo-400 cursor-pointer"
+              className=" hover:text-bordo-400 cursor-pointer"
             >
               <Icon
                 icon={watched ? "mdi:eye-check" : "mdi:eye-plus-outline"}
@@ -101,7 +101,7 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
             <button
               title={savedWL ? "Remove from Watch-Later" : "Add to Watch-Later"}
               onClick={() => toggleWL(movie, savedWL)}
-              className="text-white hover:text-bordo-400 cursor-pointer"
+              className=" hover:text-bordo-400 cursor-pointer"
             >
               <Icon
                 icon={

@@ -15,12 +15,12 @@ export default function AvatarCard({
         alt="avatar"
         className="w-68 h-68 rounded-full border-4 border-black object-cover mx-auto -mt-44"
       />
-      <h3 className="mt-4 text-5xl font-medium text-center text-white">
+      <h3 className="mt-4 text-5xl font-medium text-center text-siva-100">
         {name}
       </h3>
       <p
         onClick={() => navigate(`./achievements`)}
-        className=" cursor-pointer text-center text-lg uppercase text-gray-300 mt-8"
+        className=" cursor-pointer text-center text-lg uppercase text-siva-300 mt-8"
       >
         {subtitle}
       </p>

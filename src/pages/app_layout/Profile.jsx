@@ -4,7 +4,7 @@ import RecentlyWatched from "../../features/profile/RecentlyWatched";
 
 export default function Profile() {
   return (
-    <div className="text-white">
+    <div className="text-siva-100">
       <ProfileHero />
       <Favorites />
       <RecentlyWatched />

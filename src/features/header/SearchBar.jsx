@@ -70,13 +70,13 @@ export default function SearchBar({ className = "" }) {
       {!expanded && (
         <button
           onClick={open}
-          className="w-14 h-14 flex items-center justify-center rounded-full cursor-pointer hover:bg-black/20"
+          className="w-14 h-14    flex items-center justify-center rounded-full cursor-pointer hover:bg-black/20  "
         >
           <Icon
             icon="jam:search"
             width="36"
             height="36"
-            className="text-white"
+            className="text-white stroke-black stroke-[0.5] "
           />
         </button>
       )}
@@ -90,13 +90,13 @@ export default function SearchBar({ className = "" }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onBlur={() => !query && close() /* blur cancels if empty */}
-            className="w-full h-14 pl-16 pr-12 rounded-full bg-black/70 text-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-bordo-400"
+            className="w-full h-14 pl-16 pr-12 rounded-full bg-black/70 text-lg text-siva-100 placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-bordo-400"
           />
           <Icon
             icon="jam:search"
             width="32"
             height="32"
-            className="absolute left-5 top-1/2 -translate-y-1/2 text-white/75 pointer-events-none"
+            className="absolute left-5 top-1/2 -translate-y-1/2 text-siva-100/75 pointer-events-none"
           />
           <Icon
             icon="mdi:close"
@@ -116,7 +116,7 @@ export default function SearchBar({ className = "" }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.15 }}
-            className="absolute left-0 top-[calc(100%+0.5rem)] w-full max-h-[32rem] overflow-auto bg-[#0e1512]/95 backdrop-blur-lg rounded-lg shadow-2xl text-white z-50"
+            className="absolute left-0 top-[calc(100%+0.5rem)] w-full max-h-[32rem] overflow-auto bg-[#0e1512]/95 backdrop-blur-lg rounded-lg shadow-2xl text-siva-100 z-50"
           >
             {results.map((movie) => (
               <li
@@ -139,7 +139,7 @@ export default function SearchBar({ className = "" }) {
                     <h3 className="font-semibold leading-snug line-clamp-1">
                       {movie.title}
                     </h3>
-                    <span className="text-xs text-white/50 ml-2 mt-0.5">
+                    <span className="text-xs text-siva-100/50 ml-2 mt-0.5">
                       {movie.release_date?.slice(0, 4) || "—"}
                     </span>
                   </div>
@@ -158,11 +158,11 @@ export default function SearchBar({ className = "" }) {
                         height="16"
                       />
                     ))}
-                    <span className="text-xs text-white/50 ml-1">
+                    <span className="text-xs text-siva-100/50 ml-1">
                       {(movie.vote_average / 2).toFixed(1)}/5
                     </span>
                   </div>
-                  <p className="text-sm text-white/70 line-clamp-2 mt-1">
+                  <p className="text-sm text-siva-100/70 line-clamp-2 mt-1">
                     {movie.overview}
                   </p>
                 </div>
@@ -187,7 +187,7 @@ export default function SearchBar({ className = "" }) {
           icon="mingcute:loading-fill"
           width="20"
           height="20"
-          className="absolute right-6 top-1/2 -translate-y-1/2 animate-spin text-white/70"
+          className="absolute right-6 top-1/2 -translate-y-1/2 animate-spin text-siva-100/70"
         />
       )}
     </motion.div>

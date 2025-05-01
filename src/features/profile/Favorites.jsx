@@ -49,7 +49,7 @@ export default function Favorites() {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto my-12 grid grid-cols-1 md:grid-cols-3 gap-y-8 justify-items-center text-center text-white">
+    <div className="max-w-5xl mx-auto my-12 grid grid-cols-1 md:grid-cols-3 gap-y-8 justify-items-center text-center text-siva-100">
       {items.map(({ title, name, count, img, isPerson }) => (
         <div key={title} className="space-y-2">
           <h4 className="text-lg font-semibold">{title}</h4>

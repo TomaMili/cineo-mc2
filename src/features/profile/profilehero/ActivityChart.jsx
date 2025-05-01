@@ -83,7 +83,7 @@ function ActivityChart({ data = [] }) {
 
   return (
     <div className="w-84 h-52 bg-siva-800 rounded-lg px-3 py-4 shadow-2xl">
-      <h3 className="text-white text-center mb-3 tracking-wide">ACTIVITY</h3>
+      <h3 className="text-siva-100 text-center mb-3 tracking-wide">ACTIVITY</h3>
 
       <ResponsiveContainer width="100%" height="80%">
         <BarChart data={normalised} barGap={2}>
@@ -91,7 +91,7 @@ function ActivityChart({ data = [] }) {
             dataKey="day"
             axisLine={false}
             tickLine={false}
-            tick={{ fill: "#fff", fontSize: 12 }}
+            tick={{ fill: "gray", fontSize: 14 }}
           />
 
           <RechartsTooltip

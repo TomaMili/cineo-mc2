@@ -41,7 +41,7 @@ function Notification({ className = "", onEmpty }) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -12, scale: 0.97 }}
           transition={{ duration: 0.18, ease: "easeOut" }}
-          className={`absolute top-24 left-6 z-50 w-100 rounded-lg shadow-2xl overflow-hidden bg-[#0e1512]/95 text-white backdrop-blur-sm ${className}`}
+          className={`absolute top-24 left-6 z-50 w-100 rounded-lg shadow-2xl overflow-hidden bg-[#0e1512]/95 text-siva-100 backdrop-blur-sm ${className}`}
         >
           <AnimatePresence>
             {items.map((item, idx) => (
@@ -66,10 +66,10 @@ function Notification({ className = "", onEmpty }) {
                 <h3 className="font-semibold leading-none mb-1">
                   {item.title}
                 </h3>
-                <p className="text-sm leading-snug text-white/90 mb-2">
+                <p className="text-sm leading-snug text-siva-100/90 mb-2">
                   {item.message}
                 </p>
-                <span className="text-xs uppercase tracking-wide text-white/50">
+                <span className="text-xs uppercase tracking-wide text-siva-100/50">
                   {item.timeLabel}
                 </span>
               </motion.div>

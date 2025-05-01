@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Icon } from "@iconify-icon/react";
+import ThemeToggleButton from "../../ui/ThemeToggleButton"; // prilagodi path
 
 function IconWithSkeleton({
   icon,
@@ -155,17 +156,8 @@ function Navigation({ isNavActive, setIsNavActive }) {
             <span>Supersuggestion</span>
           </button>
           <hr className="border-t w-full border-white/50 my-3 mb-5" />
-          <button
-            onClick={() => alert("Toggled light mode")}
-            className="flex items-center gap-3 mb-4 text-left hover:text-siva-100 cursor-pointer h-10"
-          >
-            <IconWithSkeleton
-              icon="flowbite:sun-outline"
-              width={ICON_SIZE}
-              height={ICON_SIZE}
-            />
-            <span>Light mode</span>
-          </button>
+          <ThemeToggleButton />
+
           <NavLink
             to="/profile"
             className="flex items-center gap-3 mb-4 hover:text-siva-100 h-10"

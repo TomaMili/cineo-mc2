@@ -3,8 +3,8 @@ import { useSuperSuggest } from "../../context/SuperSuggestContext";
 function HeroSection() {
   const { show } = useSuperSuggest();
   return (
-    <div>
-      <div className="flex flex-col items-center gap-6 z-0 bg-[url(/bg-image.jpg)] -mt-24 pb-28">
+    <div className="text-white">
+      <div className="flex flex-col items-center gap-6 z-0 bg-[url(/bg-image.jpg)] -mt-24 pb-28 ">
         <img
           src="/logo-cineo.svg"
           alt="logo"

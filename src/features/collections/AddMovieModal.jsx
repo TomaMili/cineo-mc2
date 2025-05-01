@@ -16,7 +16,7 @@ export default function AddMovieModal({ onAdd, onCancel, alreadyAdded = [] }) {
   if (isLoading)
     return createPortal(
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-        <div className="bg-gray-900 text-white rounded-lg p-8">Loading…</div>
+        <div className="bg-gray-900 text-siva-100 rounded-lg p-8">Loading…</div>
       </div>,
       document.body
     );
@@ -24,10 +24,10 @@ export default function AddMovieModal({ onAdd, onCancel, alreadyAdded = [] }) {
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/70" onClick={onCancel} />
-      <div className="relative bg-siva-800 rounded-lg p-10  w-3/4 text-white z-10">
+      <div className="relative bg-siva-800 rounded-lg p-10  w-3/4 text-siva-100 z-10">
         <button
           onClick={onCancel}
-          className="absolute top-3 right-3 text-gray-400 hover:text-white"
+          className="absolute top-3 right-3 text-gray-400 hover:text-siva-100"
         >
           <Icon icon="gridicons:cross-circle" width="28" height="28" />
         </button>

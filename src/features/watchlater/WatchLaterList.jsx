@@ -53,11 +53,13 @@ export default function WatchLaterList({
   }, [movies, sortMode]);
 
   return (
-    <section className="min-h-screen px-6 xl:px-12 pb-32 text-white">
+    <section className="min-h-screen px-6 xl:px-12 pb-32 text-siva-100">
       {Object.entries(groups).map(([groupKey, items]) => (
         <section key={groupKey} className="mb-12">
           {groupKey && (
-            <h2 className="text-2xl font-bold text-white mb-4">{groupKey}</h2>
+            <h2 className="text-2xl font-bold text-siva-100 mb-4">
+              {groupKey}
+            </h2>
           )}
 
           <div className="flex flex-wrap gap-6">

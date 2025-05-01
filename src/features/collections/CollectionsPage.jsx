@@ -56,7 +56,7 @@ export default function CollectionsPage({
     );
 
   return (
-    <div className="min-h-screen text-white pb-12">
+    <div className="min-h-screen text-siva-100 pb-12">
       <div className="w-full mx-auto px-6 pt-6">
         <TabNav
           tabs={[
@@ -67,7 +67,7 @@ export default function CollectionsPage({
         />
       </div>
 
-      <div className="w-full mx-auto flex justify-end items-center gap-4 mt-4 px-6">
+      <div className="w-full mx-auto flex justify-end items-center gap-4 mt-4 px-6 text-white">
         <button
           onClick={onShareAll}
           className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 cursor-pointer transition-colors duration-200"
@@ -83,7 +83,7 @@ export default function CollectionsPage({
           <span>New collection</span>
         </button>
       </div>
-      <section className="min-h-screen px-6 xl:px-12 pb-32 text-white">
+      <section className="min-h-screen px-6 xl:px-12 pb-32 text-siva-100">
         <div className="w-full mx-auto mt-8 space-y-12 px-6">
           <CollectionsList
             collections={collections}

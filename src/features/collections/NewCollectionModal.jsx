@@ -22,10 +22,10 @@ export default function NewCollectionModal({
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/70" onClick={onCancel} />
-      <div className="relative bg-siva-800 rounded-lg p-10  w-3/4 text-white z-10">
+      <div className="relative bg-siva-800 rounded-lg p-10  w-3/4 text-siva-100 z-10">
         <button
           onClick={onCancel}
-          className="absolute top-3 right-3 text-gray-400 hover:text-white"
+          className="absolute top-3 right-3 text-gray-400 hover:text-siva-100"
         >
           <Icon icon="gridicons:cross-circle" width="24" height="24" />
         </button>

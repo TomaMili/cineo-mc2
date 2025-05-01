@@ -27,7 +27,7 @@ export default function CastCard({
         <ActorPlaceholder name={cast.name} />
       )}
 
-      <p className="mt-2 text-xs sm:text-sm font-medium text-white line-clamp-1">
+      <p className="mt-2 text-xs sm:text-sm font-medium text-siva-100 line-clamp-1">
         {cast.name}
       </p>
 

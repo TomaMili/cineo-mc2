@@ -48,14 +48,14 @@ export default function WatchedItem({ movie }) {
 
       <button
         onClick={() => open(movie)}
-        className="mt-2 text-sm font-medium text-white line-clamp-1 text-left hover:text-bordo-400 transition-all w-full cursor-pointer"
+        className="mt-2 text-sm font-medium text-siva-100 line-clamp-1 text-left hover:text-bordo-400 transition-all w-full cursor-pointer"
         title={movie.title}
       >
         {movie.title}
       </button>
 
-      <div className="mt-2 flex items-center justify-between text-sm text-white">
-        <div className="flex items-center space-x-1 text-yellow-400">
+      <div className="mt-2 flex items-center justify-between text-sm text-siva-100">
+        <div className="flex items-center space-x-1 text-yellow-400  ">
           {localRating ? (
             Array.from({ length: localRating }).map((_, i) => (
               <Icon key={i} icon="mdi:star" width="16" height="16" />
@@ -63,7 +63,7 @@ export default function WatchedItem({ movie }) {
           ) : (
             <button
               onClick={() => setShowRating(true)}
-              className="text-white hover:text-bordo-400 flex items-center justify-center cursor-pointer"
+              className="text-siva-100 hover:text-bordo-400 flex items-center justify-center cursor-pointer"
               aria-label="Rate movie"
             >
               <Icon icon="mdi:star-outline" width="20" height="20" />
@@ -78,7 +78,7 @@ export default function WatchedItem({ movie }) {
               "Link copied!"
             )
           }
-          className="text-gray-300 hover:text-white p-1 rounded-full transition-all cursor-pointer"
+          className="text-siva-100 hover:text-bordo-400 p-1 rounded-full transition-all cursor-pointer"
           aria-label="Share movie"
         >
           <Icon icon="gridicons:share" width="18" height="18" />

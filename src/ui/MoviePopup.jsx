@@ -86,7 +86,7 @@ export default function MoviePopup({ movie, onClose }) {
         <div
           onClick={(e) => e.stopPropagation()}
           className="flex flex-col sm:flex-row max-w-4xl w-full
-                     bg-siva-800 text-white rounded-lg overflow-hidden shadow-2xl"
+                     bg-siva-800 rounded-lg overflow-hidden shadow-2xl"
         >
           {data.poster_path ? (
             <img
@@ -157,7 +157,7 @@ export default function MoviePopup({ movie, onClose }) {
             )}
 
             <div className="flex items-end justify-between pt-2">
-              <span className="text-xs px-2 py-1 bg-neutral-700 rounded">
+              <span className="text-xs px-2 py-1 text-white bg-neutral-700 rounded">
                 18+
               </span>
 

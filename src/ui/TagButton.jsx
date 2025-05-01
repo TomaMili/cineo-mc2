@@ -6,7 +6,7 @@ function TagButton({ label, active, onToggle }) {
                     truncate
                     ${
                       active
-                        ? "bg-bordo-500/90 border-bordo-400 text-white"
+                        ? "bg-bordo-500/90 border-bordo-400 text-siva-100"
                         : "bg-siva-700/40 border-siva-400 hover:bg-siva-600/50"
                     }`}
     >

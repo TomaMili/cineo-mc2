@@ -67,7 +67,7 @@ export default function MovieDetail() {
     );
 
   return (
-    <article className="flex flex-col bg-black">
+    <article className="flex flex-col ">
       <MovieHero details={details} director={director} providers={providers} />
 
       <TrailerSection youtubeKey={youtubeKey} />

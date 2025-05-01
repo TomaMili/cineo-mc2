@@ -7,21 +7,21 @@ export default function SettingsInfo() {
         <h2 className="text-2xl font-semibold text-center mb-4">Info</h2>
         <div className="space-y-4">
           <label className="block">
-            <span className="text-gray-300">Full Name</span>
+            <span className="text-white">Full Name</span>
             <input
               type="text"
               className="mt-1 block w-full rounded border-gray-600 bg-gray-900"
             />
           </label>
           <label className="block">
-            <span className="text-gray-300">E-mail</span>
+            <span className="text-white">E-mail</span>
             <input
               type="email"
               className="mt-1 block w-full rounded border-gray-600 bg-gray-900"
             />
           </label>
           <label className="block">
-            <span className="text-gray-300">Username</span>
+            <span className="text-white">Username</span>
             <input
               type="text"
               className="mt-1 block w-full rounded border-gray-600 bg-gray-900"
@@ -39,21 +39,21 @@ export default function SettingsInfo() {
         </h2>
         <div className="space-y-4">
           <label className="block">
-            <span className="text-gray-300">Current password</span>
+            <span className="text-white">Current password</span>
             <input
               type="password"
               className="mt-1 block w-full rounded border-gray-600 bg-gray-900"
             />
           </label>
           <label className="block">
-            <span className="text-gray-300">New password</span>
+            <span className="text-white">New password</span>
             <input
               type="password"
               className="mt-1 block w-full rounded border-gray-600 bg-gray-900 "
             />
           </label>
           <label className="block">
-            <span className="text-gray-300">Confirm password</span>
+            <span className="text-white">Confirm password</span>
             <input
               type="password"
               className="mt-1 block w-full rounded border-gray-600 bg-gray-900"
