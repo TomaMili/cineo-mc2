@@ -1,10 +1,11 @@
+import React from "react";
 import CollectionRow from "./CollectionRow";
 
 export default function CollectionsList({
   collections,
-  onRemoveMovie,
-  onAddMovie,
   onDeleteCollection,
+  onAddMovie,
+  onRemoveMovie,
   onShareCollection,
 }) {
   return (
@@ -13,9 +14,9 @@ export default function CollectionsList({
         <CollectionRow
           key={col.id}
           collection={col}
-          onRemoveMovie={onRemoveMovie}
-          onAddMovie={onAddMovie}
           onDeleteCollection={onDeleteCollection}
+          onAddMovie={onAddMovie}
+          onRemoveMovie={onRemoveMovie}
           onShareCollection={onShareCollection}
         />
       ))}

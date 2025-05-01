@@ -1,18 +1,74 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchPopularMovies } from "../services/apiTmdb";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getCollections,
+  createCollection,
+  deleteCollection,
+  getCollectionMovies,
+  addMovieToCollection,
+  removeMovieFromCollection,
+} from "../services/apiCollections";
 
-export default function useCollections() {
+/** keys */
+const colsKey = (userId) => ["collections", userId];
+const moviesKey = (userId, collectionId) => [
+  "collections",
+  userId,
+  "movies",
+  collectionId,
+];
+
+/** 1️⃣ load all collections */
+export function useCollections(userId) {
   return useQuery({
-    queryKey: ["collections"],
-    queryFn: async ({ signal }) => {
-      const popular = await fetchPopularMovies(1, signal);
-      const movies = popular.results;
-      // build two dummy collections
-      return [
-        { id: "1", name: "Sci-Fi Favorites", movies: movies.slice(0, 6) },
-        { id: "2", name: "Drama Picks", movies: movies.slice(6, 12) },
-      ];
-    },
-    staleTime: 1000 * 60 * 5,
+    queryKey: colsKey(userId),
+    enabled: !!userId,
+    queryFn: () => getCollections(userId),
+  });
+}
+
+/** 2️⃣ create */
+export function useCreateCollection(userId) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (vars) => createCollection(userId, vars),
+    onSuccess: () => qc.invalidateQueries(colsKey(userId)),
+  });
+}
+
+/** 3️⃣ delete */
+export function useDeleteCollection(userId) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (vars) => deleteCollection(userId, vars),
+    onSuccess: () => qc.invalidateQueries(colsKey(userId)),
+  });
+}
+
+/** 4️⃣ fetch one collection’s movies */
+export function useCollectionMovies(userId, collectionId) {
+  return useQuery({
+    queryKey: moviesKey(userId, collectionId),
+    enabled: !!userId && !!collectionId,
+    queryFn: () => getCollectionMovies(userId, { collectionId }),
+  });
+}
+
+/** 5️⃣ add a movie */
+export function useAddMovieToCollection(userId) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (vars) => addMovieToCollection(userId, vars),
+    onSuccess: (_, vars) =>
+      qc.invalidateQueries(moviesKey(userId, vars.collectionId)),
+  });
+}
+
+/** 6️⃣ remove a movie */
+export function useRemoveMovieFromCollection(userId) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (vars) => removeMovieFromCollection(userId, vars),
+    onSuccess: (_, vars) =>
+      qc.invalidateQueries(moviesKey(userId, vars.collectionId)),
   });
 }

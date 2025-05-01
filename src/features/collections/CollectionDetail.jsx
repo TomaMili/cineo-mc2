@@ -1,91 +1,87 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import useCollections from "../../hooks/useCollections";
-import usePopularMovies from "../../hooks/usePopularMovies";
-import { useMoviePopup } from "../../context/MoviePopupContext";
 import { Icon } from "@iconify-icon/react";
+import Spinner from "../../ui/Spinner";
+import ErrorNotice from "../../ui/ErrorNotice";
 import AddMovieCard from "./AddMovieCard";
 import AddMovieModal from "./AddMovieModal";
+import { useMoviePopup } from "../../context/MoviePopupContext";
+import { poster } from "../../services/apiTmdb";
+import {
+  useCollectionMovies,
+  useAddMovieToCollection,
+  useRemoveMovieFromCollection,
+} from "../../hooks/useCollections";
 
 export default function CollectionDetail() {
   const { id } = useParams();
-  const { data: cols = [], isLoading } = useCollections();
-  const [showAddModal, setShowAddModal] = useState(false);
+  const userId = 1; // TODO: replace with real session user ID
+
+  const {
+    data: movies = [],
+    isLoading,
+    isError,
+  } = useCollectionMovies(userId, Number(id));
+
+  const addMovie = useAddMovieToCollection(userId);
+  const removeMovie = useRemoveMovieFromCollection(userId);
   const { open } = useMoviePopup();
+  const [showAdd, setShowAdd] = useState(false);
 
-  const { data: popularData, isLoading: loadingPopular } = usePopularMovies(1);
-
-  if (isLoading || loadingPopular)
-    return <div className="text-siva-100 p-8">Loading…</div>;
-
-  const col = cols.find((c) => c.id === id);
-  if (!col) return <div className="text-siva-100 p-8">Not found</div>;
-
-  const movies = popularData?.results ?? [];
-
-  const handleAddMovies = (movieIds) => {
-    alert(`Dodaj filmove s ID-evima: ${movieIds.join(", ")}`);
-    setShowAddModal(false);
-  };
+  if (isError) return <ErrorNotice title="Failed to load collection" />;
+  if (isLoading) return <Spinner size={48} />;
 
   return (
     <section className="min-h-screen bg-black text-siva-100 pb-12 pt-24 px-6 xl:px-12">
-      <h1 className="text-4xl font-semibold mb-6">{col.name}</h1>
+      <h1 className="text-4xl font-semibold mb-6">
+        Collection: {movies.length ? movies[0].collectionName : id}
+      </h1>
+
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-        {movies.map((movie) => (
-          <div key={movie.id} className="group relative">
-            {/* Poster hover */}
-            <div className="overflow-hidden rounded-lg aspect-[2/3]">
-              <img
-                src={
-                  movie.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                    : "/placeholder.jpg"
-                }
-                alt={movie.title}
-                className="w-full h-full object-cover transition-all duration-300 ease-out group-hover:blur-[3px] group-hover:scale-105"
-                style={{ cursor: "pointer" }}
-                onClick={() => open(movie)}
-              />
-            </div>
-            {/* Title popup */}
+        {movies.map((m) => (
+          <div key={m.dbId} className="group relative">
+            <img
+              src={poster(m.poster)}
+              alt={m.title}
+              className="w-full h-full object-cover rounded-lg cursor-pointer transition-all duration-300 ease-out hover:scale-105"
+              onClick={() => open(m)}
+            />
             <button
-              onClick={() => open(movie)}
-              className="mt-2 text-sm font-medium text-siva-100 line-clamp-1 text-left hover:underline transition-all w-full"
-              title={movie.title}
+              onClick={() =>
+                removeMovie.mutate({
+                  collectionId: Number(id),
+                  movieId: m.dbId,
+                })
+              }
+              className="absolute top-2 right-2 bg-black/50 p-1 rounded-full hover:bg-bordo-500"
+              title="Remove from collection"
             >
-              {movie.title}
+              <Icon icon="gridicons:cross-circle" className="text-white" />
             </button>
-            {/* Share button */}
-            <div className="mt-2 flex items-center justify-end text-sm text-siva-100">
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(
-                    window.location.origin + `/movie/${movie.id}`
-                  );
-                  const t = document.createElement("div");
-                  t.innerText = "Link copied!";
-                  t.className =
-                    "fixed bottom-4 right-4 bg-bordo-500 text-siva-100 px-4 py-2 rounded shadow-lg";
-                  document.body.appendChild(t);
-                  setTimeout(() => document.body.removeChild(t), 1500);
-                }}
-                className="text-siva-300 hover:text-siva-100"
-                aria-label="Share movie"
-              >
-                <Icon icon="gridicons:share" width="18" height="18" />
-              </button>
-            </div>
+            <button
+              onClick={() => open(m)}
+              className="mt-2 text-sm font-medium line-clamp-1 hover:text-bordo-400 transition-all w-full text-left"
+              title={m.title}
+            >
+              {m.title}
+            </button>
           </div>
         ))}
-        {/* AddMovieCard na kraju */}
-        <AddMovieCard onClick={() => setShowAddModal(true)} />
+
+        {/* “Add Movie” card */}
+        <AddMovieCard onClick={() => setShowAdd(true)} />
       </div>
-      {showAddModal && (
+
+      {showAdd && (
         <AddMovieModal
-          onAdd={handleAddMovies}
-          onCancel={() => setShowAddModal(false)}
-          alreadyAdded={movies.map((m) => m.id)}
+          alreadyAdded={movies.map((m) => m.api_id)}
+          onAdd={(tmdbMovie) => {
+            addMovie.mutate(
+              { collectionId: Number(id), tmdbMovie },
+              { onSuccess: () => setShowAdd(false) }
+            );
+          }}
+          onCancel={() => setShowAdd(false)}
         />
       )}
     </section>
