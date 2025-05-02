@@ -1,77 +1,105 @@
-// src/pages/BrowsePage.jsx
+// src/pages/app_layout/Browse.jsx
 import { useSearchParams } from "react-router-dom";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { InView } from "react-intersection-observer";
+import { useQuery, useQueries } from "@tanstack/react-query";
+
 import MovieCard from "../../ui/MovieCard";
 import Spinner from "../../ui/Spinner";
 import ErrorNotice from "../../ui/ErrorNotice";
 import useSearchMovies from "../../hooks/useSearchMovies";
 import useDiscoverMovies from "../../hooks/useDiscoverMovies";
 import { searchPeople, fetchGenres } from "../../services/apiTmdb";
-import { useQuery } from "@tanstack/react-query";
 
-const rank = (m) => [m.poster_path ? 0 : 1, -(m.popularity || 0)];
-
-export default function BrowsePage() {
+export default function Browse() {
   const [params] = useSearchParams();
   const query = params.get("query")?.trim() || "";
-  const actorNames = params.get("actors")
-    ? params.get("actors").split(",")
-    : [];
-  const directorNames = params.get("directors")
-    ? params.get("directors").split(",")
-    : [];
-  const genreNames = params.get("genres")
-    ? params.get("genres").split(",")
-    : [];
+  const actorNames = params.get("actors")?.split(",") || [];
+  const directorNames = params.get("directors")?.split(",") || [];
 
-  // resolve names → IDs
-  const actorQs = actorNames.map((n) =>
-    useQuery({
-      queryKey: ["person-search", "actor", n],
-      queryFn: ({ signal }) => searchPeople(n, 1, signal),
-      enabled: !!n,
-    })
-  );
-  const dirQs = directorNames.map((n) =>
-    useQuery({
-      queryKey: ["person-search", "director", n],
-      queryFn: ({ signal }) => searchPeople(n, 1, signal),
-      enabled: !!n,
-    })
-  );
+  // 1) Resolve actor & director names → TMDB person IDs
+  const actorQueries = useQueries({
+    queries: actorNames.map((name) => ({
+      queryKey: ["person-search", "actor", name],
+      queryFn: ({ signal }) => searchPeople(name, 1, signal),
+      enabled: Boolean(name),
+    })),
+  });
+  const directorQueries = useQueries({
+    queries: directorNames.map((name) => ({
+      queryKey: ["person-search", "director", name],
+      queryFn: ({ signal }) => searchPeople(name, 1, signal),
+      enabled: Boolean(name),
+    })),
+  });
+
+  // 2) Fetch full genre list
   const { data: allGenres = [] } = useQuery({
     queryKey: ["tmdb-genres"],
     queryFn: ({ signal }) => fetchGenres(signal),
   });
 
-  const castIDs = actorQs.map((r) => r.data?.results?.[0]?.id).filter(Boolean);
-  const crewIDs = dirQs.map((r) => r.data?.results?.[0]?.id).filter(Boolean);
-  const genreIDs = genreNames
-    .map(
-      (n) => allGenres.find((g) => g.name.toLowerCase() === n.toLowerCase())?.id
-    )
-    .filter(Boolean);
-
-  const isDiscover = castIDs.length || crewIDs.length || genreIDs.length;
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-    isDiscover
-      ? useDiscoverMovies({
-          cast: castIDs.join(","),
-          crew: crewIDs.join(","),
-          genres: genreIDs.join(","),
-        })
-      : useSearchMovies(query);
-
-  // flatten, dedupe, sort
-  const movies = (data?.pages ?? [])
-    .flatMap((p) => p.results)
-    .reduce((map, m) => map.set(m.id, m), new Map())
-    .values();
-  const sorted = Array.from(movies).sort(
-    (a, b) => rank(a)[0] - rank(b)[0] || rank(a)[1] - rank(b)[1]
+  // 3) Extract comma-joined ID strings (for Discover API)
+  const castIDs = useMemo(
+    () =>
+      actorQueries
+        .map((r) => r.data?.results?.[0]?.id)
+        .filter(Boolean)
+        .join(","),
+    [actorQueries]
   );
+  const crewIDs = useMemo(
+    () =>
+      directorQueries
+        .map((r) => r.data?.results?.[0]?.id)
+        .filter(Boolean)
+        .join(","),
+    [directorQueries]
+  );
+  const genreIDs = useMemo(() => {
+    // inline splitting so deps stay stable
+    const names = (params.get("genres") || "").split(",").filter(Boolean);
+    return names
+      .map((n) =>
+        allGenres.find((g) => g.name.toLowerCase() === n.toLowerCase())
+      )
+      .filter(Boolean)
+      .map((g) => g.id)
+      .join(",");
+  }, [params, allGenres]);
+
+  const isDiscover = Boolean(castIDs || crewIDs || genreIDs);
+
+  // 4) Pick the right infinite query
+  const searchResult = useSearchMovies(query);
+  const discoverResult = useDiscoverMovies({
+    cast: castIDs,
+    crew: crewIDs,
+    genres: genreIDs,
+  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
+    isDiscover ? discoverResult : searchResult;
+
+  // 5) Sort each page individually, then append without reshuffling
+  const movies = useMemo(() => {
+    if (!data?.pages) return [];
+    const seen = new Set();
+    const list = [];
+    data.pages.forEach((page) => {
+      const pageSorted = [...page.results].sort(
+        (a, b) =>
+          (a.poster_path ? 0 : 1) - (b.poster_path ? 0 : 1) ||
+          -(a.popularity || 0) + (b.popularity || 0)
+      );
+      pageSorted.forEach((m) => {
+        if (!seen.has(m.id)) {
+          seen.add(m.id);
+          list.push(m);
+        }
+      });
+    });
+    return list;
+  }, [data]);
 
   const loadMore = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage) fetchNextPage();
@@ -94,11 +122,11 @@ export default function BrowsePage() {
     <section className="min-h-screen -mt-24 bg-black px-6 xl:px-12 pb-32 text-siva-100">
       <h1 className="text-4xl font-semibold pt-24 pb-10 text-center">
         {isDiscover
-          ? `Found ${sorted.length} titles`
+          ? `Found ${movies.length} titles`
           : `Results for “${query || "…"}”`}
       </h1>
 
-      {sorted.length === 0 && (
+      {movies.length === 0 && (
         <p className="text-center text-siva-300 mt-32">
           No titles match your filters.
         </p>
@@ -116,14 +144,15 @@ export default function BrowsePage() {
           min-[1860px]:grid-cols-8
         "
       >
-        {sorted.map((m) => (
+        {movies.map((m) => (
           <MovieCard key={m.id} movie={m} />
         ))}
       </div>
 
       {hasNextPage && (
         <InView
-          rootMargin="1000px 0px"
+          as="div"
+          rootMargin="600px 0px"
           onChange={(inView) => inView && loadMore()}
         >
           <div className="flex justify-center h-32 items-center">
