@@ -43,13 +43,13 @@ export default function CollectionsPage() {
       <div className="flex justify-end gap-4 mt-4 px-6">
         <button
           onClick={() => setShowNew(true)}
-          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2"
+          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 cursor-pointer"
         >
           <Icon icon="mdi:plus" /> New Collection
         </button>
       </div>
 
-      <section className="px-6 my-8">
+      <section className="px-6 my-8.5">
         <CollectionsList
           collections={collections}
           onCreateCollection={(name) => createCollection.mutate({ name })}

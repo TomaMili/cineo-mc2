@@ -17,8 +17,6 @@ import {
 export default function CollectionRow({
   collection,
   onDeleteCollection,
-  onAddMovie,
-  onRemoveMovie,
   onShareCollection,
 }) {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -39,14 +37,9 @@ export default function CollectionRow({
   if (isLoading) return <Spinner size={24} />;
 
   return (
-    <div className="mb-12">
-      <div className="flex items-center gap-6 mb-3   bg-siva-700 rounded-lg">
-        <Link
-          to={`/collections/${collection.id}`}
-          className="text-3xl font-normal hover:text-bordo-400 mb-1"
-        >
-          {collection.name}
-        </Link>
+    <div className="mb-18">
+      <div className="flex items-center gap-6 mb-3 bg-siva-700 rounded-lg">
+        <h1 className="text-3xl font-normal mb-1">{collection.name}</h1>
         <div className="flex gap-2">
           <button
             onClick={() => onShareCollection?.(collection)}
@@ -120,7 +113,7 @@ export default function CollectionRow({
             </button>
             <button
               onClick={() => open(m)}
-              className="mt-2 text-sm font-medium line-clamp-1 hover:text-bordo-400 transition-all w-full text-left"
+              className="mt-2 text-sm font-medium line-clamp-1 hover:text-bordo-400 transition-all w-full text-left cursor-pointer"
               title={m.title}
             >
               {m.title}
