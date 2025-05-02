@@ -167,3 +167,12 @@ export function fetchMovieProviders(movieId, region = "HR", abortSignal) {
     abortSignal
   ).then((json) => json.results?.[region] ?? null);
 }
+
+/** Fetches the full list of movie genres from TMDB */
+export async function fetchGenres(abortSignal) {
+  const json = await fetchJson(
+    makeUrl("genre/movie/list", { language: "en-US" }),
+    abortSignal
+  );
+  return json.genres;
+}
