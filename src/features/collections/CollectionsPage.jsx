@@ -29,7 +29,7 @@ export default function CollectionsPage() {
   if (isLoading) return <Spinner size={48} />;
 
   return (
-    <div className="min-h-screen bg-siva-800 text-white pb-12">
+    <div className="min-h-screen  text-siva-100 pb-12">
       <div className="px-6 pt-6">
         <TabNav
           tabs={[
@@ -49,7 +49,7 @@ export default function CollectionsPage() {
         </button>
       </div>
 
-      <section className="px-6 py-8">
+      <section className="px-6">
         <CollectionsList
           collections={collections}
           onCreateCollection={(name) => createCollection.mutate({ name })}

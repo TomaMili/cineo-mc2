@@ -15,14 +15,16 @@ export default function Achievements() {
   const notFinished = items.filter((a) => !a.completed);
 
   return (
-    <div className="min-h-screen bg-siva-800 text-white px-6 py-8 -mt-24">
-      <h2 className="text-4xl font-medium uppercase text-center pb-10">
+    <div className="min-h-screen  text-white px-6 py-8 -mt-24">
+      <h2 className="text-4xl font-medium uppercase text-center pb-10 text-siva-100">
         Achievements
       </h2>
 
       {completed.length > 0 && (
         <>
-          <h3 className="text-2xl font-light mb-4">Completed Achievements</h3>
+          <h3 className="text-2xl font-light mb-4 text-siva-100">
+            Completed Achievements
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             {completed.map((a) => (
               <div
@@ -37,7 +39,7 @@ export default function Achievements() {
                 />
                 <h4 className="mt-2 text-xl font-semibold">{a.title}</h4>
                 <p className="mt-1 text-sm text-gray-200">{a.desc}</p>
-                <p className="mt-2 text-xs italic">
+                <p className="mt-2 text-xs italic ">
                   Achieved on {new Date(a.date).toLocaleDateString()}
                 </p>
               </div>
@@ -48,7 +50,9 @@ export default function Achievements() {
 
       {notFinished.length > 0 && (
         <>
-          <h3 className="text-2xl font-light mb-4">Locked Achievements</h3>
+          <h3 className="text-2xl font-light mb-4 text-siva-100">
+            Locked Achievements
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {notFinished.map((a) => (
               <div
