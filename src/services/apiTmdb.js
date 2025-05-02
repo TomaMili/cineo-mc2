@@ -169,10 +169,19 @@ export function fetchMovieProviders(movieId, region = "HR", abortSignal) {
 }
 
 /** Fetches the full list of movie genres from TMDB */
-export async function fetchGenres(abortSignal) {
+export async function fetchGenres(signal) {
   const json = await fetchJson(
     makeUrl("genre/movie/list", { language: "en-US" }),
-    abortSignal
+    signal
   );
-  return json.genres;
+  return json.genres; // [{ id, name }, …]
+}
+
+/** Discover by numeric IDs */
+export function discoverMovies({ cast, crew, genres, page = 1 }, signal) {
+  const params = { page, language: "en-US", include_adult: false };
+  if (cast) params.with_cast = cast;
+  if (crew) params.with_crew = crew;
+  if (genres) params.with_genres = genres;
+  return fetchJson(makeUrl("discover/movie", params), signal);
 }
