@@ -47,7 +47,7 @@ const queryClient = new QueryClient({
 
 function App() {
   // const { user } = useAuth();
-  const user = true;
+  const user = false;
 
   return (
     <QueryClientProvider client={queryClient}>
