@@ -37,7 +37,9 @@ export default function SearchBar({ className = "" }) {
     staleTime: 1000 * 60 * 5,
   });
 
-  const results = data?.results?.slice(0, 3) ?? [];
+  const results = (data?.results ?? [])
+    .filter((m) => m.poster_path)
+    .slice(0, 3);
 
   const onSubmit = (e) => {
     e.preventDefault();
