@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import ThemeToggleButton from "../../ui/ThemeToggleButton"; // prilagodi path
+import ThemeToggleButton from "../../ui/ThemeToggleButton";
 import IconWithSkeleton from "./IconWithSkeleton";
+import { useSuperSuggest } from "../../context/SuperSuggestContext";
 
 const ICON_SIZE = 30;
 
-// ---- NAVIGATION ----
 function Navigation({ isNavActive, setIsNavActive }) {
   const location = useLocation();
+  const { show } = useSuperSuggest();
 
   useEffect(() => {
     if (isNavActive) setIsNavActive(false);
@@ -35,7 +36,6 @@ function Navigation({ isNavActive, setIsNavActive }) {
         `}
       >
         <div className="flex flex-col items-start  h-full bg-siva-800 text-xl pt-6 pb-6 px-5">
-          {/* Menu IconWithSkeleton in fixed slot */}
           <div className="flex items-center justify-center min-w-[30px] min-h-[30px] h-10 mb-6">
             <IconWithSkeleton
               icon="mdi:menu"
@@ -49,6 +49,7 @@ function Navigation({ isNavActive, setIsNavActive }) {
           <NavLink
             to="/homepage"
             className="flex items-center gap-3 mb-4 hover:text-siva-100 h-10"
+            onClick={() => setIsNavActive(false)}
           >
             <IconWithSkeleton
               icon="codicon:home"
@@ -79,17 +80,7 @@ function Navigation({ isNavActive, setIsNavActive }) {
             />
             <span>Watched</span>
           </NavLink>
-          <NavLink
-            to="/watch-together"
-            className="flex items-center gap-3 mb-4 text-left hover:text-siva-100 h-10"
-          >
-            <IconWithSkeleton
-              icon="mingcute:group-line"
-              width={ICON_SIZE}
-              height={ICON_SIZE}
-            />
-            <span>Watch together</span>
-          </NavLink>
+
           <NavLink
             to="/collections"
             className="flex items-center gap-3 mb-4 hover:text-siva-100 h-10"
@@ -101,8 +92,22 @@ function Navigation({ isNavActive, setIsNavActive }) {
             />
             <span>Collections</span>
           </NavLink>
+          <NavLink
+            to="/watch-together"
+            className="flex items-center gap-3 mb-4 text-left hover:text-siva-100 h-10"
+          >
+            <IconWithSkeleton
+              icon="mingcute:group-line"
+              width={ICON_SIZE}
+              height={ICON_SIZE}
+            />
+            <span>Watch together</span>
+          </NavLink>
           <button
-            onClick={() => alert("Superpreporuka")}
+            onClick={() => {
+              setIsNavActive(false);
+              show();
+            }}
             className="flex items-center gap-3 mb-4 text-left hover:text-siva-100 cursor-pointer h-10"
           >
             <IconWithSkeleton
