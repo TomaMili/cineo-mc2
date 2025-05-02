@@ -32,14 +32,21 @@ export default function CollectionDetail() {
   if (isLoading) return <Spinner size={48} />;
 
   return (
-    <section className="min-h-screen bg-black text-siva-100 pb-12 pt-24 px-6 xl:px-12">
+    <section className="min-h-screen  text-siva-100 pb-12 pt-12 px-6 xl:px-12">
       <h1 className="text-4xl font-semibold mb-6">
         Collection: {movies.length ? movies[0].collectionName : id}
       </h1>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      <div
+        className="grid gap-6 gap-y-10
+          grid-cols-2 min-[570px]:grid-cols-3 min-[770px]:grid-cols-4 min-[1100px]:grid-cols-5 min-[1400px]:grid-cols-6
+          min-[1670px]:grid-cols-7 min-[1860px]:grid-cols-8 "
+      >
         {movies.map((m) => (
-          <div key={m.dbId} className="group relative">
+          <div
+            key={m.dbId}
+            className="group relative w-40 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3]"
+          >
             <img
               src={poster(m.poster)}
               alt={m.title}
@@ -53,7 +60,7 @@ export default function CollectionDetail() {
                   movieId: m.dbId,
                 })
               }
-              className="absolute top-2 right-2 bg-black/50 p-1 rounded-full hover:bg-bordo-500"
+              className="absolute top-2 right-2 bg-black/50 p-1 rounded-full hover:bg-bordo-500 justify-center items-center flex transition-all duration-300 ease-out group-hover:scale-105"
               title="Remove from collection"
             >
               <Icon icon="gridicons:cross-circle" className="text-white" />

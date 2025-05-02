@@ -1,12 +1,18 @@
-// src/features/collections/CollectionRow.jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify-icon/react";
 import AddMovieCard from "./AddMovieCard";
 import AddMovieModal from "./AddMovieModal";
 import ConfirmRemoveModal from "../../ui/ConfirmRemoveModal.jsx";
+import Spinner from "../../ui/Spinner";
+import ErrorNotice from "../../ui/ErrorNotice";
 import { useMoviePopup } from "../../context/MoviePopupContext";
 import { poster } from "../../services/apiTmdb";
+import {
+  useCollectionMovies,
+  useAddMovieToCollection,
+  useRemoveMovieFromCollection,
+} from "../../hooks/useCollections";
 
 export default function CollectionRow({
   collection,
@@ -18,17 +24,26 @@ export default function CollectionRow({
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const { open } = useMoviePopup();
+  const userId = 1;
 
-  // Are we in “detail” mode? i.e. has the parent passed a movies[]?
-  const hasMovies = Array.isArray(collection.movies);
+  const {
+    data: movies = [],
+    isLoading,
+    isError,
+  } = useCollectionMovies(userId, collection.id);
 
-  // Index page: only render header
-  if (!hasMovies) {
-    return (
-      <div className="flex items-center justify-between mb-4 px-4 py-2 bg-siva-700 rounded-lg">
+  const addMovie = useAddMovieToCollection(userId);
+  const removeMovie = useRemoveMovieFromCollection(userId);
+
+  if (isError) return <ErrorNotice title="Failed to load collection" />;
+  if (isLoading) return <Spinner size={24} />;
+
+  return (
+    <div className="mb-12">
+      <div className="flex items-center gap-6 mb-4 px-2 py-2 bg-siva-700 rounded-lg">
         <Link
           to={`/collections/${collection.id}`}
-          className="text-xl font-semibold hover:text-bordo-400"
+          className="text-3xl font-normal hover:text-bordo-400"
         >
           {collection.name}
         </Link>
@@ -36,70 +51,94 @@ export default function CollectionRow({
           <button
             onClick={() => onShareCollection?.(collection)}
             title="Share collection"
-            className="p-1 bg-bordo-500 rounded"
+            className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 transition-colors duration-200 cursor-pointer"
           >
-            <Icon icon="gridicons:share" className="text-white" />
+            <Icon icon="gridicons:share" width="18" height="18" />
+            <span>Share</span>
           </button>
           <button
             onClick={() => setShowDeleteConfirm(true)}
             title="Delete collection"
-            className="p-1 bg-red-600 rounded"
+            className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 transition-colors duration-200 cursor-pointer"
           >
-            <Icon
-              icon="material-symbols:delete-outline"
-              className="text-white"
-            />
+            <Icon icon="material-symbols:delete-outline" />
+            <span>Delete</span>
           </button>
         </div>
-
-        {showDeleteConfirm && (
-          <ConfirmRemoveModal
-            movie={{ title: collection.name }}
-            listName="collection"
-            onConfirm={() => {
-              onDeleteCollection(collection.id);
-              setShowDeleteConfirm(false);
-            }}
-            onCancel={() => setShowDeleteConfirm(false)}
-          />
-        )}
       </div>
-    );
-  }
 
-  // Detail page: render grid of movies + add/remove controls
-  return (
-    <div className="mb-12">
-      <h2 className="text-3xl font-semibold mb-6">{collection.name}</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-        {collection.movies.map((m) => (
-          <div key={m.dbId} className="relative">
+      {showDeleteConfirm && (
+        <ConfirmRemoveModal
+          movie={{ title: collection.name }}
+          listName="collection"
+          onConfirm={() => {
+            onDeleteCollection(collection.id);
+            setShowDeleteConfirm(false);
+          }}
+          onCancel={() => setShowDeleteConfirm(false)}
+        />
+      )}
+
+      <div
+        className="grid gap-6 gap-y-10
+          grid-cols-2 min-[570px]:grid-cols-3 min-[770px]:grid-cols-4 min-[1100px]:grid-cols-5 min-[1400px]:grid-cols-6
+          min-[1670px]:grid-cols-7 min-[1860px]:grid-cols-8 "
+      >
+        {movies.map((m) => (
+          <div
+            key={m.dbId}
+            className="group relative w-40 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3]"
+          >
             <img
               src={poster(m.poster)}
               alt={m.title}
-              className="w-full rounded-lg cursor-pointer object-cover transition-transform duration-200 hover:scale-105"
+              className="w-full h-full object-cover rounded-lg cursor-pointer transition-all duration-300 ease-out hover:scale-105"
               onClick={() => open(m)}
             />
             <button
-              onClick={() => onRemoveMovie(collection.id, m.dbId)}
-              className="absolute top-2 right-2 bg-black/50 p-1 rounded-full hover:bg-red-600"
+              onClick={() =>
+                removeMovie.mutate({
+                  collectionId: collection.id,
+                  movieId: m.dbId,
+                })
+              }
+              className=" absolute top-2 right-2
+    bg-black/50 p-1 rounded-full
+    hover:bg-bordo-500
+    flex justify-center items-center
+    transition-all duration-300 ease-out
+    opacity-0            
+    group-hover:opacity-100 cursor-pointer"
               title="Remove from collection"
             >
-              <Icon icon="gridicons:cross-circle" className="text-white" />
+              <Icon
+                icon="gridicons:cross-circle"
+                className="text-white"
+                width="20"
+                height="20"
+              />
+            </button>
+            <button
+              onClick={() => open(m)}
+              className="mt-2 text-sm font-medium line-clamp-1 hover:text-bordo-400 transition-all w-full text-left"
+              title={m.title}
+            >
+              {m.title}
             </button>
           </div>
         ))}
 
-        {/* “Add Movie” card */}
         <AddMovieCard onClick={() => setShowAddModal(true)} />
       </div>
 
       {showAddModal && (
         <AddMovieModal
-          alreadyAdded={collection.movies.map((m) => m.api_id)}
-          onAdd={(ids) => {
-            onAddMovie(collection.id, ids);
-            setShowAddModal(false);
+          alreadyAdded={movies.map((m) => m.api_id)}
+          onAdd={(tmdbMovie) => {
+            addMovie.mutate(
+              { collectionId: collection.id, tmdbMovie },
+              { onSuccess: () => setShowAddModal(false) }
+            );
           }}
           onCancel={() => setShowAddModal(false)}
         />
