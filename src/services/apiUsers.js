@@ -21,7 +21,6 @@ export async function getUserByID(id) {
 }
 
 export async function getUserProfile(id) {
-  /* A. user row --------------------------------------------------------- */
   const { data: user, error: userErr } = await supabase
     .from("users")
     .select("*")
@@ -29,7 +28,6 @@ export async function getUserProfile(id) {
     .single();
   if (userErr) throw userErr;
 
-  /* B. simple counts ---------------------------------------------------- */
   const { count: watchLaterCount } = await supabase
     .from("watch_later")
     .select("*", { count: "exact", head: true })
@@ -40,7 +38,6 @@ export async function getUserProfile(id) {
     .select("*", { count: "exact", head: true })
     .eq("users_id", id);
 
-  /* C. fetch watched rows ---------------------------------------------- */
   const { data: watchedRows, error: wErr } = await supabase
     .from("watched")
     .select(
@@ -59,12 +56,11 @@ export async function getUserProfile(id) {
     .eq("users_id", id);
   if (wErr) throw wErr;
 
-  /* D. build maps & stats ---------------------------------------------- */
-  const actorMap = new Map(); // name → { n , img }
-  const directorMap = new Map(); // name → { n , img }
-  const movieMap = new Map(); // title → { n , poster }
+  const actorMap = new Map();
+  const directorMap = new Map();
+  const movieMap = new Map();
 
-  const genreMap = new Map(); // name → n
+  const genreMap = new Map();
   const activity = new Map(
     ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => [d, new Map()])
   );
@@ -78,11 +74,9 @@ export async function getUserProfile(id) {
   watchedRows.forEach((row) => {
     const m = row.movies;
 
-    /* genre */
     const g = m.genres?.[0]?.name ?? "Other";
     genreMap.set(g, (genreMap.get(g) || 0) + 1);
 
-    /* activity 7-day */
     const when = new Date(row.created_at);
     if (when >= weekStart) {
       const dayKey = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][
@@ -92,7 +86,6 @@ export async function getUserProfile(id) {
       dayMap.set(g, (dayMap.get(g) || 0) + 1);
     }
 
-    /* actors */
     m.actors?.forEach((a) => {
       const obj = actorMap.get(a.name) || { n: 0, img: a.profile_path };
       obj.n += 1;
@@ -100,7 +93,6 @@ export async function getUserProfile(id) {
       actorMap.set(a.name, obj);
     });
 
-    /* directors */
     m.directors?.forEach((d) => {
       const obj = directorMap.get(d.name) || { n: 0, img: d.profile_path };
       obj.n += 1;
@@ -108,7 +100,6 @@ export async function getUserProfile(id) {
       directorMap.set(d.name, obj);
     });
 
-    /* movie frequency */
     const mv = movieMap.get(m.title) || {
       n: 0,
       poster: m.poster,
@@ -119,7 +110,6 @@ export async function getUserProfile(id) {
     movieMap.set(m.title, mv);
   });
 
-  /* E. pick favourites -------------------------------------------------- */
   const pick = (map) => [...map].sort((a, b) => b[1].n - a[1].n)[0] ?? [];
   const [favActor, actObj] = pick(actorMap);
   const [favDirector, dirObj] = pick(directorMap);
@@ -137,7 +127,6 @@ export async function getUserProfile(id) {
     [favMovie, movObj] = [...movieMap].sort((a, b) => b[1].n - a[1].n)[0] ?? [];
   }
 
-  /* donut + activity arrays -------------------------------------------- */
   const palette = [
     "#DC2626",
     "#FBBF24",
@@ -182,7 +171,6 @@ export async function getUserProfile(id) {
     return obj;
   });
 
-  /* avatar public URL --------------------------------------------------- */
   let avatarUrl = null;
   if (user.avatar) {
     const {
@@ -191,7 +179,6 @@ export async function getUserProfile(id) {
     avatarUrl = publicUrl;
   }
 
-  /* return -------------------------------------------------------------- */
   return {
     ...user,
     watchLaterCount,

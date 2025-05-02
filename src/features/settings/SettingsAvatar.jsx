@@ -1,4 +1,3 @@
-// SettingsAvatar.jsx
 export default function SettingsAvatar({
   src = "/profile-avatar.png",
   name = "Username",
@@ -21,9 +20,7 @@ export default function SettingsAvatar({
           type="file"
           accept="image/*"
           className="hidden"
-          onChange={() => {
-            /*…*/
-          }}
+          onChange={() => {}}
         />
       </label>
     </div>

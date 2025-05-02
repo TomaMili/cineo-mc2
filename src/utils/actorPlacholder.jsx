@@ -1,6 +1,6 @@
 export default function ActorPlaceholder({ name = "?" }) {
   return (
-    <div className="flex items-center justify-center h-40 sm:h-44 lg:h-48 bg-siva-800 rounded-lg">
+    <div className="flex items-center justify-center h-50 lg:h-56 xl:h-62  bg-siva-800 rounded-lg">
       <svg
         viewBox="0 0 24 24"
         className="w-12 h-12 text-siva-300"

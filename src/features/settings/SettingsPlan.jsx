@@ -1,5 +1,3 @@
-// src/features/settings/SettingsPlan.jsx
-
 export default function SettingsPlan() {
   return (
     <div className="max-w-3xl mx-auto rounded-lg p-6 text-white">

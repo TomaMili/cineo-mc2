@@ -1,16 +1,31 @@
 import { useUserAchievements } from "../../hooks/useAchievements";
 import { Icon } from "@iconify-icon/react";
+import ErrorNotice from "../../ui/ErrorNotice";
+import Spinner from "../../ui/Spinner";
 
 export default function Achievements() {
   const userId = 1; // replace with real session.id
   const { items, isLoading, error } = useUserAchievements(userId);
 
-  if (isLoading)
-    return <div className="p-8 text-white">Loading achievements…</div>;
+  if (!userId)
+    return (
+      <div className="flex items-center justify-center h-screen bg-siva-800">
+        <ErrorNotice title="Couldn't load Achievements" message="No user" />
+      </div>
+    );
   if (error)
-    return <div className="p-8 text-red-500">Error: {error.message}</div>;
+    return (
+      <div className="flex items-center justify-center h-screen bg-siva-800">
+        <ErrorNotice title="Couldn't load Watched" message={error.message} />
+      </div>
+    );
 
-  // split into two lists
+  if (isLoading)
+    return (
+      <div className="h-screen -m-24 flex justify-center items-center">
+        <Spinner size={46} />
+      </div>
+    );
   const completed = items.filter((a) => a.completed);
   const notFinished = items.filter((a) => !a.completed);
 

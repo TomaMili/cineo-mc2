@@ -1,4 +1,3 @@
-import React from "react";
 import CollectionRow from "./CollectionRow";
 
 export default function CollectionsList({

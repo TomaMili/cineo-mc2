@@ -6,21 +6,14 @@ import {
 import { fetchMovieDetails } from "../services/apiTmdb";
 import supabase from "../services/supabase";
 
-/* ---------------------------------------------------------------------------
- * Shared query-key helper
- * ------------------------------------------------------------------------- */
 const wlKey = (userId) => ["watch-later", userId];
 
-/* ---------------------------------------------------------------------------
- * 1️⃣  Main list – fetch ids from DB, then details from TMDB
- * ------------------------------------------------------------------------- */
 export function useWatchLater(userId) {
   return useQuery({
     queryKey: wlKey(userId),
     enabled: !!userId,
     staleTime: 5 * 60 * 1000, // 5 min cache
     queryFn: async () => {
-      /* step-A  fetch api_id + created_at */
       const { data, error } = await supabase
         .from("watch_later")
         .select("created_at, movies ( id, api_id )")
@@ -29,12 +22,10 @@ export function useWatchLater(userId) {
 
       if (error) throw error;
 
-      /* step-B  fetch TMDB details in parallel */
       const details = await Promise.all(
         data.map(({ movies }) => fetchMovieDetails(movies.api_id))
       );
 
-      /* step-C  preserve addedAt for “Date added” sort */
       return details.map((m, i) => ({
         ...m,
         dbId: data[i].movies.id,
@@ -44,9 +35,6 @@ export function useWatchLater(userId) {
   });
 }
 
-/* ---------------------------------------------------------------------------
- * 2️⃣  Mutations (unchanged except for centralised key)
- * ------------------------------------------------------------------------- */
 export function useAddToWatchLater(userId) {
   const qc = useQueryClient();
   return useMutation({
@@ -63,9 +51,6 @@ export function useRemoveFromWatchLater(userId) {
   });
 }
 
-/* ---------------------------------------------------------------------------
- * 3️⃣  Convenience hooks for “bookmark” buttons
- * ------------------------------------------------------------------------- */
 export function useIsInWatchLater(movieId, userId) {
   const { data: list = [] } = useWatchLater(userId);
   return list.some((m) => m.id === movieId);

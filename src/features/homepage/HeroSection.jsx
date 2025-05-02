@@ -17,7 +17,7 @@ function HeroSection() {
         </h2>
         <button
           onClick={show}
-          className="bg-bordo-500 z-0 px-6 pt-4 pb-3 rounded-4xl font-semibold cursor-pointer hover:bg-bordo-400"
+          className="bg-bordo-500 z-0 px-6 pt-4 pb-3 rounded-4xl font-semibold cursor-pointer hover:bg-bordo-400 transition-colors duration-300 ease-out"
         >
           SUPERSUGGESTION
         </button>

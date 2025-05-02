@@ -8,7 +8,6 @@ import {
   removeMovieFromCollection,
 } from "../services/apiCollections";
 
-/** keys */
 const colsKey = (userId) => ["collections", userId];
 const moviesKey = (userId, collectionId) => [
   "collections",
@@ -17,7 +16,6 @@ const moviesKey = (userId, collectionId) => [
   collectionId,
 ];
 
-/** 1️⃣ load all collections */
 export function useCollections(userId) {
   return useQuery({
     queryKey: colsKey(userId),
@@ -26,7 +24,6 @@ export function useCollections(userId) {
   });
 }
 
-/** 2️⃣ create */
 export function useCreateCollection(userId) {
   const qc = useQueryClient();
   return useMutation({
@@ -35,7 +32,6 @@ export function useCreateCollection(userId) {
   });
 }
 
-/** 3️⃣ delete */
 export function useDeleteCollection(userId) {
   const qc = useQueryClient();
   return useMutation({
@@ -44,7 +40,6 @@ export function useDeleteCollection(userId) {
   });
 }
 
-/** 4️⃣ fetch one collection’s movies */
 export function useCollectionMovies(userId, collectionId) {
   return useQuery({
     queryKey: moviesKey(userId, collectionId),
@@ -53,7 +48,6 @@ export function useCollectionMovies(userId, collectionId) {
   });
 }
 
-/** 5️⃣ add a movie */
 export function useAddMovieToCollection(userId) {
   const qc = useQueryClient();
   return useMutation({
@@ -63,7 +57,6 @@ export function useAddMovieToCollection(userId) {
   });
 }
 
-/** 6️⃣ remove a movie */
 export function useRemoveMovieFromCollection(userId) {
   const qc = useQueryClient();
   return useMutation({

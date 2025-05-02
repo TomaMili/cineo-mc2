@@ -4,7 +4,6 @@ import SettingsAvatar from "../../features/settings/SettingsAvatar";
 export default function Settings() {
   return (
     <>
-      {/* HERO SECTION */}
       <div
         className="w-full bg-cover bg-center -mt-24 "
         style={{ backgroundImage: "url(/bg-image.jpg)" }}
@@ -17,7 +16,6 @@ export default function Settings() {
         </div>
       </div>
 
-      {/* TABS + CONTENT */}
       <div className="bg-siva-800 pt-12 pb-12">
         <nav className="max-w-3xl mx-auto flex bg-gray-500/40  rounded-full overflow-hidden mb-20">
           {[

@@ -1,5 +1,3 @@
-// src/features/settings/SettingsPlatforms.jsx
-
 const platforms = [
   { id: "netflix", label: "Netflix", logo: "/netflix-logo.png" },
   { id: "prime-video", label: "Prime Video", logo: "/prime-video-logo.png" },

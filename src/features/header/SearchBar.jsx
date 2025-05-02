@@ -49,7 +49,6 @@ export default function SearchBar({ className = "" }) {
     close();
   };
 
-  /* Collapse on escape */
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") close();
@@ -91,7 +90,7 @@ export default function SearchBar({ className = "" }) {
             placeholder="Search movies, shows…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            onBlur={() => !query && close() /* blur cancels if empty */}
+            onBlur={() => !query && close()}
             className="w-full h-14 pl-16 pr-12 rounded-full bg-black/70 text-lg text-siva-100 placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-bordo-400"
           />
           <Icon

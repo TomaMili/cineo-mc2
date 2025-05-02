@@ -33,7 +33,6 @@ export function useWatched(userId) {
   });
 }
 
-/* ---------- mutations ---------- */
 export function useAddToWatched(userId) {
   const qc = useQueryClient();
   return useMutation({
@@ -50,7 +49,6 @@ export function useRemoveFromWatched(userId) {
   });
 }
 
-/* ---------- convenience ---------- */
 export function useIsWatched(movieId, userId) {
   const { data: list = [] } = useWatched(userId);
   return list.some((m) => m.id === movieId);
@@ -71,9 +69,6 @@ export function useToggleWatched(userId) {
   };
 }
 
-/* ---------------------------------------------------------------------------
- * 4️⃣  last-N recently watched  (for profile page)
- * ------------------------------------------------------------------------- */
 export function useRecentlyWatched(userId, limit = 4) {
   return useQuery({
     queryKey: ["recently-watched", userId, limit],

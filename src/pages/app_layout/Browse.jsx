@@ -1,4 +1,3 @@
-// src/pages/app_layout/Browse.jsx
 import { useSearchParams } from "react-router-dom";
 import { useCallback, useMemo } from "react";
 import { InView } from "react-intersection-observer";
@@ -17,7 +16,6 @@ export default function Browse() {
   const actorNames = params.get("actors")?.split(",") || [];
   const directorNames = params.get("directors")?.split(",") || [];
 
-  // 1) resolve actor & director names → TMDB person IDs
   const actorQueries = useQueries({
     queries: actorNames.map((name) => ({
       queryKey: ["person-search", "actor", name],
@@ -33,13 +31,11 @@ export default function Browse() {
     })),
   });
 
-  // 2) fetch full TMDB genre list
   const { data: allGenres = [] } = useQuery({
     queryKey: ["tmdb-genres"],
     queryFn: ({ signal }) => fetchGenres(signal),
   });
 
-  // 3) turn those names into comma-joined ID strings
   const castIDs = useMemo(
     () =>
       actorQueries
@@ -69,7 +65,6 @@ export default function Browse() {
 
   const isDiscover = Boolean(castIDs || crewIDs || genreIDs);
 
-  // 4) pick the right infinite query
   const searchResult = useSearchMovies(query);
   const discoverResult = useDiscoverMovies({
     cast: castIDs,
@@ -79,7 +74,6 @@ export default function Browse() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     isDiscover ? discoverResult : searchResult;
 
-  // 5) sort each page’s results then concat (no reshuffle on append)
   const movies = useMemo(() => {
     if (!data?.pages) return [];
     const seen = new Set();
@@ -100,7 +94,6 @@ export default function Browse() {
     return list;
   }, [data]);
 
-  // 6) **new** final filter: must have poster + non-zero rating
   const visibleMovies = useMemo(
     () => movies.filter((m) => m.poster_path && m.vote_average > 0),
     [movies]
@@ -112,19 +105,19 @@ export default function Browse() {
 
   if (status === "pending")
     return (
-      <div className="flex items-center justify-center h-screen bg-black">
+      <div className="flex items-center justify-center h-screen bg-siva-800">
         <Spinner size={48} />
       </div>
     );
   if (status === "error")
     return (
-      <div className="flex items-center justify-center h-screen bg-black">
+      <div className="flex items-center justify-center h-screen bg-siva-800">
         <ErrorNotice title="Search/Discover failed" />
       </div>
     );
 
   return (
-    <section className="min-h-screen -mt-24 bg-black px-6 xl:px-12 pb-32 text-siva-100">
+    <section className="min-h-screen -mt-24 bg-siva-800 px-6 xl:px-12 pb-32 text-siva-100">
       <h1 className="text-4xl font-semibold pt-24 pb-10 text-center">
         {isDiscover
           ? `Found ${visibleMovies.length} titles`

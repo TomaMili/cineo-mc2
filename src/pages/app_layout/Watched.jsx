@@ -12,14 +12,20 @@ export default function Watched() {
   // const userId   = session?.user?.id;
   const userId = 1; // TODO: real session
 
-  const { data: movies = [], isLoading } = useWatched(userId);
+  const { data: movies = [], isLoading, isError } = useWatched(userId);
 
   const [sort, setSort] = useState("date");
 
   if (!userId)
     return (
-      <div className="flex items-center justify-center h-screen bg-black">
+      <div className="flex items-center justify-center h-screen bg-siva-800">
         <ErrorNotice title="Couldn't load Watched" message="No user" />
+      </div>
+    );
+  if (isError)
+    return (
+      <div className="flex items-center justify-center h-screen bg-siva-800">
+        <ErrorNotice title="Couldn't load Watched" message={isError.message} />
       </div>
     );
 
