@@ -49,7 +49,7 @@ export default function CollectionsPage() {
         </button>
       </div>
 
-      <section className="px-6">
+      <section className="px-6 my-8">
         <CollectionsList
           collections={collections}
           onCreateCollection={(name) => createCollection.mutate({ name })}

@@ -40,10 +40,10 @@ export default function CollectionRow({
 
   return (
     <div className="mb-12">
-      <div className="flex items-center gap-6 mb-4 px-2 py-2 bg-siva-700 rounded-lg">
+      <div className="flex items-center gap-6 mb-3   bg-siva-700 rounded-lg">
         <Link
           to={`/collections/${collection.id}`}
-          className="text-3xl font-normal hover:text-bordo-400"
+          className="text-3xl font-normal hover:text-bordo-400 mb-1"
         >
           {collection.name}
         </Link>

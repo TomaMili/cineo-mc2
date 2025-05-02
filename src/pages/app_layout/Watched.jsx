@@ -71,7 +71,7 @@ export default function Watched() {
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
-          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2.5 rounded transition-colors duration-200 cursor-pointer"
+          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-3 rounded transition-colors duration-200 cursor-pointer"
         >
           <option value="date">Date watched</option>
           <option value="title">Title (A–Z)</option>
