@@ -1,5 +1,4 @@
 import HeroSection from "../../features/homepage/HeroSection";
-import Spinner from "../../ui/Spinner";
 import ErrorNotice from "../../ui/ErrorNotice";
 import Section from "../../features/homepage/Section";
 
@@ -18,7 +17,7 @@ export default function HomePage() {
     return (
       <>
         <HeroSection />
-        <div className="px-20 pt-32 bg-black text-white">
+        <div className="px-20 pt-32 bg-siva-800 text-white">
           <div className="grid grid-cols-[repeat(auto-fill,minmax(192px,1fr))] gap-6">
             {Array.from({ length: 8 }).map((_, i) => (
               <SkeletonPoster key={i} />
@@ -30,9 +29,12 @@ export default function HomePage() {
 
   if (isError)
     return (
-      <div className="flex items-center justify-center h-screen bg-black">
-        <ErrorNotice title="Couldn’t load popular movies" />
-      </div>
+      <>
+        <HeroSection />
+        <div className="flex items-center justify-center h-screen bg-siva-800">
+          <ErrorNotice title="Couldn’t load popular movies" />
+        </div>
+      </>
     );
 
   return (

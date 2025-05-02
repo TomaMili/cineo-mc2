@@ -1,5 +1,3 @@
-// src/features/settings/SettingsInfo.jsx
-
 export default function SettingsInfo() {
   return (
     <div className="space-y-12">

@@ -18,13 +18,13 @@ export default function Watched() {
 
   if (!userId)
     return (
-      <div className="flex items-center justify-center h-screen bg-black">
+      <div className="flex items-center justify-center h-screen bg-siva-800">
         <ErrorNotice title="Couldn't load Watched" message="No user" />
       </div>
     );
   if (isError)
     return (
-      <div className="flex items-center justify-center h-screen bg-black">
+      <div className="flex items-center justify-center h-screen bg-siva-800">
         <ErrorNotice title="Couldn't load Watched" message={isError.message} />
       </div>
     );

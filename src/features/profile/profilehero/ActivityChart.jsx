@@ -7,7 +7,6 @@ import {
   Cell,
 } from "recharts";
 
-/* ─── nice colours: same 20-colour palette ─────────────── */
 const baseColors = [
   "#DC2626",
   "#FBBF24",
@@ -38,7 +37,6 @@ const genreColor = (g) => {
   return baseColors[h];
 };
 
-/* ─── tooltip helper ───────────────────────────────────── */
 const dayNames = {
   Mon: "Monday",
   Tue: "Tuesday",
@@ -68,13 +66,11 @@ const TooltipContent = ({ active, payload, label }) =>
     </div>
   ) : null;
 
-/* ─── chart component ─────────────────────────────────── */
 function ActivityChart({ data = [] }) {
   const genres = Array.from(
     new Set(data.flatMap((d) => Object.keys(d).filter((k) => k !== "day")))
   );
 
-  /* ensure every bar stack gets zeros for missing keys */
   const normalised = data.map((d) => {
     const obj = { day: d.day };
     genres.forEach((g) => (obj[g] = d[g] ?? 0));

@@ -12,6 +12,7 @@ function Navigation({ isNavActive, setIsNavActive }) {
 
   useEffect(() => {
     if (isNavActive) setIsNavActive(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   return (

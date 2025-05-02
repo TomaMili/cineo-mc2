@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import WatchedItem from "./WatchedItem";
 
 export default function WatchedList({ movies, sortMode, onRemove }) {

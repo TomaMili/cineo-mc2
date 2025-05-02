@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 
-/**  Tiny hook to manage a selectable string list */
 function useSelectable(initial = []) {
   const [items, setItems] = useState(initial);
 

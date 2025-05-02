@@ -6,7 +6,6 @@ import {
   updateUser,
 } from "../services/apiUsers";
 
-/* list */
 export function useUsers() {
   return useQuery({
     queryKey: ["users"],
@@ -14,7 +13,6 @@ export function useUsers() {
   });
 }
 
-/* single row (basic) */
 export function useUser(id, enabled = true) {
   return useQuery({
     queryKey: ["user", id],
@@ -23,7 +21,6 @@ export function useUser(id, enabled = true) {
   });
 }
 
-/* full profile bundle */
 export function useUserProfile(id, enabled = true) {
   return useQuery({
     queryKey: ["user-profile", id],
@@ -33,7 +30,6 @@ export function useUserProfile(id, enabled = true) {
   });
 }
 
-/* update mutation (username, avatar, prefs …) */
 export function useUpdateUser(id) {
   const qc = useQueryClient();
   return useMutation({

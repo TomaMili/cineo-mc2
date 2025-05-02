@@ -1,10 +1,6 @@
 import supabase from "./supabase";
 import { fetchMovieDetails } from "./apiTmdb";
 
-/**
- * Map a TMDB movie object into our `movies` table format,
- * fetching full details if needed to include credits with images.
- */
 async function mapMovieForDB(tmdb) {
   let full = tmdb;
   if (!tmdb.credits || !Array.isArray(tmdb.credits.cast)) {
@@ -35,9 +31,6 @@ async function mapMovieForDB(tmdb) {
   };
 }
 
-/**
- * Upsert a movie row, returning the DB record (including generated id).
- */
 export async function upsertMovie(tmdbMovie) {
   const row = await mapMovieForDB(tmdbMovie);
   const { data, error } = await supabase
@@ -49,9 +42,6 @@ export async function upsertMovie(tmdbMovie) {
   return data;
 }
 
-/**
- * Add a movie to the user's Watched list, with optional rating.
- */
 export async function addToWatched(userId, tmdbMovie, rating = null) {
   const movieRow = await upsertMovie(tmdbMovie);
   const { error } = await supabase.from("watched").insert([
@@ -65,9 +55,6 @@ export async function addToWatched(userId, tmdbMovie, rating = null) {
   return movieRow;
 }
 
-/**
- * Remove a movie from the user's Watched list
- */
 export async function removeFromWatched(userId, movieDbId) {
   const { error } = await supabase
     .from("watched")

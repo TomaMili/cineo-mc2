@@ -12,8 +12,8 @@ export async function getRegionViaGeolocation() {
   const coords = await new Promise((resolve) => {
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => resolve(coords),
-      () => resolve(null), // permission denied or error
-      { maximumAge: 86_400_000, timeout: 8000 } // 8 s
+      () => resolve(null),
+      { maximumAge: 86_400_000, timeout: 8000 }
     );
   });
 

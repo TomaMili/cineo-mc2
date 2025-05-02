@@ -1,17 +1,13 @@
 import supabase from "./supabase";
 import { fetchMovieDetails } from "./apiTmdb";
 
-/**
- * Map a TMDB movie object into our `movies` table format,
- * fetching full details if needed to include credits with images.
- */
 async function mapMovieForDB(tmdb) {
   let full = tmdb;
   if (!tmdb.credits || !Array.isArray(tmdb.credits.cast)) {
     full = await fetchMovieDetails(tmdb.id);
   }
   return {
-    api_id: full.id, // UNIQUE
+    api_id: full.id,
     title: full.title,
     overview: full.overview,
     release_date: full.release_date
@@ -35,9 +31,6 @@ async function mapMovieForDB(tmdb) {
   };
 }
 
-/**
- * Upsert a movie row, returning the DB record (including generated id).
- */
 export async function upsertMovie(tmdbMovie) {
   const row = await mapMovieForDB(tmdbMovie);
   const { data, error } = await supabase
@@ -49,9 +42,6 @@ export async function upsertMovie(tmdbMovie) {
   return data;
 }
 
-/**
- * Add a movie to the user's Watch-Later list
- */
 export async function addToWatchLater(userId, tmdbMovie) {
   const movieRow = await upsertMovie(tmdbMovie);
   const { error } = await supabase
@@ -61,9 +51,6 @@ export async function addToWatchLater(userId, tmdbMovie) {
   return movieRow;
 }
 
-/**
- * Remove a movie from the user's Watch-Later list
- */
 export async function removeFromWatchLater(userId, movieId) {
   const { error } = await supabase
     .from("watch_later")

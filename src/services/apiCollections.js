@@ -1,6 +1,5 @@
 import supabase from "./supabase";
 
-/** 1️⃣ Fetch all collections for a user */
 export async function getCollections(userId) {
   const { data, error } = await supabase
     .from("collections")
@@ -11,7 +10,6 @@ export async function getCollections(userId) {
   return data;
 }
 
-/** 2️⃣ Create a new collection */
 export async function createCollection(userId, { name }) {
   const { data, error } = await supabase
     .from("collections")
@@ -22,7 +20,6 @@ export async function createCollection(userId, { name }) {
   return data;
 }
 
-/** 3️⃣ Delete a collection */
 export async function deleteCollection(userId, { collectionId }) {
   const { error } = await supabase
     .from("collections")
@@ -32,7 +29,6 @@ export async function deleteCollection(userId, { collectionId }) {
   if (error) throw error;
 }
 
-/** 4️⃣ Fetch one collection’s movies */
 export async function getCollectionMovies(userId, { collectionId }) {
   const { data, error } = await supabase
     .from("movies_collections")
@@ -54,9 +50,7 @@ export async function getCollectionMovies(userId, { collectionId }) {
   if (error) throw error;
 
   return data.map(({ created_at, movies }) => ({
-    // TMDB id for the popup/card
     id: movies.api_id,
-    // keep your DB PK so you can delete by it
     dbId: movies.id,
     title: movies.title,
     poster: movies.poster,
@@ -65,12 +59,10 @@ export async function getCollectionMovies(userId, { collectionId }) {
   }));
 }
 
-/** 5️⃣ Upsert movie + add to collection */
 export async function addMovieToCollection(
   userId,
   { collectionId, tmdbMovie }
 ) {
-  // 1) upsert into `movies`
   const { data: row, error: up } = await supabase
     .from("movies")
     .upsert(
@@ -86,7 +78,6 @@ export async function addMovieToCollection(
     .single();
   if (up) throw up;
 
-  // 2) insert into join table (no user_id here!)
   const { error: joinErr } = await supabase.from("movies_collections").insert([
     {
       collections_id: collectionId,
@@ -98,7 +89,6 @@ export async function addMovieToCollection(
   return row;
 }
 
-/** 6️⃣ Remove a movie from a collection */
 export async function removeMovieFromCollection(
   userId,
   { collectionId, movieId }

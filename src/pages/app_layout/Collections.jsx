@@ -25,14 +25,17 @@ export default function Collections() {
 
   if (!userId)
     return (
-      <div className="flex items-center justify-center h-screen bg-black">
-        <ErrorNotice title="Couldn't load Watched" message="No user" />
+      <div className="flex items-center justify-center h-screen bg-siva-800">
+        <ErrorNotice title="Couldn't load Collections" message="No user" />
       </div>
     );
   if (isError)
     return (
-      <div className="flex items-center justify-center h-screen bg-black">
-        <ErrorNotice title="Couldn't load Watched" message={isError.message} />
+      <div className="flex items-center justify-center h-screen bg-siva-800">
+        <ErrorNotice
+          title="Couldn't load Collections"
+          message={isError.message}
+        />
       </div>
     );
 

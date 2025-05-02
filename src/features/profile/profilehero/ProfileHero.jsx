@@ -3,18 +3,27 @@ import DonutChart from "./DonutChart";
 import ActivityChart from "./ActivityChart";
 import { useUserProfile } from "../../../hooks/useUsers";
 import { useUserAchievements } from "../../../hooks/useAchievements";
+import ErrorNotice from "../../../ui/ErrorNotice";
+import Spinner from "../../../ui/Spinner";
 
 export default function ProfileHero() {
   const userId = 1; // TODO real session
-  const { data: profile, isLoading } = useUserProfile(userId);
+  const { data: profile, isLoading, isError } = useUserProfile(userId);
 
   const { items } = useUserAchievements(userId);
   const completed = items.filter((a) => a.completed).length;
 
-  if (isLoading || !profile)
+  if (isError)
     return (
-      <div className="flex items-center justify-center h-64 text-white">
-        Loading profile…
+      <div className="flex items-center justify-center h-screen bg-siva-800">
+        <ErrorNotice title="Couldn't load Profile" message={isError.message} />
+      </div>
+    );
+
+  if (isLoading)
+    return (
+      <div className="h-screen -m-24 flex justify-center items-center">
+        <Spinner size={46} />
       </div>
     );
 

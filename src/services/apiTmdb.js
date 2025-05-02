@@ -1,9 +1,6 @@
 const BASE = "https://api.themoviedb.org/3";
 const APIKEY = import.meta.env.VITE_TMDB_API_KEY;
 
-/**
- * Internal helper – attaches the API‑key + extra params and returns a URL.
- */
 function makeUrl(path, params = {}) {
   const url = new URL(`${BASE}/${path.replace(/^\//, "")}`);
   url.searchParams.set("api_key", APIKEY);
@@ -11,9 +8,6 @@ function makeUrl(path, params = {}) {
   return url;
 }
 
-/**
- * Internal helper – fetch + basic error handling.
- */
 async function fetchJson(url, abortSignal) {
   const res = await fetch(url, { signal: abortSignal });
   if (!res.ok) {
@@ -23,9 +17,6 @@ async function fetchJson(url, abortSignal) {
   return res.json();
 }
 
-/* --------------------------------------------------------------------------
-   Endpoints
-   -------------------------------------------------------------------------- */
 export function searchMovies(query, page = 1, abortSignal) {
   return fetchJson(
     makeUrl("search/movie", {
@@ -59,9 +50,6 @@ export function fetchTrending(window = "week", abortSignal) {
   return fetchJson(makeUrl(`trending/movie/${window}`), abortSignal);
 }
 
-/* --------------------------------------------------------------------------
-   ▸ Image helpers (poster / backdrop)
-   -------------------------------------------------------------------------- */
 const IMG_BASE = "https://image.tmdb.org/t/p";
 
 // 92, 154, 185, 342, 500, 780, original
@@ -76,21 +64,6 @@ export const backdrop = (path, size = 1280) =>
 export const profileImage = (path, size = 632) =>
   path ? `${IMG_BASE}/h${size}${path}` : null;
 
-/* --------------------------------------------------------------------------
-   ▸ Usage example (React‑Query):
-   --------------------------------------------------------------------------
-   import { useQuery } from "@tanstack/react-query";
-   import { searchMovies } from "../services/apiTmdb";
-
-   const { data } = useQuery(["search", q], ({ signal }) =>
-     searchMovies(q, 1, signal)
-   );
--------------------------------------------------------------------------- */
-
-/**
- * Search for a person by name.
- * e.g. useQuery(["persons", q], ({ signal }) => searchPeople(q, 1, signal))
- */
 export function searchPeople(query, page = 1, abortSignal) {
   return fetchJson(
     makeUrl("search/person", {
@@ -103,10 +76,6 @@ export function searchPeople(query, page = 1, abortSignal) {
   );
 }
 
-/**
- * Fetch detailed person info (bio, profile_path, etc.).
- * append_to_response can include movie_credits, combined_credits, images, etc.
- */
 export function fetchPersonDetails(personId, abortSignal) {
   return fetchJson(
     makeUrl(`person/${personId}`, {
@@ -116,8 +85,6 @@ export function fetchPersonDetails(personId, abortSignal) {
     abortSignal
   );
 }
-
-/* Movie page */
 
 export function fetchMovieRecommendations(movieId, page = 1, abortSignal) {
   return fetchJson(
@@ -136,7 +103,6 @@ export function fetchMovieReviews(movieId, page = 1, abortSignal) {
   );
 }
 
-/* OPTIONAL: if you prefer credits & videos separated */
 export const fetchMovieCredits = (movieId, abortSignal) =>
   fetchJson(
     makeUrl(`movie/${movieId}/credits`, { language: "en-US" }),
@@ -152,7 +118,6 @@ export const fetchMovieVideos = (movieId, abortSignal) =>
 export function findDirector(credits) {
   if (!credits) return null;
 
-  // credits can be `{crew:[…]}` or `{credits:{crew:[…]}}`
   const crewArray = Array.isArray(credits)
     ? credits
     : credits.crew ?? credits?.credits?.crew ?? [];
@@ -160,7 +125,6 @@ export function findDirector(credits) {
   return crewArray.find((person) => person.job === "Director") || null;
 }
 
-/* Watch Providers -------------------------------------------------------- */
 export function fetchMovieProviders(movieId, region = "HR", abortSignal) {
   return fetchJson(
     makeUrl(`movie/${movieId}/watch/providers`),
@@ -168,16 +132,14 @@ export function fetchMovieProviders(movieId, region = "HR", abortSignal) {
   ).then((json) => json.results?.[region] ?? null);
 }
 
-/** Fetches the full list of movie genres from TMDB */
 export async function fetchGenres(signal) {
   const json = await fetchJson(
     makeUrl("genre/movie/list", { language: "en-US" }),
     signal
   );
-  return json.genres; // [{ id, name }, …]
+  return json.genres;
 }
 
-/** Discover by numeric IDs */
 export function discoverMovies({ cast, crew, genres, page = 1 }, signal) {
   const params = { page, language: "en-US", include_adult: false };
   if (cast) params.with_cast = cast;

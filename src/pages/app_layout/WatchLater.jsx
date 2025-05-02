@@ -32,13 +32,13 @@ export default function WatchLater() {
 
   if (!userId)
     return (
-      <div className="flex items-center justify-center h-screen bg-black">
+      <div className="flex items-center justify-center h-screen bg-siva-800">
         <ErrorNotice title="Couldn't load Watch-Later" message="No user" />
       </div>
     );
   if (isError)
     return (
-      <div className="flex items-center justify-center h-screen bg-black">
+      <div className="flex items-center justify-center h-screen bg-siva-800">
         <ErrorNotice
           title="Couldn't load Watch-Later"
           message={isError.message}

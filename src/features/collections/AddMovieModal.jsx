@@ -1,4 +1,3 @@
-// src/features/collections/AddMovieModal.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Icon } from "@iconify-icon/react";

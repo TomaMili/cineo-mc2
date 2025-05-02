@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
 import { Icon } from "@iconify-icon/react";
 import AddMovieCard from "./AddMovieCard";
 import AddMovieModal from "./AddMovieModal";

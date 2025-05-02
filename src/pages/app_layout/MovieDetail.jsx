@@ -42,13 +42,13 @@ export default function MovieDetail() {
 
   if (loadingDetails)
     return (
-      <div className="flex items-center justify-center h-screen -mt-24 bg-black">
+      <div className="flex items-center justify-center h-screen -mt-24 bg-siva-800">
         <Spinner size={48} color="text-bordo-400" />
       </div>
     );
   if (detailsError)
     return (
-      <div className="flex items-center justify-center h-screen -mt-24 bg-black">
+      <div className="flex items-center justify-center h-screen -mt-24 bg-siva-800">
         <ErrorNotice
           title="Unable to load movie data"
           message={detailsError.message}
@@ -61,7 +61,7 @@ export default function MovieDetail() {
 
   if (!details)
     return (
-      <div className="flex items-center justify-center h-screen -mt-24 bg-black">
+      <div className="flex items-center justify-center h-screen -mt-24 bg-siva-800">
         <ErrorNotice title="Movie not found" />
       </div>
     );
