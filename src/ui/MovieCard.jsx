@@ -46,35 +46,33 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
   };
 
   return (
-    <div className="relative w-40 sm:w-44 lg:w-48 xl:w-52">
-      <div className="relative overflow-hidden rounded-lg aspect-[2/3]">
-        {movie.poster_path ? (
-          <img
-            src={poster(movie.poster_path)}
-            alt={movie.title}
-            onMouseEnter={prefetch}
-            onClick={handlePosterClick}
-            className="w-full h-full transition-transform duration-300 ease-out hover:scale-105 cursor-pointer"
-          />
-        ) : (
-          <div
-            onClick={handlePosterClick}
-            className="w-full h-full bg-gray-700 flex items-center justify-center text-sm  cursor-pointer"
-          >
-            {movie.title}
-          </div>
-        )}
+    <div className="group relative w-40 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3]">
+      {movie.poster_path ? (
+        <img
+          src={poster(movie.poster_path)}
+          alt={movie.title}
+          onMouseEnter={prefetch}
+          onClick={handlePosterClick}
+          className="w-full h-full object-cover rounded-lg cursor-pointer transition-all duration-300 ease-out hover:scale-103"
+        />
+      ) : (
+        <div
+          onClick={handlePosterClick}
+          className="w-full h-full bg-gray-700 flex items-center justify-center text-sm  cursor-pointer"
+        >
+          {movie.title}
+        </div>
+      )}
 
-        {showRating && !watched && (
-          <div className="absolute inset-0 flex items-center justify-center z-20">
-            <RatingOverlay
-              onRate={(stars) => rateAndSave(stars)}
-              onRateLater={() => rateAndSave(null)}
-              onClose={() => setShowRating(false)}
-            />
-          </div>
-        )}
-      </div>
+      {showRating && !watched && (
+        <div className="absolute inset-0 flex items-center justify-center z-20">
+          <RatingOverlay
+            onRate={(stars) => rateAndSave(stars)}
+            onRateLater={() => rateAndSave(null)}
+            onClose={() => setShowRating(false)}
+          />
+        </div>
+      )}
 
       <div className="mt-2 flex items-start justify-between">
         <p

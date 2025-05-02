@@ -34,7 +34,7 @@ export default function CastCarousel({
       />
 
       <div ref={emblaRef} className="overflow-hidden w-full">
-        <div className="flex gap-6">
+        <div className="flex gap-4 px-2">
           {slides.map((cast) => (
             <div
               key={cast.credit_id ?? cast.id}

@@ -26,25 +26,23 @@ export default function WatchedItem({ movie }) {
   }
 
   return (
-    <div className="relative  w-40 sm:w-44 lg:w-48 xl:w-52">
-      <div className="overflow-hidden rounded-lg relative aspect-[2/3]">
-        <img
-          src={posterSrc}
-          alt={movie.title}
-          className="w-full h-full object-cover transition-all duration-300 ease-out hover:scale-105 cursor-pointer"
-          onClick={() => open(movie)}
-        />
+    <div className="group relative w-40 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3]">
+      <img
+        src={posterSrc}
+        alt={movie.title}
+        className="w-full h-full object-cover rounded-lg cursor-pointer transition-all duration-300 ease-out hover:scale-103"
+        onClick={() => open(movie)}
+      />
 
-        {showRating && (
-          <div className="absolute inset-0 flex items-center justify-center z-20">
-            <RatingOverlay
-              onRate={(stars) => saveRating(stars)}
-              onRateLater={() => saveRating(null)}
-              onClose={() => setShowRating(false)}
-            />
-          </div>
-        )}
-      </div>
+      {showRating && (
+        <div className="absolute inset-0 flex items-center justify-center z-20">
+          <RatingOverlay
+            onRate={(stars) => saveRating(stars)}
+            onRateLater={() => saveRating(null)}
+            onClose={() => setShowRating(false)}
+          />
+        </div>
+      )}
 
       <button
         onClick={() => open(movie)}

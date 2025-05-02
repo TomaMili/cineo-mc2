@@ -34,7 +34,7 @@ export default function MovieCarousel({
       />
 
       <div ref={emblaRef} className="overflow-hidden w-full">
-        <div className="flex gap-6">
+        <div className="flex gap-6 pt-2 px-1">
           {slides.map((movie) => (
             <div
               key={movie.id}

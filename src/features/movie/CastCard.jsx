@@ -8,11 +8,11 @@ export default function CastCard({
 }) {
   return (
     <div
-      className="w-28 sm:w-32 lg:w-36 xl:w-40 cursor-pointer"
+      className="group relative w-28 sm:w-32 lg:w-36 xl:w-40 cursor-pointer"
       onClick={() => onClick(cast)}
     >
       {cast.profile_path ? (
-        <div className="overflow-hidden rounded-lg">
+        <div className="pt-2 h-full">
           <img
             src={
               cast.profile_path
@@ -20,7 +20,7 @@ export default function CastCard({
                 : "/fallback-person.png"
             }
             alt={cast.name}
-            className="w-full transition-transform duration-300 ease-out hover:scale-105 object-cover h-40 sm:h-44 lg:h-48"
+            className="w-full rounded-lg transition-transform duration-300 ease-out hover:scale-103 object-cover h-full "
           />
         </div>
       ) : (

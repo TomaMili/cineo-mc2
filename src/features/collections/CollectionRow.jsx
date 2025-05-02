@@ -85,7 +85,7 @@ export default function CollectionRow({
             <img
               src={poster(m.poster)}
               alt={m.title}
-              className="w-full h-full object-cover rounded-lg cursor-pointer transition-all duration-300 ease-out hover:scale-105"
+              className="w-full h-full object-cover rounded-lg cursor-pointer transition-all duration-300 ease-out hover:scale-103"
               onClick={() => open(m)}
             />
             <button
