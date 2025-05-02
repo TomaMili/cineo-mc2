@@ -17,7 +17,7 @@ export default function Browse() {
   const actorNames = params.get("actors")?.split(",") || [];
   const directorNames = params.get("directors")?.split(",") || [];
 
-  // 1) Resolve actor & director names → TMDB person IDs
+  // 1) resolve actor & director names → TMDB person IDs
   const actorQueries = useQueries({
     queries: actorNames.map((name) => ({
       queryKey: ["person-search", "actor", name],
@@ -33,13 +33,13 @@ export default function Browse() {
     })),
   });
 
-  // 2) Fetch full genre list
+  // 2) fetch full TMDB genre list
   const { data: allGenres = [] } = useQuery({
     queryKey: ["tmdb-genres"],
     queryFn: ({ signal }) => fetchGenres(signal),
   });
 
-  // 3) Extract comma-joined ID strings (for Discover API)
+  // 3) turn those names into comma-joined ID strings
   const castIDs = useMemo(
     () =>
       actorQueries
@@ -57,7 +57,6 @@ export default function Browse() {
     [directorQueries]
   );
   const genreIDs = useMemo(() => {
-    // inline splitting so deps stay stable
     const names = (params.get("genres") || "").split(",").filter(Boolean);
     return names
       .map((n) =>
@@ -70,7 +69,7 @@ export default function Browse() {
 
   const isDiscover = Boolean(castIDs || crewIDs || genreIDs);
 
-  // 4) Pick the right infinite query
+  // 4) pick the right infinite query
   const searchResult = useSearchMovies(query);
   const discoverResult = useDiscoverMovies({
     cast: castIDs,
@@ -80,18 +79,18 @@ export default function Browse() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     isDiscover ? discoverResult : searchResult;
 
-  // 5) Sort each page individually, then append without reshuffling
+  // 5) sort each page’s results then concat (no reshuffle on append)
   const movies = useMemo(() => {
     if (!data?.pages) return [];
     const seen = new Set();
     const list = [];
     data.pages.forEach((page) => {
-      const pageSorted = [...page.results].sort(
+      const sorted = [...page.results].sort(
         (a, b) =>
           (a.poster_path ? 0 : 1) - (b.poster_path ? 0 : 1) ||
           -(a.popularity || 0) + (b.popularity || 0)
       );
-      pageSorted.forEach((m) => {
+      sorted.forEach((m) => {
         if (!seen.has(m.id)) {
           seen.add(m.id);
           list.push(m);
@@ -100,6 +99,12 @@ export default function Browse() {
     });
     return list;
   }, [data]);
+
+  // 6) **new** final filter: must have poster + non-zero rating
+  const visibleMovies = useMemo(
+    () => movies.filter((m) => m.poster_path && m.vote_average > 0),
+    [movies]
+  );
 
   const loadMore = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage) fetchNextPage();
@@ -122,11 +127,11 @@ export default function Browse() {
     <section className="min-h-screen -mt-24 bg-black px-6 xl:px-12 pb-32 text-siva-100">
       <h1 className="text-4xl font-semibold pt-24 pb-10 text-center">
         {isDiscover
-          ? `Found ${movies.length} titles`
+          ? `Found ${visibleMovies.length} titles`
           : `Results for “${query || "…"}”`}
       </h1>
 
-      {movies.length === 0 && (
+      {visibleMovies.length === 0 && (
         <p className="text-center text-siva-300 mt-32">
           No titles match your filters.
         </p>
@@ -144,7 +149,7 @@ export default function Browse() {
           min-[1860px]:grid-cols-8
         "
       >
-        {movies.map((m) => (
+        {visibleMovies.map((m) => (
           <MovieCard key={m.id} movie={m} />
         ))}
       </div>
