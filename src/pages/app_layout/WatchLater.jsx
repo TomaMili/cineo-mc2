@@ -16,7 +16,7 @@ export default function WatchLater() {
   // const userId = session?.user?.id;
   const userId = 1; // TODO: replace with real session
 
-  const { data: movies = [], isLoading } = useWatchLater(userId);
+  const { data: movies = [], isLoading, isError } = useWatchLater(userId);
   const toggleWatchLater = useToggleWatchLater(userId);
 
   const [sort, setSort] = useState("genre");
@@ -34,6 +34,15 @@ export default function WatchLater() {
     return (
       <div className="flex items-center justify-center h-screen bg-black">
         <ErrorNotice title="Couldn't load Watch-Later" message="No user" />
+      </div>
+    );
+  if (isError)
+    return (
+      <div className="flex items-center justify-center h-screen bg-black">
+        <ErrorNotice
+          title="Couldn't load Watch-Later"
+          message={isError.message}
+        />
       </div>
     );
 

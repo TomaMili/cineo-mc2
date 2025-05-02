@@ -1,62 +1,105 @@
-import React, { useCallback } from "react";
-import CollectionsPage from "../../features/collections/CollectionsPage";
-import { handleShare } from "../../utils/share";
+import { useState } from "react";
+import TabNav from "../../ui/TabNav";
+import Spinner from "../../ui/Spinner";
+import ErrorNotice from "../../ui/ErrorNotice";
+import CollectionsList from "../../features/collections/CollectionsList";
+import NewCollectionModal from "../../features/collections/NewCollectionModal";
 import {
+  useAddMovieToCollection,
+  useCollections,
   useCreateCollection,
   useDeleteCollection,
-  useAddMovieToCollection,
   useRemoveMovieFromCollection,
 } from "../../hooks/useCollections";
+import { Icon } from "@iconify-icon/react";
 
 export default function Collections() {
-  const userId = 1; // replace with real session
+  const userId = 1;
+  const { data: collections = [], isLoading, isError } = useCollections(userId);
+  const createCollection = useCreateCollection(userId);
+  const deleteCollection = useDeleteCollection(userId);
+  const addToCollection = useAddMovieToCollection(userId);
+  const removeFromCollection = useRemoveMovieFromCollection(userId);
 
-  const createCol = useCreateCollection(userId);
-  const deleteCol = useDeleteCollection(userId);
-  const addMovie = useAddMovieToCollection(userId);
-  const removeMovie = useRemoveMovieFromCollection(userId);
+  const [showNew, setShowNew] = useState(false);
 
-  const onShareAll = useCallback(
-    () =>
-      handleShare(
-        window.location.origin + "/collections",
-        "All collections link copied!"
-      ),
-    []
-  );
-  const onCreateCollection = useCallback(
-    (name) => createCol.mutate(name),
-    [createCol]
-  );
-  const onDeleteCollection = useCallback(
-    (col) => deleteCol.mutate(col.id),
-    [deleteCol]
-  );
-  const onShareCollection = useCallback(
-    (col) =>
-      handleShare(
-        window.location.origin + `/collections/${col.id}`,
-        `"${col.name}" link copied!`
-      ),
-    []
-  );
-  const onAddMovieToCollection = useCallback(
-    (collectionId, tmdbMovie) => addMovie.mutate({ collectionId, tmdbMovie }),
-    [addMovie]
-  );
-  const onRemoveMovieFromCollection = useCallback(
-    (collectionId, movieId) => removeMovie.mutate({ collectionId, movieId }),
-    [removeMovie]
-  );
+  if (!userId)
+    return (
+      <div className="flex items-center justify-center h-screen bg-black">
+        <ErrorNotice title="Couldn't load Watched" message="No user" />
+      </div>
+    );
+  if (isError)
+    return (
+      <div className="flex items-center justify-center h-screen bg-black">
+        <ErrorNotice title="Couldn't load Watched" message={isError.message} />
+      </div>
+    );
+
+  if (isLoading)
+    return (
+      <>
+        <div className="w-full mx-auto px-6 pt-6">
+          <TabNav
+            tabs={[
+              ["../watchlater", "Watch later"],
+              ["../watched", "Watched"],
+              ["", "Collections"],
+            ]}
+          />
+        </div>
+        <div className="h-screen -m-24 flex justify-center items-center">
+          <Spinner size={46} />
+        </div>
+      </>
+    );
 
   return (
-    <CollectionsPage
-      onShareAll={onShareAll}
-      onCreateCollection={onCreateCollection}
-      onDeleteCollection={onDeleteCollection}
-      onShareCollection={onShareCollection}
-      onAddMovie={onAddMovieToCollection}
-      onRemoveMovie={onRemoveMovieFromCollection}
-    />
+    <div className="min-h-screen  text-siva-100 pb-12">
+      <div className="px-6 pt-6">
+        <TabNav
+          tabs={[
+            ["../watchlater", "Watch later"],
+            ["../watched", "Watched"],
+            ["", "Collections"],
+          ]}
+        />
+      </div>
+
+      <div className="flex justify-end gap-4 mt-4 px-6">
+        <button
+          onClick={() => setShowNew(true)}
+          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 cursor-pointer"
+        >
+          <Icon icon="mdi:plus" /> New Collection
+        </button>
+      </div>
+
+      <section className="px-6 my-8.5">
+        <CollectionsList
+          collections={collections}
+          onCreateCollection={(name) => createCollection.mutate({ name })}
+          onDeleteCollection={(colId) =>
+            deleteCollection.mutate({ collectionId: colId })
+          }
+          onAddMovie={(collectionId, tmdbMovie) =>
+            addToCollection.mutate({ collectionId, tmdbMovie })
+          }
+          onRemoveMovie={(collectionId, movieDbId) =>
+            removeFromCollection.mutate({ collectionId, movieDbId })
+          }
+        />
+      </section>
+
+      {showNew && (
+        <NewCollectionModal
+          onCreate={(name) => {
+            createCollection.mutate({ name });
+            setShowNew(false);
+          }}
+          onCancel={() => setShowNew(false)}
+        />
+      )}
+    </div>
   );
 }

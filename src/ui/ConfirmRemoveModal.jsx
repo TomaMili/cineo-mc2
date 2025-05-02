@@ -1,6 +1,6 @@
-import React from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
 
 export default function ConfirmRemoveModal({
   movie,
@@ -8,8 +8,7 @@ export default function ConfirmRemoveModal({
   onConfirm,
   onCancel,
 }) {
-  // prevent body scroll when modal is open
-  React.useEffect(() => {
+  useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "";
@@ -18,7 +17,6 @@ export default function ConfirmRemoveModal({
 
   return createPortal(
     <AnimatePresence>
-      {/* backdrop */}
       <motion.div
         key="backdrop"
         initial={{ opacity: 0 }}
@@ -27,7 +25,6 @@ export default function ConfirmRemoveModal({
         className="fixed inset-0 bg-black z-40"
       />
 
-      {/* modal panel */}
       <motion.div
         key="modal"
         initial={{ scale: 0.9, opacity: 0 }}
@@ -48,13 +45,13 @@ export default function ConfirmRemoveModal({
           <div className="flex justify-center gap-4">
             <button
               onClick={onCancel}
-              className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-500"
+              className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-500 cursor-pointer"
             >
               Cancel
             </button>
             <button
               onClick={onConfirm}
-              className="px-4 py-2 bg-bordo-500 rounded hover:bg-bordo-400"
+              className="px-4 py-2 bg-bordo-500 rounded hover:bg-bordo-400 cursor-pointer"
             >
               Remove
             </button>
