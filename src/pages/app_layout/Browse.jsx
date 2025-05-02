@@ -56,8 +56,8 @@ export default function BrowsePage() {
       <div
         className="
           grid gap-6
-          grid-cols-2 sm:grid-cols-3 md:grid-cols-4
-          lg:grid-cols-6 xl:grid-cols-8
+          grid-cols-2 min-[570px]:grid-cols-3 min-[770px]:grid-cols-4 min-[1100px]:grid-cols-5 min-[1400px]:grid-cols-6
+          min-[1670px]:grid-cols-7 min-[1860px]:grid-cols-8
         "
       >
         {movies.map((m) => (
