@@ -34,8 +34,9 @@ import WatchLater from "./pages/app_layout/WatchLater";
 
 import { MoviePopupProvider } from "./context/MoviePopupContext";
 import { SuperSuggestProvider } from "./context/SuperSuggestContext";
+import { Toaster } from "react-hot-toast";
 
-// import { useAuth } from "./hooks/useAuth";
+import { useAuth } from "./hooks/useAuth";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,8 +47,8 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  // const { user } = useAuth();
-  const user = true;
+  const { user } = useAuth();
+  console.log(user);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -119,6 +120,26 @@ function App() {
           </SuperSuggestProvider>
         </MoviePopupProvider>
       </BrowserRouter>
+      <Toaster
+        position="top-center"
+        gutter={12}
+        containerStyle={{ margin: "8px" }}
+        toastOptions={{
+          success: {
+            duration: 3000,
+          },
+          error: {
+            duration: 5000,
+          },
+          style: {
+            fontSize: "16px",
+            maxWidth: "500px",
+            padding: "16px 24px",
+            backgroundColor: "var(--color-grey-0)",
+            color: "var(--color-grey-700)",
+          },
+        }}
+      />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
