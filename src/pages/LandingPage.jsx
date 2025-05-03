@@ -1,10 +1,8 @@
-// src/pages/Landing.jsx
 import { Link } from "react-router-dom";
 
 export default function LandingPage() {
   return (
     <main className="w-full overflow-x-hidden">
-      {/* --- HERO -------------------------------------------------------- */}
       <section
         className="
     relative w-full h-[90vh] overflow-hidden
@@ -15,11 +13,10 @@ export default function LandingPage() {
     before:z-0            
   "
       >
-        {/* login top-right */}
         <Link
           to="/login"
           className="absolute right-4 top-6 sm:right-10 sm:top-8
-               bg-bordo-500 hover:bg-bordo-400 text-xs font-semibold px-6 py-2 rounded"
+               bg-bordo-500 hover:bg-bordo-400 text-xs font-semibold px-6 py-2 rounded cursor-pointer z-20"
         >
           LOGIN
         </Link>
@@ -38,7 +35,7 @@ export default function LandingPage() {
           </p>
 
           <Link
-            to="/signup"
+            to="/info"
             className="mt-8 bg-bordo-500 hover:bg-bordo-400 px-10 py-3 rounded-full
                  tracking-wider text-sm font-semibold"
           >
