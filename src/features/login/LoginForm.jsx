@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useLogin } from "./useLogin";
+import { useLogin } from "../../hooks/useAuth";
 import Spinner from "../../ui/Spinner";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("cineo@email.com");
+  const [email, setEmail] = useState("toma@gmail.com");
   const [password, setPassword] = useState("12345678");
   const { login, isLoading, error } = useLogin();
 
@@ -22,31 +22,27 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {error && (
-        <div className="text-red-400 text-sm text-center">
-          {error.message || "Login failed"}
-        </div>
-      )}
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {error && <p className="text-red-500 text-sm">{error.message}</p>}
+
       <div>
-        <label htmlFor="email" className="block text-gray-200 mb-1">
-          Email *
+        <label htmlFor="email" className="block font-medium">
+          Email
         </label>
         <input
           id="email"
-          type="text"
-          autoComplete="email"
+          type="email"
+          autoComplete="username"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={isLoading}
-          className="w-full px-4 py-3 rounded-lg bg-black bg-opacity-50 border border-gray-400 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-          placeholder="Enter your email"
+          className="mt-1 w-full px-3 py-2 bg-gray-900 rounded"
         />
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-gray-200 mb-1">
-          Password *
+        <label htmlFor="password" className="block font-medium">
+          Password
         </label>
         <input
           id="password"
@@ -55,17 +51,16 @@ export default function LoginForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           disabled={isLoading}
-          className="w-full px-4 py-3 rounded-lg bg-black bg-opacity-50 border border-gray-400 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-          placeholder="••••••••"
+          className="mt-1 w-full px-3 py-2 bg-gray-900 rounded"
         />
       </div>
 
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full cursor-pointer flex items-center justify-center py-3 bg-red-800 hover:bg-red-700 text-white rounded-lg font-medium transition"
+        className="w-full py-2 bg-bordo-500 rounded text-white cursor-pointer"
       >
-        {isLoading ? <Spinner size={24} /> : "Login"}
+        {isLoading ? <Spinner /> : "Log in"}
       </button>
     </form>
   );
