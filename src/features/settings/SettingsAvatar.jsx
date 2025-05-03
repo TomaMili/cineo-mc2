@@ -3,26 +3,15 @@ export default function SettingsAvatar({
   name = "Username",
 }) {
   return (
-    <div className="relative bg-siva-800 rounded-2xl px-8 pb-15 mx-auto">
+    <div className="relative bg-siva-800 rounded-t-2xl px-8 pb-15 mx-auto mt-30">
       <img
         src={src}
         alt="avatar"
-        className="w-68 h-68 rounded-full border-4 border-black object-cover mx-auto -mt-24"
+        className="w-68 h-68 rounded-full border-4 border-black object-cover mx-auto -mt-42"
       />
-      <h3 className="mt-4 text-5xl font-semibold text-center text-siva-100">
+      <h3 className="mt-4 text-5xl font-normal text-center text-siva-100">
         {name}
       </h3>
-      <label className="block text-center mt-15 ">
-        <button className="  bg-bordo-500 hover:bg-bordo-400 text-white px-4 py-2 rounded cursor-pointer">
-          Change photo
-        </button>
-        <input
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={() => {}}
-        />
-      </label>
     </div>
   );
 }

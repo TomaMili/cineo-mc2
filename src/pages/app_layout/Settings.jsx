@@ -1,7 +1,27 @@
 import { NavLink, Outlet } from "react-router-dom";
 import SettingsAvatar from "../../features/settings/SettingsAvatar";
+import { useUserProfile } from "../../hooks/useUsers";
+import Spinner from "../../ui/Spinner";
+import ErrorNotice from "../../ui/ErrorNotice";
 
 export default function Settings() {
+  const userId = 1; // TODO real session
+  const { data: profile, isLoading, isError } = useUserProfile(userId);
+
+  if (isError)
+    return (
+      <div className="flex items-center justify-center h-screen bg-siva-800">
+        <ErrorNotice title="Couldn't load Profile" message={isError.message} />
+      </div>
+    );
+
+  if (isLoading)
+    return (
+      <div className="h-screen -m-24 flex justify-center items-center">
+        <Spinner size={46} />
+      </div>
+    );
+
   return (
     <>
       <div
@@ -12,7 +32,7 @@ export default function Settings() {
           SETTINGS
         </h1>
         <div className="flex justify-center items-end">
-          <SettingsAvatar />
+          <SettingsAvatar name={profile.username} />
         </div>
       </div>
 
@@ -40,7 +60,7 @@ export default function Settings() {
           ))}
         </nav>
 
-        <div className="max-w-3xl mx-auto  rounded-lg p-6">
+        <div className="max-w-6xl mx-auto  rounded-lg p-6">
           <Outlet />
         </div>
       </div>
