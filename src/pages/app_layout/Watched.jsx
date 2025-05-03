@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Icon } from "@iconify-icon/react";
-import { useWatched } from "../../hooks/useWatched";
+import { useWatched } from "../../features/watched/useWatched";
 import WatchedList from "../../features/watched/WatchedList";
 import { handleShare } from "../../utils/share";
 import TabNav from "../../ui/TabNav";
 import Spinner from "../../ui/Spinner";
 import ErrorNotice from "../../ui/ErrorNotice";
+import { useCurrentUser } from "../../hooks/useAuth";
 
 export default function Watched() {
-  // const session  = useSession();
-  // const userId   = session?.user?.id;
-  const userId = 1; // TODO: real session
+  const { profile } = useCurrentUser();
+  const userId = profile?.id;
 
   const { data: movies = [], isLoading, isError } = useWatched(userId);
 

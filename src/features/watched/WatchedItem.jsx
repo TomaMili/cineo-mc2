@@ -3,13 +3,15 @@ import { Icon } from "@iconify-icon/react";
 import RatingOverlay from "../../ui/RatingOverlay";
 import { useMoviePopup } from "../../context/MoviePopupContext";
 import { handleShare } from "../../utils/share";
-import { useToggleWatched } from "../../hooks/useWatched";
+import { useToggleWatched } from "./useWatched";
+import { useCurrentUser } from "../../hooks/useAuth";
 
 export default function WatchedItem({ movie }) {
   const { open } = useMoviePopup();
 
-  // TODO: swap the stub for the real session id
-  const userId = 1;
+  const { profile } = useCurrentUser();
+  const userId = profile?.id;
+
   const toggleWatched = useToggleWatched(userId);
 
   const [showRating, setShowRating] = useState(false);
