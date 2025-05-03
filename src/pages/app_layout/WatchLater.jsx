@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import { Icon } from "@iconify-icon/react";
-import { useWatchLater, useToggleWatchLater } from "../../hooks/useWatchLater";
-// import { useSession } from "@supabase/auth-helpers-react";
+import {
+  useWatchLater,
+  useToggleWatchLater,
+} from "../../features/watchlater/useWatchLater";
 
 import WatchLaterList from "../../features/watchlater/WatchLaterList";
 import MoviePopup from "../../ui/MoviePopup";
@@ -9,12 +11,13 @@ import ErrorNotice from "../../ui/ErrorNotice";
 import TabNav from "../../ui/TabNav";
 import useShare from "../../hooks/useShare";
 import Spinner from "../../ui/Spinner";
+import { useCurrentUser } from "../../hooks/useAuth";
 
 export default function WatchLater() {
   const share = useShare();
-  // const session = useSession();
-  // const userId = session?.user?.id;
-  const userId = 1; // TODO: replace with real session
+
+  const { profile } = useCurrentUser();
+  const userId = profile?.id;
 
   const { data: movies = [], isLoading, isError } = useWatchLater(userId);
   const toggleWatchLater = useToggleWatchLater(userId);
