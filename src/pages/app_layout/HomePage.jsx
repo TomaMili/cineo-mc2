@@ -2,7 +2,7 @@ import HeroSection from "../../features/homepage/HeroSection";
 import ErrorNotice from "../../ui/ErrorNotice";
 import Section from "../../features/homepage/Section";
 
-import usePopularMovies from "../../hooks/usePopularMovies";
+import usePopularMovies from "../../features/homepage/usePopularMovies";
 import SkeletonPoster from "../../ui/SkeletonPoster";
 
 export default function HomePage() {
