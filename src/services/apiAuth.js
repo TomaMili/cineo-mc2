@@ -1,39 +1,40 @@
 import supabase from "./supabase";
 
-export async function signUpWithProfile({ email, password, username }) {
-  // 1) create auth user
-  const {
-    data: { user },
-    error: signUpError,
-  } = await supabase.auth.signUp({
+export async function signUpWithProfile({
+  email,
+  password,
+  username,
+  genres = [],
+  platforms = [],
+  actors = [],
+  plan = null,
+}) {
+  const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
+    options: { data: { username } },
   });
   if (signUpError) throw signUpError;
+  const user = signUpData.user;
+  if (!user?.id) throw new Error("No user id from auth.signUp");
 
-  if (!user?.id) {
-    throw new Error("No user id returned by supabase.auth.signUp");
-  }
-
-  // 2) create public.users row, linking to auth.users via profile_id
   const { data: profile, error: profileError } = await supabase
-    .from("users") // your public.users table
+    .from("users")
     .insert([
       {
         profile_id: user.id,
         username,
-        platforms: [], // you can pass any other initial fields here
-        plan: null,
-        favourite_actors: [],
-        favourite_genres: [],
+        favourite_genres: genres,
+        platforms,
+        favourite_actors: actors,
+        plan,
       },
     ])
+    .select(
+      "id, profile_id, username, platforms, plan, favourite_actors, favourite_genres"
+    )
     .single();
-
-  if (profileError) {
-    // optionally roll back auth user?
-    throw profileError;
-  }
+  if (profileError) throw profileError;
 
   return { authUser: user, profile };
 }
@@ -43,41 +44,68 @@ export async function login({ email, password }) {
     email,
     password,
   });
-
-  if (error) throw new Error(error.message);
-
+  if (error) throw error;
   return data;
 }
 
 export async function getCurrentUser() {
-  const { data: session } = await supabase.auth.getSession();
-  if (!session.session) return null;
+  const {
+    data: { session },
+    error: sessionErr,
+  } = await supabase.auth.getSession();
+  if (sessionErr) throw sessionErr;
+  if (!session) return null;
 
-  const { data, error } = await supabase.auth.getUser();
-
-  if (error) throw new Error(error.message);
-  return data?.user;
+  const {
+    data: { user },
+    error: userErr,
+  } = await supabase.auth.getUser();
+  if (userErr) throw userErr;
+  return user;
 }
 
 export async function logout() {
   const { error } = await supabase.auth.signOut();
-  if (error) throw new Error(error.message);
+  if (error) throw error;
 }
 
-export async function updateCurrentUser({ password, fullName }) {
-  // 1. Update password OR fullName
-  let updateData;
-  if (password) updateData = { password };
-  if (fullName) updateData = { data: { fullName } };
+export async function updateCurrentUser(patch) {
+  const authUpdate = {};
+  if (patch.password) authUpdate.password = patch.password;
+  if (patch.fullName) authUpdate.data = { fullName: patch.fullName };
 
-  const { data, error } = await supabase.auth.updateUser(updateData);
+  let authData = null;
+  if (Object.keys(authUpdate).length) {
+    const { data, error } = await supabase.auth.updateUser(authUpdate);
+    if (error) throw error;
+    authData = data;
+  }
 
-  if (error) throw new Error(error.message);
+  const profileUpdate = {};
+  if (patch.username !== undefined) profileUpdate.username = patch.username;
+  if (patch.platforms !== undefined) profileUpdate.platforms = patch.platforms;
+  if (patch.plan !== undefined) profileUpdate.plan = patch.plan;
+  if (patch.favourite_actors !== undefined)
+    profileUpdate.favourite_actors = patch.favourite_actors;
+  if (patch.favourite_genres !== undefined)
+    profileUpdate.favourite_genres = patch.favourite_genres;
 
-  const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
-    data,
-  });
+  let profileData = null;
+  if (Object.keys(profileUpdate).length) {
+    const { data, error } = await supabase
+      .from("users")
+      .update(profileUpdate)
+      .eq("profile_id", authData.user.id)
+      .select(
+        "id,profile_id,username,platforms,plan,favourite_actors,favourite_genres"
+      )
+      .single();
+    if (error) throw error;
+    profileData = data;
+  }
 
-  if (error2) throw new Error(error2.message);
-  return updatedUser;
+  return {
+    authUser: authData?.user ?? null,
+    profile: profileData,
+  };
 }
