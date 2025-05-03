@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import ThemeToggleButton from "../../ui/ThemeToggleButton";
 import IconWithSkeleton from "./IconWithSkeleton";
 import { useSuperSuggest } from "../../context/SuperSuggestContext";
-import { useLogout } from "./useLogout";
+import { useLogout } from "../../hooks/useAuth";
 
 const ICON_SIZE = 30;
 
