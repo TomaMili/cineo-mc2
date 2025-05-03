@@ -1,6 +1,6 @@
+import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "react-hot-toast";
 
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
@@ -8,13 +8,13 @@ import PageNotFound from "./pages/PageNotFound";
 import WatchTogether from "./pages/WatchTogether";
 import WatchTogetherGroup from "./pages/WatchTogetherGroup";
 
-import RegisterLayout from "./ui/RegisterLayout";
-import RegisterInfo from "./pages/register_layout/RegisterInfo";
-import RegisterGenres from "./pages/register_layout/RegisterGenres";
-import RegisterPlatforms from "./pages/register_layout/RegisterPlatforms";
-import RegisterActors from "./pages/register_layout/RegisterActors";
-import RegisterPaymentPlan from "./pages/register_layout/RegisterPaymentPlan";
-import RegisterFinish from "./pages/register_layout/RegisterFinish";
+import RegisterLayout from "./features/register/RegisterLayout";
+import RegisterInfo from "./features/register/RegisterInfo";
+import RegisterGenres from "./features/register/RegisterGenres";
+import RegisterPlatforms from "./features/register/RegisterPlatforms";
+import RegisterActors from "./features/register/RegisterActors";
+import RegisterPaymentPlan from "./features/register/RegisterPaymentPlan";
+import RegisterFinish from "./features/register/RegisterFinish";
 
 import AppLayout from "./ui/AppLayout";
 import HomePage from "./pages/app_layout/HomePage";
@@ -23,72 +23,30 @@ import Achievements from "./pages/app_layout/Achievements";
 import Browse from "./pages/app_layout/Browse";
 import Collections from "./pages/app_layout/Collections";
 import MovieDetail from "./pages/app_layout/MovieDetail";
-
 import Settings from "./pages/app_layout/Settings";
 import SettingsInfo from "./features/settings/SettingsInfo";
 import SettingsPlatforms from "./features/settings/SettingsPlatforms";
 import SettingsPlan from "./features/settings/SettingsPlan";
-
 import Watched from "./pages/app_layout/Watched";
 import WatchLater from "./pages/app_layout/WatchLater";
 
 import { MoviePopupProvider } from "./context/MoviePopupContext";
 import { SuperSuggestProvider } from "./context/SuperSuggestContext";
-import { Toaster } from "react-hot-toast";
+import { RegistrationProvider } from "./features/register/RegistrationContext";
 
-import { useAuth } from "./hooks/useAuth";
+import { useCurrentUser } from "./hooks/useAuth";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 0,
-    },
-  },
-});
-
-function App() {
-  const { user } = useAuth();
-  console.log(user);
+export default function App() {
+  const { profile } = useCurrentUser();
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <BrowserRouter>
         <MoviePopupProvider>
           <SuperSuggestProvider>
             <Routes>
-              {!user ? (
-                <>
-                  <Route
-                    index
-                    element={<Navigate replace to="landing-page" />}
-                  />
-                  <Route path="landing-page" element={<LandingPage />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route element={<RegisterLayout />}>
-                    <Route path="register/info" element={<RegisterInfo />} />
-                    <Route
-                      path="register/genres"
-                      element={<RegisterGenres />}
-                    />
-                    <Route
-                      path="register/platforms"
-                      element={<RegisterPlatforms />}
-                    />
-                    <Route
-                      path="register/actors"
-                      element={<RegisterActors />}
-                    />
-                    <Route
-                      path="register/payment-plan"
-                      element={<RegisterPaymentPlan />}
-                    />
-                    <Route
-                      path="register/finish"
-                      element={<RegisterFinish />}
-                    />
-                  </Route>
-                </>
-              ) : (
+              {profile ? (
+                // ─── Authenticated ─────────────────────────────────
                 <Route element={<AppLayout />}>
                   <Route index element={<Navigate replace to="homepage" />} />
                   <Route path="homepage" element={<HomePage />} />
@@ -106,31 +64,56 @@ function App() {
                     element={<WatchTogetherGroup />}
                   />
                   <Route path="movie/:movieId" element={<MovieDetail />} />
+                  <Route path="browse" element={<Browse />} />
                   <Route path="settings" element={<Settings />}>
                     <Route index element={<Navigate replace to="info" />} />
                     <Route path="info" element={<SettingsInfo />} />
                     <Route path="platforms" element={<SettingsPlatforms />} />
                     <Route path="plan" element={<SettingsPlan />} />
                   </Route>
-                  <Route path="browse" element={<Browse />} />
                 </Route>
+              ) : (
+                // ─── Unauthenticated ───────────────────────────────
+                <>
+                  <Route
+                    index
+                    element={<Navigate replace to="landing-page" />}
+                  />
+                  <Route path="landing-page" element={<LandingPage />} />
+                  <Route path="login" element={<Login />} />
+
+                  <Route
+                    element={
+                      <RegistrationProvider>
+                        <RegisterLayout />
+                      </RegistrationProvider>
+                    }
+                  >
+                    <Route path="info" element={<RegisterInfo />} />
+                    <Route path="genres" element={<RegisterGenres />} />
+                    <Route path="platforms" element={<RegisterPlatforms />} />
+                    <Route path="actors" element={<RegisterActors />} />
+                    <Route
+                      path="payment-plan"
+                      element={<RegisterPaymentPlan />}
+                    />
+                    <Route path="finish" element={<RegisterFinish />} />
+                  </Route>
+                </>
               )}
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </SuperSuggestProvider>
         </MoviePopupProvider>
       </BrowserRouter>
+
       <Toaster
         position="top-center"
         gutter={12}
         containerStyle={{ margin: "8px" }}
         toastOptions={{
-          success: {
-            duration: 3000,
-          },
-          error: {
-            duration: 5000,
-          },
+          success: { duration: 3000 },
+          error: { duration: 5000 },
           style: {
             fontSize: "16px",
             maxWidth: "500px",
@@ -140,9 +123,6 @@ function App() {
           },
         }}
       />
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    </>
   );
 }
-
-export default App;
