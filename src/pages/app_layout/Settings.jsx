@@ -3,10 +3,12 @@ import SettingsAvatar from "../../features/settings/SettingsAvatar";
 import { useUserProfile } from "../../hooks/useUsers";
 import Spinner from "../../ui/Spinner";
 import ErrorNotice from "../../ui/ErrorNotice";
+import { useCurrentUser } from "../../hooks/useAuth";
 
 export default function Settings() {
-  const userId = 1; // TODO real session
-  const { data: profile, isLoading, isError } = useUserProfile(userId);
+  const { profile, isLoading, isError } = useCurrentUser();
+  // const userId = profile?.id;
+  // const { data: profile, isLoading, isError } = useUserProfile(userId);
 
   if (isError)
     return (
