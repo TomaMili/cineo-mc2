@@ -197,12 +197,11 @@ export async function getUserProfile(id) {
     avatarUrl,
   };
 }
-
-export async function updateUser(id, patch) {
+export async function updateUser(userId, patch) {
   const { data, error } = await supabase
     .from("users")
     .update(patch)
-    .eq("id", id)
+    .eq("id", userId)
     .select()
     .single();
 

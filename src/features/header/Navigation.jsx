@@ -3,12 +3,14 @@ import { NavLink, useLocation } from "react-router-dom";
 import ThemeToggleButton from "../../ui/ThemeToggleButton";
 import IconWithSkeleton from "./IconWithSkeleton";
 import { useSuperSuggest } from "../../context/SuperSuggestContext";
+import { useLogout } from "./useLogout";
 
 const ICON_SIZE = 30;
 
 function Navigation({ isNavActive, setIsNavActive }) {
   const location = useLocation();
   const { show } = useSuperSuggest();
+  const { logout, isLoading } = useLogout();
 
   useEffect(() => {
     if (isNavActive) setIsNavActive(false);
@@ -145,7 +147,8 @@ function Navigation({ isNavActive, setIsNavActive }) {
           </NavLink>
           <hr className="border-t w-full border-white/50 my-3 mb-5" />
           <button
-            onClick={() => alert("Signed out")}
+            onClick={logout}
+            disabled={isLoading}
             className="flex items-center gap-3 text-left ml-0 hover:text-siva-100 cursor-pointer h-10 mb-2"
           >
             <IconWithSkeleton
