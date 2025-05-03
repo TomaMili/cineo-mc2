@@ -13,7 +13,7 @@ export async function getUserByID(id) {
   const { data, error } = await supabase
     .from("users")
     .select("*")
-    .eq("id", id)
+    .eq("profile_id", id)
     .single();
 
   if (error) throw error;
