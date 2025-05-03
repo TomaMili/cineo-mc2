@@ -11,7 +11,8 @@ import {
   useCollectionMovies,
   useAddMovieToCollection,
   useRemoveMovieFromCollection,
-} from "../../hooks/useCollections";
+} from "./useCollections.js";
+import { useCurrentUser } from "../../hooks/useAuth.jsx";
 
 export default function CollectionRow({
   collection,
@@ -21,7 +22,9 @@ export default function CollectionRow({
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const { open } = useMoviePopup();
-  const userId = 1;
+
+  const { profile } = useCurrentUser();
+  const userId = profile?.id;
 
   const {
     data: movies = [],

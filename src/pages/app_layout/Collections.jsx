@@ -10,11 +10,14 @@ import {
   useCreateCollection,
   useDeleteCollection,
   useRemoveMovieFromCollection,
-} from "../../hooks/useCollections";
+} from "../../features/collections/useCollections";
 import { Icon } from "@iconify-icon/react";
+import { useCurrentUser } from "../../hooks/useAuth";
 
 export default function Collections() {
-  const userId = 1;
+  const { profile } = useCurrentUser();
+  const userId = profile?.id;
+
   const { data: collections = [], isLoading, isError } = useCollections(userId);
   const createCollection = useCreateCollection(userId);
   const deleteCollection = useDeleteCollection(userId);
