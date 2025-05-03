@@ -2,9 +2,12 @@ import { useUserAchievements } from "../../hooks/useAchievements";
 import { Icon } from "@iconify-icon/react";
 import ErrorNotice from "../../ui/ErrorNotice";
 import Spinner from "../../ui/Spinner";
+import { useCurrentUser } from "../../hooks/useAuth";
 
 export default function Achievements() {
-  const userId = 1; // replace with real session.id
+  const { profile } = useCurrentUser();
+  const userId = profile?.id;
+
   const { items, isLoading, error } = useUserAchievements(userId);
 
   if (!userId)

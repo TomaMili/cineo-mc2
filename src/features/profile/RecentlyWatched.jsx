@@ -1,8 +1,11 @@
 import MovieCard from "../../ui/MovieCard";
-import { useRecentlyWatched } from "../../hooks/useWatched";
+import { useRecentlyWatched } from "../watched/useWatched";
+import { useCurrentUser } from "../../hooks/useAuth";
 
 export default function RecentlyWatched() {
-  const userId = 1;
+  const { profile } = useCurrentUser();
+  const userId = profile?.id;
+
   const { data: movies = [], isLoading } = useRecentlyWatched(userId, 4);
 
   if (isLoading) return null;

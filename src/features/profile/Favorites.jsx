@@ -2,11 +2,14 @@ import { profileImage, poster } from "../../services/apiTmdb";
 import { useUserProfile } from "../../hooks/useUsers";
 import ErrorNotice from "../../ui/ErrorNotice";
 import SkeletonPoster from "../../ui/SkeletonPoster";
+import { useCurrentUser } from "../../hooks/useAuth";
 
 const PLACEHOLDER = "https://via.placeholder.com/342x513?text=No+Image";
 
 export default function Favorites() {
-  const userId = 1;
+  const { profile } = useCurrentUser();
+  const userId = profile?.id;
+
   const { data: p, isLoading, isError, error } = useUserProfile(userId);
 
   if (isLoading)

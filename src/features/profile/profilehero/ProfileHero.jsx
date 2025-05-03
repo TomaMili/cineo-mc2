@@ -5,9 +5,12 @@ import { useUserProfile } from "../../../hooks/useUsers";
 import { useUserAchievements } from "../../../hooks/useAchievements";
 import ErrorNotice from "../../../ui/ErrorNotice";
 import Spinner from "../../../ui/Spinner";
+import { useCurrentUser } from "../../../hooks/useAuth";
 
 export default function ProfileHero() {
-  const userId = 1; // TODO real session
+  const { profile: p } = useCurrentUser();
+  const userId = p?.id;
+
   const { data: profile, isLoading, isError } = useUserProfile(userId);
 
   const { items } = useUserAchievements(userId);
@@ -38,8 +41,7 @@ export default function ProfileHero() {
 
       <div className="max-w-6xl mx-auto px-6 flex flex-col items-center md:flex-row md:items-end md:justify-around gap-3">
         <AvatarCard
-          // src={profile.avatarUrl || "/profile-avatar.png"}
-          name={profile.username.toUpperCase() || "Anonymous"}
+          name={p.username.toUpperCase() || "Anonymous"}
           // subtitle={`Favourite actor: ${profile.favActor ?? "—"}`}
           trophyCount={`${completed}/${19}`}
         />
