@@ -9,14 +9,19 @@ import { useQuery } from "@tanstack/react-query";
 import { poster, fetchMovieDetails } from "../services/apiTmdb";
 import PosterPlaceholder from "../utils/posterPlaceholder";
 import RatingOverlay from "./RatingOverlay";
-import { useIsWatched, useToggleWatched } from "../hooks/useWatched";
-import { useIsInWatchLater, useToggleWatchLater } from "../hooks/useWatchLater";
+import { useIsWatched, useToggleWatched } from "../features/watched/useWatched";
+import {
+  useIsInWatchLater,
+  useToggleWatchLater,
+} from "../features/watchlater/useWatchLater";
+import { useCurrentUser } from "../hooks/useAuth";
 
 export default function MoviePopup({ movie, onClose }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const userId = 1; // TODO: real session id
+  const { profile } = useCurrentUser();
+  const userId = profile?.id;
 
   const watched = useIsWatched(movie?.id, userId);
   const toggleWat = useToggleWatched(userId);

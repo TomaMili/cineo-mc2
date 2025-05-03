@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { backdrop } from "../../services/apiTmdb";
 import { Icon } from "@iconify-icon/react";
 
 import {
   useIsInWatchLater,
   useToggleWatchLater,
-} from "../../hooks/useWatchLater";
-import { useIsWatched, useToggleWatched } from "../../hooks/useWatched";
+} from "../watchlater/useWatchLater";
+import { useIsWatched, useToggleWatched } from "../watched/useWatched";
 
 import RatingOverlay from "../../ui/RatingOverlay";
+import { useCurrentUser } from "../../hooks/useAuth";
 
 export default function MovieHero({ details, director, providers }) {
   const {
@@ -40,7 +40,8 @@ export default function MovieHero({ details, director, providers }) {
         arr.findIndex((q) => q.provider_id === p.provider_id) === idx
     );
 
-  const userId = 1; // TODO real session
+  const { profile } = useCurrentUser();
+  const userId = profile?.id;
 
   const savedWL = useIsInWatchLater(id, userId);
   const toggleWL = useToggleWatchLater(userId);

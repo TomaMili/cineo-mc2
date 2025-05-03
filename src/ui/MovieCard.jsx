@@ -3,9 +3,13 @@ import { Icon } from "@iconify-icon/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useMoviePopup } from "../context/MoviePopupContext";
 import { poster, fetchMovieDetails } from "../services/apiTmdb";
-import { useIsInWatchLater, useToggleWatchLater } from "../hooks/useWatchLater";
-import { useIsWatched, useToggleWatched } from "../hooks/useWatched";
+import {
+  useIsInWatchLater,
+  useToggleWatchLater,
+} from "../features/watchlater/useWatchLater";
+import { useIsWatched, useToggleWatched } from "../features/watched/useWatched";
 import RatingOverlay from "./RatingOverlay";
+import { useCurrentUser } from "../hooks/useAuth";
 // import { useSession } from "@supabase/auth-helpers-react";
 
 export default function MovieCard({ movie, hideActions = false, onClick }) {
@@ -20,7 +24,8 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
   const { open } = useMoviePopup();
   const handlePosterClick = onClick ?? (() => open(movie));
 
-  const userId = 1; // TODO real session
+  const { profile } = useCurrentUser();
+  const userId = profile?.id;
 
   const savedWL = useIsInWatchLater(movie.id, userId);
   const toggleWL = useToggleWatchLater(userId);
