@@ -33,8 +33,8 @@ export default function usePrevNextButtons(emblaApi) {
 }
 
 const base =
-  "flex items-center justify-center w-10 h-10 rounded-full  " +
-  "text-siva-100 transition-colors cursor-pointer " +
+  "flex items-center justify-center w-10 h-10 rounded-full " +
+  "text-siva-100 transition-colors cursor-pointer hover:bg-black/10 " +
   "shadow-lg backdrop-blur-sm " +
   "disabled:opacity-30 disabled:cursor-not-allowed";
 
