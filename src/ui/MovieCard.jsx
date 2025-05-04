@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { Icon } from "@iconify-icon/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -10,7 +11,7 @@ import {
 import { useIsWatched, useToggleWatched } from "../features/watched/useWatched";
 import RatingOverlay from "./RatingOverlay";
 import { useCurrentUser } from "../hooks/useAuth";
-// import { useSession } from "@supabase/auth-helpers-react";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function MovieCard({ movie, hideActions = false, onClick }) {
   const qc = useQueryClient();
@@ -41,7 +42,7 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
 
   const handleEye = () => {
     if (!userId) return;
-    if (!watched) setShowRating(true);
+    if (!watched) setShowRating(!showRating);
     else open(movie);
   };
 
@@ -69,15 +70,23 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
         </div>
       )}
 
-      {showRating && !watched && (
-        <div className="absolute mb-8 inset-0 flex items-center justify-center z-20">
-          <RatingOverlay
-            onRate={(stars) => rateAndSave(stars)}
-            onRateLater={() => rateAndSave(null)}
-            onClose={() => setShowRating(false)}
-          />
-        </div>
-      )}
+      <AnimatePresence>
+        {showRating && !watched && (
+          <motion.div
+            className="absolute inset-0 mb-8 flex items-center justify-center z-20"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+          >
+            <RatingOverlay
+              onRate={(stars) => rateAndSave(stars)}
+              onRateLater={() => rateAndSave(null)}
+              onClose={() => setShowRating(false)}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="mt-2 flex items-start justify-between">
         <p

@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { addToWatched, removeFromWatched } from "../../services/apiWatched";
 import { fetchMovieDetails } from "../../services/apiTmdb";
 import supabase from "../../services/supabase";
+import toast from "react-hot-toast";
+import React from "react";
 
 const key = (userId) => ["watched", userId];
 
@@ -37,7 +39,22 @@ export function useAddToWatched(userId) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ movie, rating }) => addToWatched(userId, movie, rating),
-    onSuccess: () => qc.invalidateQueries(key(userId)),
+    onSuccess: (_data, variables) => {
+      qc.invalidateQueries(key(userId));
+      toast.success(
+        React.createElement(
+          "span",
+          null,
+          "Added ",
+          React.createElement(
+            "span",
+            { className: "font-semibold" },
+            variables.movie.title
+          ),
+          " to Watched list!"
+        )
+      );
+    },
   });
 }
 

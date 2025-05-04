@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { Icon } from "@iconify-icon/react";
 import RatingOverlay from "../../ui/RatingOverlay";
@@ -5,6 +6,7 @@ import { useMoviePopup } from "../../context/MoviePopupContext";
 import { handleShare } from "../../utils/share";
 import { useToggleWatched } from "./useWatched";
 import { useCurrentUser } from "../../hooks/useAuth";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function WatchedItem({ movie }) {
   const { open } = useMoviePopup();
@@ -36,7 +38,7 @@ export default function WatchedItem({ movie }) {
         onClick={() => open(movie)}
       />
 
-      {showRating && (
+      {/* {showRating && (
         <div className="absolute mb-17 inset-0 flex items-center justify-center z-20">
           <RatingOverlay
             onRate={(stars) => saveRating(stars)}
@@ -44,7 +46,24 @@ export default function WatchedItem({ movie }) {
             onClose={() => setShowRating(false)}
           />
         </div>
-      )}
+      )} */}
+      <AnimatePresence>
+        {showRating && (
+          <motion.div
+            className="absolute mb-17 inset-0 flex items-center justify-center z-20"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+          >
+            <RatingOverlay
+              onRate={(stars) => saveRating(stars)}
+              onRateLater={() => saveRating(null)}
+              onClose={() => setShowRating(false)}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <button
         onClick={() => open(movie)}

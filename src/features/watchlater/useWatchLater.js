@@ -6,6 +6,7 @@ import {
 import { fetchMovieDetails } from "../../services/apiTmdb";
 import supabase from "../../services/supabase";
 import toast from "react-hot-toast";
+import React from "react";
 
 const wlKey = (userId) => ["watch-later", userId];
 
@@ -40,7 +41,22 @@ export function useAddToWatchLater(userId) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (movie) => addToWatchLater(userId, movie),
-    onSuccess: () => qc.invalidateQueries(wlKey(userId)),
+    onSuccess: (_data, movie) => {
+      qc.invalidateQueries(wlKey(userId));
+      toast.success(
+        React.createElement(
+          "span",
+          null,
+          "Added ",
+          React.createElement(
+            "span",
+            { className: "font-semibold" },
+            movie.title
+          ),
+          " to Watch later list!"
+        )
+      );
+    },
   });
 }
 
@@ -50,7 +66,7 @@ export function useRemoveFromWatchLater(userId) {
     mutationFn: (movieId) => removeFromWatchLater(userId, movieId),
     onSuccess: () => {
       qc.invalidateQueries(wlKey(userId));
-      toast.success("Added to Watch-Later successfully");
+      toast.error("Removed from Watch later list!");
     },
   });
 }
