@@ -6,7 +6,7 @@ export default function LandingPage() {
       <section className="relative w-full h-[100vh] bg-[url('/bg-image.jpg')] bg-cover bg-center overflow-hidden">
         <Link
           to="/login"
-          className="z-20 absolute right-4 top-6 sm:right-10 sm:top-8 bg-bordo-500 hover:bg-bordo-400 text-sm font-semibold px-7 py-3 rounded tracking-wider transition-all duration-300"
+          className="z-60 absolute right-4 top-6 sm:right-10 sm:top-8 bg-bordo-500 hover:bg-bordo-400 text-sm font-semibold px-7 py-3 rounded tracking-wider transition-all duration-300"
         >
           LOGIN
         </Link>
