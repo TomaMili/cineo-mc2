@@ -72,10 +72,10 @@ export default function Collections() {
         />
       </div>
 
-      <div className="flex justify-end gap-4 mt-4 px-6">
+      <div className="flex justify-end gap-4 mt-4 px-10">
         <button
           onClick={() => setShowNew(true)}
-          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 cursor-pointer"
+          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 cursor-pointer text-white"
         >
           <Icon icon="mdi:plus" /> New Collection
         </button>

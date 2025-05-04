@@ -43,17 +43,17 @@ export default function NewCollectionModal({
             <Icon icon="gridicons:cross-circle" width={28} height={28} />
           </button>
 
-          <h2 className="text-2xl font-semibold text-white mb-4">
+          <h2 className="text-2xl font-semibold text-siva-100 mb-4">
             New Collection
           </h2>
 
           <label className="block mb-6">
-            <span className="text-siva-300">Name</span>
+            <span className="text-siva-100">Name</span>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="mt-1 w-full px-4 py-2 bg-siva-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-bordo-400 text-white placeholder-siva-400"
+              className="mt-1 w-full px-4 py-2 bg-siva-700 rounded-lg ring-1 focus:outline-none focus:ring-2 focus:ring-bordo-400 text-siva-300 placeholder-siva-400"
               placeholder="My Sci-Fi Faves"
             />
           </label>
@@ -63,7 +63,7 @@ export default function NewCollectionModal({
               onClick={onCancel}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="px-5 py-2 bg-siva-600 hover:bg-siva-500 text-white rounded-lg transition cursor-pointer"
+              className="px-5 py-2 bg-siva-300 hover:bg-siva-200  text-siva-800 rounded-lg transition cursor-pointer"
             >
               Cancel
             </motion.button>
