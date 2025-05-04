@@ -1,5 +1,4 @@
-import React from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import LandingPage from "./pages/LandingPage";
@@ -34,21 +33,19 @@ import { MoviePopupProvider } from "./context/MoviePopupContext";
 import { SuperSuggestProvider } from "./context/SuperSuggestContext";
 import { RegistrationProvider } from "./features/register/RegistrationContext";
 
-import { useCurrentUser } from "./hooks/useAuth";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import PublicRoute from "./routes/PublicRoute";
 
 export default function App() {
-  const { profile } = useCurrentUser();
-
   return (
     <>
       <BrowserRouter>
         <MoviePopupProvider>
           <SuperSuggestProvider>
             <Routes>
-              {profile ? (
-                // ─── Authenticated ─────────────────────────────────
+              <Route element={<ProtectedRoute />}>
                 <Route element={<AppLayout />}>
-                  <Route index element={<Navigate replace to="homepage" />} />
+                  <Route path="/" element={<HomePage />} />
                   <Route path="homepage" element={<HomePage />} />
                   <Route path="profile" element={<Profile />} />
                   <Route
@@ -66,42 +63,37 @@ export default function App() {
                   <Route path="movie/:movieId" element={<MovieDetail />} />
                   <Route path="browse" element={<Browse />} />
                   <Route path="settings" element={<Settings />}>
-                    <Route index element={<Navigate replace to="info" />} />
+                    <Route index element={<SettingsInfo />} />
                     <Route path="info" element={<SettingsInfo />} />
                     <Route path="platforms" element={<SettingsPlatforms />} />
                     <Route path="plan" element={<SettingsPlan />} />
                   </Route>
+                  <Route path="*" element={<PageNotFound />} />
                 </Route>
-              ) : (
-                // ─── Unauthenticated ───────────────────────────────
-                <>
-                  <Route
-                    index
-                    element={<Navigate replace to="landing-page" />}
-                  />
-                  <Route path="landing-page" element={<LandingPage />} />
-                  <Route path="login" element={<Login />} />
+              </Route>
 
+              <Route element={<PublicRoute />}>
+                <Route path="landing-page" element={<LandingPage />} />
+                <Route path="login" element={<Login />} />
+                <Route
+                  element={
+                    <RegistrationProvider>
+                      <RegisterLayout />
+                    </RegistrationProvider>
+                  }
+                >
+                  <Route path="info" element={<RegisterInfo />} />
+                  <Route path="genres" element={<RegisterGenres />} />
+                  <Route path="platforms" element={<RegisterPlatforms />} />
+                  <Route path="actors" element={<RegisterActors />} />
                   <Route
-                    element={
-                      <RegistrationProvider>
-                        <RegisterLayout />
-                      </RegistrationProvider>
-                    }
-                  >
-                    <Route path="info" element={<RegisterInfo />} />
-                    <Route path="genres" element={<RegisterGenres />} />
-                    <Route path="platforms" element={<RegisterPlatforms />} />
-                    <Route path="actors" element={<RegisterActors />} />
-                    <Route
-                      path="payment-plan"
-                      element={<RegisterPaymentPlan />}
-                    />
-                    <Route path="finish" element={<RegisterFinish />} />
-                  </Route>
-                </>
-              )}
-              <Route path="*" element={<PageNotFound />} />
+                    path="payment-plan"
+                    element={<RegisterPaymentPlan />}
+                  />
+                  <Route path="finish" element={<RegisterFinish />} />
+                </Route>
+                <Route path="*" element={<PageNotFound />} />
+              </Route>
             </Routes>
           </SuperSuggestProvider>
         </MoviePopupProvider>
