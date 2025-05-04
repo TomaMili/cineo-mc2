@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { useRegistrationContext } from "./RegistrationContext";
 import { useAllProviders } from "../../hooks/useAllProviders";

@@ -32,7 +32,7 @@ export default function LandingPage() {
 
       <section className="relative bg-black bg-cover bg-center py-24 ">
         <div className="absolute -top-65 w-screen h-126 overflow-hidden pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-b from-0 via-black/70 via-black/100 to-0 z-20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-0  via-black/100 to-0 z-20" />
         </div>
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16 px-6">
           <img
@@ -49,7 +49,7 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="absolute -bottom-62 w-screen h-126 overflow-hidden pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-b from-0 via-black/70 via-black/100 to-0 z-20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-0  via-black/100 to-0 z-20" />
         </div>
       </section>
 
@@ -75,7 +75,7 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="absolute -bottom-62 w-screen h-126 overflow-hidden pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-b from-0 via-black/70 via-black/100 to-0 z-20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-0  via-black/100 to-0 z-20" />
         </div>
       </section>
 
