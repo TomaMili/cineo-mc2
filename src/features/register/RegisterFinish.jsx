@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { useMutation } from "@tanstack/react-query";
 import { signUpWithProfile } from "../../services/apiAuth";
 import { useNavigate } from "react-router-dom";
 import { useRegistration } from "./RegistrationContext";
+import { motion } from "framer-motion";
 
 export default function RegisterFinish() {
   const nav = useNavigate();
@@ -10,12 +12,8 @@ export default function RegisterFinish() {
 
   const mutation = useMutation({
     mutationFn: signUpWithProfile,
-    onSuccess: () => {
-      nav("/homepage");
-    },
-    onError: (err) => {
-      alert(err.message);
-    },
+    onSuccess: () => nav("/homepage"),
+    onError: (err) => alert(err.message),
   });
 
   const handleFinish = () => {
@@ -31,21 +29,27 @@ export default function RegisterFinish() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 space-y-6 bg-black rounded text-white">
-      <h2 className="text-2xl font-semibold text-center">You’re all set!</h2>
-      <p className="text-center text-siva-200">
-        Click below to create your account and get started.
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col items-center justify-center min-h-[60vh] px-4"
+    >
+      <h2 className="text-4xl -mt-8 mb-10 text-white">You are all set!</h2>
+      <p className="text-center text-2xl font-light text-siva-200 max-w-xl mb-14">
+        Rate movies you watched and add movies to your watch later list to
+        further personalize your profile
       </p>
       <button
         onClick={handleFinish}
         disabled={mutation.isLoading}
-        className="block w-full py-3 bg-bordo-500 rounded hover:bg-bordo-400 disabled:opacity-50 text-lg"
+        className="px-12 py-3 bg-bordo-500 cursor-pointer hover:bg-bordo-400 rounded-full text-white font-semibold uppercase transition disabled:opacity-50"
       >
-        {mutation.isLoading ? "Creating account…" : "Finish Registration"}
+        {mutation.isLoading ? "Creating account…" : "Finish"}
       </button>
       {mutation.isError && (
-        <p className="text-red-500 text-center">{mutation.error.message}</p>
+        <p className="mt-4 text-red-500">{mutation.error.message}</p>
       )}
-    </div>
+    </motion.div>
   );
 }

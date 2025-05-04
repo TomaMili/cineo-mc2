@@ -1,4 +1,3 @@
-// src/features/register/RegisterInfo.jsx
 import { useEffect } from "react";
 import { useRegistrationContext } from "./RegistrationContext";
 
@@ -6,64 +5,105 @@ export default function RegisterInfo() {
   const { data, update } = useRegistrationContext();
   const { email, username, password, confirm } = data;
 
-  // simple client-side validation
   const valid =
-    email.trim() &&
-    username.trim() &&
+    email.trim().length > 0 &&
+    username.trim().length > 0 &&
     password.length >= 8 &&
     password === confirm;
 
-  // notify the parent layout that this step is valid
   useEffect(() => {
     window.dispatchEvent(new CustomEvent("step-valid", { detail: valid }));
   }, [valid]);
 
+  const pwTooShort = password.length > 0 && password.length < 8;
+  const pwMismatch = confirm.length > 0 && password !== confirm;
+
   return (
-    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-      <label className="block">
-        Email *
+    <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+      <div>
+        <label className="block mb-1 text-white/80">Email *</label>
         <input
           type="email"
           value={email}
           onChange={(e) => update({ email: e.target.value })}
-          className="mt-1 w-full rounded bg-gray-900 px-3 py-2"
+          className="
+            w-full px-4 py-3
+            bg-siva-800/10 
+            border border-white/30 rounded-lg
+            placeholder-white/50 text-white
+            focus:outline-none focus:ring-2 focus:ring-bordo-400
+            transition
+          "
           required
         />
-      </label>
+      </div>
 
-      <label className="block">
-        Username *
+      <div>
+        <label className="block mb-1 text-white/80">Username *</label>
         <input
           type="text"
           value={username}
           onChange={(e) => update({ username: e.target.value })}
-          className="mt-1 w-full rounded bg-gray-900 px-3 py-2"
+          className="
+            w-full px-4 py-3
+            bg-siva-800/10 bg-opacity-40
+            border border-white/30 rounded-lg
+            placeholder-white/50 text-white
+            focus:outline-none focus:ring-2 focus:ring-bordo-400
+            transition
+          "
           required
         />
-      </label>
+      </div>
 
-      <label className="block">
-        Password * (min 8 chars)
+      <div>
+        <label className="block mb-1 text-white/80">
+          Password * <span className="text-xs">(min 8 chars)</span>
+        </label>
         <input
           type="password"
           value={password}
           onChange={(e) => update({ password: e.target.value })}
-          className="mt-1 w-full rounded bg-gray-900 px-3 py-2"
-          minLength={8}
+          className="
+            w-full px-4 py-3
+            bg-siva-800/10 bg-opacity-40
+            border border-white/30 rounded-lg
+            placeholder-white/50 text-white
+            focus:outline-none focus:ring-2 focus:ring-bordo-400
+            transition
+          "
           required
+          minLength={8}
         />
-      </label>
+        {pwTooShort && (
+          <p className="absolute mt-1 text-xs text-red-400">
+            Must be at least 8 characters.
+          </p>
+        )}
+      </div>
 
-      <label className="block">
-        Repeat password *
+      <div>
+        <label className="block mb-1 text-white/80">Repeat password *</label>
         <input
           type="password"
           value={confirm}
           onChange={(e) => update({ confirm: e.target.value })}
-          className="mt-1 w-full rounded bg-gray-900 px-3 py-2"
+          className="
+            w-full px-4 py-3
+            bg-siva-800/10 bg-opacity-40
+            border border-white/30 rounded-lg
+            placeholder-white/50 text-white
+            focus:outline-none focus:ring-2 focus:ring-bordo-400
+            transition
+          "
           required
         />
-      </label>
+        {pwMismatch && (
+          <p className="absolute mt-1 text-xs text-red-400">
+            Passwords must match.
+          </p>
+        )}
+      </div>
     </form>
   );
 }

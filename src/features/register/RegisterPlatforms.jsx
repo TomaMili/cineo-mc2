@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { useRegistrationContext } from "./RegistrationContext";
 
 const PLATFORMS = [
-  { id: "netflix", label: "Netflix" },
-  { id: "prime", label: "Prime Video" },
-  { id: "hbo", label: "HBO Max" },
-  { id: "disney", label: "Disney+" },
-  { id: "hulu", label: "Hulu" },
-  { id: "apple", label: "Apple TV+" },
+  { id: "netflix", label: "Netflix", logo: "/netflix-logo.png" },
+  { id: "prime-video", label: "Prime Video", logo: "/prime-video-logo.png" },
+  { id: "hbo-max", label: "HBO Max", logo: "/hbo-max-logo.png" },
+  { id: "disney+", label: "Disney+", logo: "/disney-logo.png" },
+  { id: "hulu", label: "Hulu", logo: "/hulu-logo.png" },
+  { id: "apple-tv+", label: "Apple TV+", logo: "/appletv-logo.png" },
 ];
 
 export default function RegisterPlatforms() {
@@ -29,19 +29,23 @@ export default function RegisterPlatforms() {
   }, [platforms]);
 
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-3 gap-3">
       {PLATFORMS.map((p) => (
-        <div
+        <button
           key={p.id}
           onClick={() => toggle(p.id)}
-          className={`cursor-pointer p-4 rounded-lg text-center border transition ${
+          className={`p-1 rounded-lg flex items-center justify-center hover:bg-bordo-400 cursor-pointer ${
             platforms.includes(p.id)
-              ? "border-bordo-500 bg-bordo-500/20"
+              ? "border-bordo-500 bg-bordo-500"
               : "border-gray-600"
-          }`}
+          } `}
         >
-          {p.label}
-        </div>
+          <img
+            src={p.logo}
+            alt={p.label}
+            className="max-h-26 w-full object-contain"
+          />
+        </button>
       ))}
     </div>
   );

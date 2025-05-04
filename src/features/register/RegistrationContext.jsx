@@ -1,4 +1,4 @@
-// src/features/register/RegistrationContext.jsx
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState } from "react";
 
 const RegistrationContext = createContext(null);
