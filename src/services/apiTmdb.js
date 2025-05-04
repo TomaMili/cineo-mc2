@@ -158,3 +158,72 @@ export function discoverMovies({ cast, crew, genres, page = 1 }, signal) {
   if (genres) params.with_genres = genres;
   return fetchJson(makeUrl("discover/movie", params), signal);
 }
+
+/**
+ * Movies released on or before 1980-01-01, sorted by vote count desc.
+ */
+export function fetchClassicMovies(page = 1, abortSignal) {
+  return fetchJson(
+    makeUrl("discover/movie", {
+      "primary_release_date.lte": "1980-01-01",
+      sort_by: "vote_count.desc",
+      page,
+      language: "en-US",
+      include_adult: false,
+    }),
+    abortSignal
+  );
+}
+
+/**
+ * Movies trending over the last week.
+ */
+export function fetchTrendingMovies(window = "week", abortSignal) {
+  return fetchTrending(window, abortSignal);
+}
+
+/**
+ * Official “Top Rated” TMDB list.
+ */
+export function fetchTopRatedMovies(page = 1, abortSignal) {
+  return fetchJson(
+    makeUrl("movie/top_rated", {
+      page,
+      language: "en-US",
+    }),
+    abortSignal
+  );
+}
+
+export function fetchNowPlaying(page = 1, abortSignal) {
+  return fetchJson(
+    makeUrl("movie/now_playing", {
+      page,
+      language: "en-US",
+    }),
+    abortSignal
+  );
+}
+
+export function fetchUpcomingMovies(page = 1, abortSignal) {
+  return fetchJson(
+    makeUrl("movie/upcoming", {
+      page,
+      language: "en-US",
+    }),
+    abortSignal
+  );
+}
+
+export function discoverByGenre(genreId, page = 1, signal) {
+  return fetchJson(
+    makeUrl("discover/movie", {
+      with_genres: genreId,
+      sort_by: "popularity.desc",
+      page,
+      language: "en-US",
+      include_adult: false,
+    }),
+    signal
+  );
+}
