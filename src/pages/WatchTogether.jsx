@@ -88,7 +88,7 @@ export default function WatchTogether() {
           <input
             type="url"
             placeholder="https://www.example.com"
-            className="w-64 px-4 py-2 bg-white/10 placeholder:text-siva-200 
+            className="w-64 px-4 py-2 bg-siva-300 placeholder:text-siva-100 
                        rounded-l-lg rounded-r-none
                        focus:outline-none focus:ring-2 focus:ring-inset focus:ring-bordo-400"
           />

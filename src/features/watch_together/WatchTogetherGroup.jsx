@@ -111,7 +111,7 @@ export default function WatchTogetherGroup() {
   return (
     <section className="min-h-screen px-6 py-8 text-white">
       <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-12">
-        <div>
+        <div className="text-siva-100">
           <h1 className="text-5xl font-light mb-4">{room.name}</h1>
           <p className="text-lg">
             Room type: <span className="font-semibold">{room.type}</span>
@@ -124,8 +124,14 @@ export default function WatchTogetherGroup() {
 
         <div className="flex flex-col items-start lg:items-end gap-4">
           <div className="flex items-center gap-3">
-            <Icon icon="mdi:clock-outline" width={20} />
-            <span className="text-lg">{diffToHms(room.endsAt)}</span>
+            <Icon
+              icon="mdi:clock-outline "
+              width={20}
+              className="text-siva-100"
+            />
+            <span className="text-lg text-siva-100">
+              {diffToHms(room.endsAt)}
+            </span>
 
             <button
               onClick={() =>
@@ -177,7 +183,7 @@ export default function WatchTogetherGroup() {
 
       <Link
         to="/watch-together"
-        className="inline-block mt-12 text-lg underline hover:text-bordo-400"
+        className="inline-block mt-12 text-lg underline text-siva-100 hover:text-bordo-400"
       >
         ← Back to rooms
       </Link>

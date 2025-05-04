@@ -64,11 +64,11 @@ export default function MemberRow({ member, limit, isHost }) {
           />
 
           <div className="min-w-0">
-            <p className="text-xl truncate">
+            <p className="text-xl truncate ">
               {member.name}
               {isHost && " (host)"}
             </p>
-            <p className="text-sm text-siva-200 transition duration-700 ease-in-out">
+            <p className="text-sm text-siva-100 transition duration-700 ease-in-out">
               {member.ready ? "Ready" : "Waiting…"}
             </p>
           </div>
