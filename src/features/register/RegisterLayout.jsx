@@ -52,7 +52,7 @@ export default function RegisterLayout() {
               initial={{ opacity: 1, y: 2 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className=" w-full"
+              className="w-full "
             >
               <Outlet />
             </motion.div>

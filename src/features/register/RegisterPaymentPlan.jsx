@@ -9,20 +9,20 @@ const PLANS = [
     label: "Free",
     price: "0 € / month",
     features: [
-      "Save up to 10 movies",
+      "Save up to 30 movies",
       "Basic recommendations",
-      "Community forums access",
+      "SuperSuggest integration",
     ],
   },
   {
     id: "premium",
     label: "Premium",
-    price: "10 € / month",
+    price: "5 € / month",
     features: [
       "Unlimited saved movies",
       "Advanced AI recommendations",
-      "Priority support",
-      "Early access to new features",
+      "Watch-together features",
+      "Integrated streaming services",
     ],
   },
 ];
@@ -48,7 +48,7 @@ export default function RegisterPaymentPlan() {
             whileHover={{ scale: 1.03 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className={`
-              cursor-pointer p-6 rounded-lg border-2 flex flex-col justify-between
+              cursor-pointer p-6 rounded-lg border-2 flex flex-col justify-between h-120
               ${
                 selected
                   ? "border-bordo-500 bg-bordo-500/10"
@@ -56,11 +56,11 @@ export default function RegisterPaymentPlan() {
               }
             `}
           >
-            <div>
+            <div className="h-full">
               <h3 className="text-2xl font-semibold">{p.label}</h3>
               <p className="mt-2 text-lg text-siva-200">{p.price}</p>
 
-              <ul className="mt-8 font-light space-y-2 list-none list-inside text-lg text-siva-100">
+              <ul className="mt-12 font-light space-y-6 list-none list-inside text-lg text-siva-200">
                 {p.features.map((f) => (
                   <li key={f}>{f}</li>
                 ))}
