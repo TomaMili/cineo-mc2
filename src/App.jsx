@@ -5,7 +5,7 @@ import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import WatchTogether from "./pages/WatchTogether";
-import WatchTogetherGroup from "./pages/WatchTogetherGroup";
+import WatchTogetherGroup from "../src/features/watch_together/WatchTogetherGroup";
 
 import RegisterLayout from "./features/register/RegisterLayout";
 import RegisterInfo from "./features/register/RegisterInfo";
