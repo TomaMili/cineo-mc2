@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 export default function LandingPage() {
   return (
     <main className="w-full overflow-x-hidden">
-      {/* SECTION 1 */}
       <section className="relative w-full h-[100vh] bg-[url('/bg-image.jpg')] bg-cover bg-center overflow-hidden">
         <Link
           to="/login"
@@ -11,7 +10,7 @@ export default function LandingPage() {
         >
           LOGIN
         </Link>
-        <div className="relative z-10 flex flex-col items-center justify-center text-center h-full px-6">
+        <div className="relative z-50 flex flex-col items-center justify-center text-center h-full px-6">
           <img src="/logo-cineo.svg" alt="CINEO" className="w-1/3 mb-10" />
           <h2 className="mt-6 mb-4 text-3xl sm:text-4xl font-medium">
             Your personal AI movie library
@@ -23,7 +22,7 @@ export default function LandingPage() {
           </p>
           <Link
             to="/info"
-            className="mt-8 bg-bordo-500 hover:bg-bordo-400 px-10 py-3 rounded-full tracking-wider text-sm font-semibold transition-all duration-300"
+            className="z-50 relative mt-8 bg-bordo-500 hover:bg-bordo-400 px-10 py-3 rounded-full tracking-wider text-sm font-semibold transition-all duration-300"
           >
             JOIN CINEO
           </Link>
@@ -31,7 +30,7 @@ export default function LandingPage() {
       </section>
 
       <section className="relative bg-black bg-cover bg-center py-24 ">
-        <div className="absolute -top-65 w-screen h-126 overflow-hidden pointer-events-none">
+        <div className="absolute -top-64 w-screen h-126 overflow-hidden pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-0  via-black/100 to-0 z-20" />
         </div>
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16 px-6">
@@ -53,7 +52,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* SECTION 3 */}
       <section
         className="
           relative w-full h-[90vh] bg-[url('/bg-image-rotate.JPG')] bg-cover bg-center overflow-hidden"
@@ -79,8 +77,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* SECTION 4: Watch Together */}
-      <section className="w-full flex flex-col justify-center h-[120vh] bg-black  bg-cover bg-center overflow-hidden">
+      <section className="w-full flex flex-col justify-center h-[130vh] bg-black  bg-cover bg-center overflow-hidden">
         <div className="max-w-5xl mx-auto px-6 text-center h-full mt-50">
           <img
             src="/couch-party.png"
@@ -95,15 +92,14 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* SECTION 5: CTA Footer */}
       <section
         className="
-          relative bg-[url('/bg-image.jpg')] w-full  h-[30vh]   bg-cover bg-center overflow-hidden"
+          relative bg-[url('/bg-image.jpg')] w-full  h-[40vh]   bg-cover bg-center overflow-hidden"
       >
         <div className="absolute top-0 w-screen h-126 overflow-hidden pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-black/100  to-0 z-20" />
         </div>
-        <div className="felx flex-col items-center justify-center text-center h-full px-6 mt-26">
+        <div className="felx flex-col items-center justify-center text-center h-full px-6 mt-36">
           <h3 className="relative text-3xl font-medium mb-8 z-21">
             Ready to transform your movie experience?
           </h3>
