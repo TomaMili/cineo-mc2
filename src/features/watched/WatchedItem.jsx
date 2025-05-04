@@ -3,10 +3,10 @@ import { useState } from "react";
 import { Icon } from "@iconify-icon/react";
 import RatingOverlay from "../../ui/RatingOverlay";
 import { useMoviePopup } from "../../context/MoviePopupContext";
-import { handleShare } from "../../utils/share";
 import { useToggleWatched } from "./useWatched";
 import { useCurrentUser } from "../../hooks/useAuth";
 import { AnimatePresence, motion } from "framer-motion";
+import { useShareMovie } from "../../hooks/useShareMovie";
 
 export default function WatchedItem({ movie }) {
   const { open } = useMoviePopup();
@@ -18,6 +18,8 @@ export default function WatchedItem({ movie }) {
 
   const [showRating, setShowRating] = useState(false);
   const [localRating, setLocalRating] = useState(movie.userRating ?? null);
+
+  const shareMovie = useShareMovie();
 
   const posterSrc = movie.poster_path
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
@@ -38,15 +40,6 @@ export default function WatchedItem({ movie }) {
         onClick={() => open(movie)}
       />
 
-      {/* {showRating && (
-        <div className="absolute mb-17 inset-0 flex items-center justify-center z-20">
-          <RatingOverlay
-            onRate={(stars) => saveRating(stars)}
-            onRateLater={() => saveRating(null)}
-            onClose={() => setShowRating(false)}
-          />
-        </div>
-      )} */}
       <AnimatePresence>
         {showRating && (
           <motion.div
@@ -100,12 +93,7 @@ export default function WatchedItem({ movie }) {
         </div>
 
         <button
-          onClick={() =>
-            handleShare(
-              `${window.location.origin}/movie/${movie.id}`,
-              "Link copied!"
-            )
-          }
+          onClick={() => shareMovie(movie, movie.userRating)}
           className="text-siva-100 hover:text-bordo-400 p-1 rounded-full transition-all cursor-pointer"
           aria-label="Share movie"
         >

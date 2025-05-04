@@ -9,13 +9,10 @@ import WatchLaterList from "../../features/watchlater/WatchLaterList";
 import MoviePopup from "../../ui/MoviePopup";
 import ErrorNotice from "../../ui/ErrorNotice";
 import TabNav from "../../ui/TabNav";
-import useShare from "../../hooks/useShare";
 import Spinner from "../../ui/Spinner";
 import { useCurrentUser } from "../../hooks/useAuth";
 
 export default function WatchLater() {
-  const share = useShare();
-
   const { profile } = useCurrentUser();
   const userId = profile?.id;
 
@@ -81,7 +78,7 @@ export default function WatchLater() {
 
       <div className="w-full mx-auto  flex justify-end items-center gap-4 mt-4 px-6">
         <button
-          onClick={() => share("WATCH LATER list link copied to clipboard!")}
+          // onClick={() => shareMovie(movies, movies.userRating)}
           className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 cursor-pointer transition-colors duration-200"
         >
           <Icon icon="gridicons:share" width="18" height="18" />
