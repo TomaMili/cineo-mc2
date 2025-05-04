@@ -50,23 +50,43 @@ export default function RegisterGenres() {
   }, [genres]);
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 max-h-[65vh] overflow-hidden px-1 py-2">
+    <div
+      className="
+        flex flex-wrap justify-center gap-6
+        max-h-[65vh] overflow-auto
+        px-1 py-2
+      "
+    >
       {all.map((g) => {
         const selected = genres.includes(g.id);
         return (
           <button
             key={g.id}
             onClick={() => toggle(g.id)}
-            className={`flex flex-col items-center gap-2 p-3 rounded-lg border cursor-pointer transition-all duration-300 ease-out hover:scale-103 hover:bg-bordo-500/20  ${
-              selected ? "border-bordo-500 bg-bordo-500/20" : "border-gray-600"
-            }`}
+            className={`
+              flex flex-col items-center gap-2 p-3 rounded-lg border
+              cursor-pointer transition-all duration-300 ease-out
+              hover:scale-103 hover:bg-bordo-500/20
+              ${
+                selected
+                  ? "border-bordo-500 bg-bordo-500/20"
+                  : "border-gray-600"
+              }
+              // width breakpoints to mimic your old grid:
+              w-1/2        // 2 cols on very small
+              sm:w-1/3     // 3 cols ≥640px
+              lg:w-1/4     // 4 cols ≥1024px
+              xl:w-1/5     // 5 cols ≥1280px
+            `}
             aria-pressed={selected}
           >
             {/* circular icon */}
             <span
-              className={`flex items-center justify-center w-10 h-10 rounded-full text-2xl transition-colors  ${
-                selected ? "bg-bordo-500 text-white" : "bg-white text-black"
-              }`}
+              className={`
+                flex items-center justify-center w-10 h-10 rounded-full text-2xl
+                transition-colors
+                ${selected ? "bg-bordo-500 text-white" : "bg-white text-black"}
+              `}
             >
               <Icon
                 icon={GENRE_ICONS[g.id] || "mdi:movie-open-outline"}

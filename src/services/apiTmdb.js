@@ -132,6 +132,17 @@ export function fetchMovieProviders(movieId, region = "HR", abortSignal) {
   ).then((json) => json.results?.[region] ?? null);
 }
 
+export function fetchAllMovieProviders(region = "HR", signal) {
+  // This hits the same “watch/providers/movie” endpoint, but without tying it to a movie ID
+  return fetchJson(
+    makeUrl(`watch/providers/movie?watch_region=${region}`),
+    signal
+  ).then((json) => {
+    // json.results is an array of providers
+    return json.results || [];
+  });
+}
+
 export async function fetchGenres(signal) {
   const json = await fetchJson(
     makeUrl("genre/movie/list", { language: "en-US" }),

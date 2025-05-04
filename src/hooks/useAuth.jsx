@@ -8,6 +8,8 @@ import {
   logout as apiLogout,
 } from "../services/apiAuth";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { AuthSessionMissingError } from "@supabase/supabase-js";
 const AuthContext = createContext({ authUser: null, profile: null });
 
 export function AuthProvider({ children }) {
@@ -95,13 +97,43 @@ export function useLogin() {
 export function useLogout() {
   const navigate = useNavigate();
   const qc = useQueryClient();
+
   const mutation = useMutation({
-    mutationFn: () => apiLogout(),
+    mutationFn: async () => {
+      // Attempt Supabase sign-out, but ignore if its session is already gone
+      try {
+        const { error: sbError } = await supabase.auth.signOut();
+        if (sbError && !(sbError instanceof AuthSessionMissingError)) {
+          throw sbError;
+        }
+      } catch (e) {
+        // sometimes signOut throws instead of returning `{ error }`
+        if (!(e instanceof AuthSessionMissingError)) {
+          throw e;
+        }
+        // else swallow
+      }
+
+      // Then call your own API logout (if you have one)
+      return apiLogout();
+    },
     onSuccess: () => {
-      qc.invalidateQueries(["current-user"]);
+      // Wipe the React-Query cache for current user
+      qc.removeQueries(["current-user"]);
+
+      toast.success("You’ve been signed out.");
+      navigate("/landing-page", { replace: true });
+    },
+    onError: (err) => {
+      console.error("Logout error", err);
+
+      // Even on error, clear local state & send them home
+      qc.removeQueries(["current-user"]);
+      toast.error("There was an error signing out—redirecting anyway.");
       navigate("/landing-page", { replace: true });
     },
   });
+
   return {
     logout: mutation.mutate,
     isLoading: mutation.isLoading,

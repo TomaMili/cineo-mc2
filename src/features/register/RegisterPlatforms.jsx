@@ -1,49 +1,55 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { useRegistrationContext } from "./RegistrationContext";
-
-const PLATFORMS = [
-  { id: "netflix", label: "Netflix", logo: "/netflix-logo.png" },
-  { id: "prime-video", label: "Prime Video", logo: "/prime-video-logo.png" },
-  { id: "hbo-max", label: "HBO Max", logo: "/hbo-max-logo.png" },
-  { id: "disney+", label: "Disney+", logo: "/disney-logo.png" },
-  { id: "hulu", label: "Hulu", logo: "/hulu-logo.png" },
-  { id: "apple-tv+", label: "Apple TV+", logo: "/appletv-logo.png" },
-];
+import { useAllProviders } from "../../hooks/useAllProviders";
 
 export default function RegisterPlatforms() {
-  const { data, update } = useRegistrationContext();
-  const { platforms } = data;
+  const { data: formData, update } = useRegistrationContext();
+  const selected = formData.platforms || [];
+
+  // Fetch all available providers
+  const { data: allProviders = [], isLoading } = useAllProviders();
 
   function toggle(id) {
     update({
-      platforms: platforms.includes(id)
-        ? platforms.filter((p) => p !== id)
-        : [...platforms, id],
+      platforms: selected.includes(id)
+        ? selected.filter((p) => p !== id)
+        : [...selected, id],
     });
   }
 
+  // Signal step validity when at least one is selected
   useEffect(() => {
     window.dispatchEvent(
-      new CustomEvent("step-valid", { detail: platforms.length > 0 })
+      new CustomEvent("step-valid", { detail: selected.length > 0 })
     );
-  }, [platforms]);
+  }, [selected]);
+
+  if (isLoading) return <p>Loading platforms…</p>;
 
   return (
-    <div className="grid grid-cols-3 gap-3">
-      {PLATFORMS.map((p) => (
+    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6  lg:grid-cols-7 xl:grid-cols-8 gap-2">
+      {allProviders.map((p) => (
         <button
           key={p.id}
           onClick={() => toggle(p.id)}
-          className={`p-1 rounded-lg flex items-center justify-center hover:bg-bordo-400 cursor-pointer ${
-            platforms.includes(p.id)
-              ? "border-bordo-500 bg-bordo-500"
-              : "border-gray-600"
-          } `}
+          className={`
+            p-1 rounded-2xl flex items-center justify-center
+            hover:bg-bordo-400 cursor-pointer
+            ${
+              selected.includes(p.id)
+                ? "border-bordo-500 bg-bordo-500"
+                : "border-gray-600"
+            }
+          `}
         >
           <img
             src={p.logo}
             alt={p.label}
-            className="max-h-26 w-full object-contain"
+            className={`
+              max-h-26 w-full rounded-2xl object-contain
+              ${selected.includes(p.id) ? "grayscale-0" : "grayscale"}
+            `}
           />
         </button>
       ))}

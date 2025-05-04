@@ -107,11 +107,12 @@ export default function App() {
           success: { duration: 3000 },
           error: { duration: 5000 },
           style: {
-            fontSize: "16px",
+            fontSize: "17px",
             maxWidth: "500px",
             padding: "16px 24px",
-            backgroundColor: "black",
+            backgroundColor: "#121212",
             color: "var(--color-grey-700)",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
           },
         }}
       />
