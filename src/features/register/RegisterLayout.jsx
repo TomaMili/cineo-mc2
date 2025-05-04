@@ -40,11 +40,11 @@ export default function RegisterLayout() {
 
   return (
     <div className="min-h-screen bg-[url(/bg-image.jpg)] bg-cover flex items-center justify-center px-4">
-      <div className="relative bg-siva-800/70 bg-opacity-70 backdrop-blur-xl rounded-2xl w-full max-w-3xl p-8 text-white">
+      <div className="relative bg-siva-800/70 bg-opacity-70 backdrop-blur-xl rounded-2xl  w-full max-w-3xl lg:max-w-4xl p-8 text-white">
         <h1 className="text-4xl font-normal text-center mb-6">
           {steps[currentIndex].title}
         </h1>
-        <div className="relative mb-12 h-[440px] ">
+        <div className="relative mb-12 min-h-[440px] ">
           <AnimatePresence>
             <motion.div
               mode="wait"
@@ -52,7 +52,7 @@ export default function RegisterLayout() {
               initial={{ opacity: 1, y: 2 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="absolute mb-12 inset-0"
+              className=" w-full"
             >
               <Outlet />
             </motion.div>
