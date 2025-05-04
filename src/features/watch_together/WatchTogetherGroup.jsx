@@ -125,7 +125,7 @@ export default function WatchTogetherGroup() {
         <div className="flex flex-col items-start lg:items-end gap-4">
           <div className="flex items-center gap-3">
             <Icon
-              icon="mdi:clock-outline "
+              icon="mdi:clock-outline"
               width={20}
               className="text-siva-100"
             />
