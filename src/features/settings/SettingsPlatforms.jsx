@@ -1,39 +1,86 @@
-const platforms = [
-  { id: "netflix", label: "Netflix", logo: "/netflix-logo.png" },
-  { id: "prime-video", label: "Prime Video", logo: "/prime-video-logo.png" },
-  { id: "hbo-max", label: "HBO Max", logo: "/hbo-max-logo.png" },
-  { id: "disney+", label: "Disney+", logo: "/disney-logo.png" },
-  { id: "hulu", label: "Hulu", logo: "/hulu-logo.png" },
-  { id: "apple-tv+", label: "Apple TV+", logo: "/appletv-logo.png" },
-];
+import React from "react";
+import { useAllProviders } from "../../hooks/useAllProviders";
+import { useCurrentUser } from "../../hooks/useAuth";
+import { useUpdateUser } from "./useUpdateUser";
+import ErrorNotice from "../../ui/ErrorNotice";
+import Spinner from "../../ui/Spinner";
 
-function PlatformGrid({ title, items }) {
+export default function SettingsPlatforms() {
+  const {
+    data: allProviders = [],
+    isLoading: isAllLoading,
+    isError: isAllError,
+    error: allError,
+  } = useAllProviders();
+
+  const {
+    profile,
+    isLoading: isProfileLoading,
+    isError: isProfileError,
+    error: profileError,
+  } = useCurrentUser();
+
+  const { updateUser, isUpdating } = useUpdateUser();
+
+  if (isAllError || isProfileError) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-siva-800">
+        <ErrorNotice
+          title="Couldn't load Platforms"
+          message={(allError || profileError).message}
+        />
+      </div>
+    );
+  }
+  if (isAllLoading || isProfileLoading) {
+    return (
+      <div className="h-full -m-24 flex justify-center items-center">
+        <Spinner size={46} />
+      </div>
+    );
+  }
+
+  const selected = profile?.platforms ?? [];
+
+  const toggle = (id) => {
+    const next = selected.includes(id)
+      ? selected.filter((p) => p !== id)
+      : [...selected, id];
+    updateUser({ platforms: next });
+  };
+
   return (
-    <div className="max-w-md mx-auto bg-black/80 rounded-lg p-6 text-white">
-      <h2 className="text-2xl font-semibold text-center pb-6">{title}</h2>
-      <div className="grid grid-cols-2 gap-4">
-        {items.map((p) => (
+    <div
+      className={`
+        flex flex-wrap justify-center gap-6 overflow-auto px-1 py-2
+        ${isUpdating ? "opacity-50 pointer-events-none" : ""}
+      `}
+    >
+      {allProviders.map((p) => {
+        const isSelected = selected.includes(p.id);
+        return (
           <button
             key={p.id}
-            className="  p-2 rounded-lg flex items-center justify-center hover:bg-bordo-400 cursor-pointer"
+            onClick={() => toggle(p.id)}
+            className={`
+              p-1 rounded-2xl flex items-center justify-center
+              hover:bg-bordo-400 cursor-pointer
+              ${
+                isSelected ? "border-bordo-500 bg-bordo-500" : "border-gray-600"
+              }
+            `}
           >
             <img
               src={p.logo}
               alt={p.label}
-              className="max-h-20 object-contain"
+              className={`
+                max-h-30 w-full rounded-2xl object-contain
+                ${isSelected ? "grayscale-0" : "grayscale"}
+              `}
             />
           </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export default function SettingsPlatforms() {
-  return (
-    <div className="space-y-12">
-      <PlatformGrid title="Platforms you use" items={platforms} />
-      <PlatformGrid title="Notify me for these platforms" items={platforms} />
+        );
+      })}
     </div>
   );
 }

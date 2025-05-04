@@ -2,13 +2,15 @@
 import { useEffect } from "react";
 import { useRegistrationContext } from "./RegistrationContext";
 import { useAllProviders } from "../../hooks/useAllProviders";
+import ErrorNotice from "../../ui/ErrorNotice";
+import Spinner from "../../ui/Spinner";
 
 export default function RegisterPlatforms() {
   const { data: formData, update } = useRegistrationContext();
   const selected = formData.platforms || [];
 
   // Fetch all available providers
-  const { data: allProviders = [], isLoading } = useAllProviders();
+  const { data: allProviders = [], isLoading, isError } = useAllProviders();
 
   function toggle(id) {
     update({
@@ -25,7 +27,19 @@ export default function RegisterPlatforms() {
     );
   }, [selected]);
 
-  if (isLoading) return <p>Loading platforms…</p>;
+  if (isError)
+    return (
+      <div className="flex items-center justify-center h-screen bg-siva-800">
+        <ErrorNotice title="Couldn't load Profile" message={isError.message} />
+      </div>
+    );
+
+  if (isLoading)
+    return (
+      <div className="h-full -m-24 flex justify-center items-center">
+        <Spinner size={46} />
+      </div>
+    );
 
   return (
     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6  lg:grid-cols-7 xl:grid-cols-8 gap-2">

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import { AuthSessionMissingError } from "@supabase/supabase-js";
 import supabase from "./supabase";
 
 export async function signUpWithProfile({
@@ -68,18 +70,28 @@ export async function logout() {
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
 }
-
 export async function updateCurrentUser(patch) {
-  const authUpdate = {};
-  if (patch.password) authUpdate.password = patch.password;
-  if (patch.fullName) authUpdate.data = { fullName: patch.fullName };
-
-  let authData = null;
-  if (Object.keys(authUpdate).length) {
-    const { data, error } = await supabase.auth.updateUser(authUpdate);
-    if (error) throw error;
-    authData = data;
+  if (patch.password) {
+    try {
+      const { data, error } = await supabase.auth.updateUser({
+        password: patch.password,
+      });
+      if (error) throw error;
+    } catch (e) {
+      if (!(e instanceof AuthSessionMissingError)) {
+        throw e;
+      }
+    }
   }
+
+  const {
+    data: { session },
+    error: sessionError,
+  } = await supabase.auth.getSession();
+  if (sessionError) throw sessionError;
+  if (!session) throw new Error("No active session — please log in again");
+
+  const userId = session.user.id;
 
   const profileUpdate = {};
   if (patch.username !== undefined) profileUpdate.username = patch.username;
@@ -95,7 +107,7 @@ export async function updateCurrentUser(patch) {
     const { data, error } = await supabase
       .from("users")
       .update(profileUpdate)
-      .eq("profile_id", authData.user.id)
+      .eq("profile_id", userId)
       .select(
         "id,profile_id,username,platforms,plan,favourite_actors,favourite_genres"
       )
@@ -105,7 +117,6 @@ export async function updateCurrentUser(patch) {
   }
 
   return {
-    authUser: authData?.user ?? null,
     profile: profileData,
   };
 }

@@ -1,5 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import supabase from "../services/supabase";
 import {
@@ -10,51 +16,52 @@ import {
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { AuthSessionMissingError } from "@supabase/supabase-js";
+
 const AuthContext = createContext({ authUser: null, profile: null });
 
 export function AuthProvider({ children }) {
   const [authUser, setAuthUser] = useState(null);
   const [profile, setProfile] = useState(null);
 
-  // 1a) on mount, get the session & auth user
+  // 1) On mount, load session & subscribe
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setAuthUser(data.session?.user || null);
     });
-
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setAuthUser(session?.user || null);
       }
     );
-    return () => {
-      listener.subscription.unsubscribe();
-    };
+    return () => listener.subscription.unsubscribe();
   }, []);
 
-  // 1b) whenever authUser changes, fetch the corresponding public.users row
-  useEffect(() => {
+  // 2) A reusable fetchProfile function
+  const refreshProfile = useCallback(async () => {
     if (!authUser?.id) {
       setProfile(null);
       return;
     }
-    supabase
+    const { data, error } = await supabase
       .from("users")
       .select("*")
       .eq("profile_id", authUser.id)
-      .single()
-      .then(({ data, error }) => {
-        if (error) {
-          console.error("Failed to load public.users row:", error);
-          setProfile(null);
-        } else {
-          setProfile(data);
-        }
-      });
+      .single();
+    if (error) {
+      console.error("Failed to load profile:", error);
+      setProfile(null);
+    } else {
+      setProfile(data);
+    }
   }, [authUser]);
 
+  // 3) Run it once whenever authUser changes
+  useEffect(() => {
+    refreshProfile();
+  }, [refreshProfile]);
+
   return (
-    <AuthContext.Provider value={{ authUser, profile }}>
+    <AuthContext.Provider value={{ authUser, profile, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );
@@ -97,46 +104,50 @@ export function useLogin() {
 export function useLogout() {
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const { setAuthUser, setProfile } = useCurrentUser(); // assume you expose setters
 
   const mutation = useMutation({
     mutationFn: async () => {
-      // Attempt Supabase sign-out, but ignore if its session is already gone
+      // 1) Try to sign out of Supabase, but ignore if there's no session
       try {
-        const { error: sbError } = await supabase.auth.signOut();
-        if (sbError && !(sbError instanceof AuthSessionMissingError)) {
-          throw sbError;
+        const { error } = await supabase.auth.signOut();
+        if (error && !(error instanceof AuthSessionMissingError)) {
+          throw error;
         }
       } catch (e) {
-        // sometimes signOut throws instead of returning `{ error }`
         if (!(e instanceof AuthSessionMissingError)) {
           throw e;
         }
-        // else swallow
       }
 
-      // Then call your own API logout (if you have one)
-      return apiLogout();
+      // 2) Call your own backend logout if needed
+      await apiLogout();
     },
     onSuccess: () => {
-      // Wipe the React-Query cache for current user
+      // 3) Clear any React-Query caches for user data
       qc.removeQueries(["current-user"]);
+      qc.removeQueries(["user"]); // whichever keys you use
 
-      toast.success("You’ve been signed out.");
+      // 4) Clear your AuthContext
+      setAuthUser(null);
+      setProfile(null);
+
+      toast.success("Signed out successfully");
       navigate("/landing-page", { replace: true });
     },
     onError: (err) => {
       console.error("Logout error", err);
-
-      // Even on error, clear local state & send them home
-      qc.removeQueries(["current-user"]);
-      toast.error("There was an error signing out—redirecting anyway.");
+      // still clear local state & redirect
+      setAuthUser(null);
+      setProfile(null);
+      qc.removeQueries();
+      toast.error("Error signing out—redirecting anyway");
       navigate("/landing-page", { replace: true });
     },
   });
 
   return {
-    logout: mutation.mutate,
+    logout: () => mutation.mutate(),
     isLoading: mutation.isLoading,
-    error: mutation.error,
   };
 }
