@@ -70,7 +70,7 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
       )}
 
       {showRating && !watched && (
-        <div className="absolute inset-0 flex items-center justify-center z-20">
+        <div className="absolute mb-8 inset-0 flex items-center justify-center z-20">
           <RatingOverlay
             onRate={(stars) => rateAndSave(stars)}
             onRateLater={() => rateAndSave(null)}

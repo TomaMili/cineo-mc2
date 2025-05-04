@@ -37,7 +37,7 @@ export default function WatchedItem({ movie }) {
       />
 
       {showRating && (
-        <div className="absolute inset-0 flex items-center justify-center z-20">
+        <div className="absolute mb-17 inset-0 flex items-center justify-center z-20">
           <RatingOverlay
             onRate={(stars) => saveRating(stars)}
             onRateLater={() => saveRating(null)}
@@ -55,10 +55,15 @@ export default function WatchedItem({ movie }) {
       </button>
 
       <div className="mt-2 flex items-center justify-between text-sm text-siva-100">
-        <div className="flex items-center space-x-1 text-yellow-400  ">
+        <div className="flex items-center  text-yellow-400  ">
           {localRating ? (
             Array.from({ length: localRating }).map((_, i) => (
-              <Icon key={i} icon="mdi:star" width="16" height="16" />
+              <Icon
+                key={i}
+                icon="material-symbols:star-rounded"
+                width="22"
+                height="22"
+              />
             ))
           ) : (
             <button
@@ -66,7 +71,11 @@ export default function WatchedItem({ movie }) {
               className="text-siva-100 hover:text-bordo-400 flex items-center justify-center cursor-pointer"
               aria-label="Rate movie"
             >
-              <Icon icon="mdi:star-outline" width="20" height="20" />
+              <Icon
+                icon="material-symbols:star-outline-rounded"
+                width="22"
+                height="22"
+              />
             </button>
           )}
         </div>

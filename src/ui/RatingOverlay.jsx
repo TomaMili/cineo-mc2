@@ -15,7 +15,7 @@ export default function RatingOverlay({ onRate, onRateLater, onClose }) {
         className="flex flex-col items-center p-4"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex space-x-1 mb-4 mt-6">
+        <div className="flex mb-4 mt-6">
           {[1, 2, 3, 4, 5].map((n) => (
             <button
               key={n}
@@ -25,10 +25,14 @@ export default function RatingOverlay({ onRate, onRateLater, onClose }) {
               className="focus:outline-none cursor-pointer"
             >
               <Icon
-                icon={hovered >= n ? "mdi:star" : "mdi:star-outline"}
-                width="32"
-                height="32"
-                className="text-yellow-400"
+                icon={
+                  hovered >= n
+                    ? "material-symbols:star-rounded"
+                    : "material-symbols:star-outline-rounded"
+                }
+                width="34"
+                height="34"
+                className="text-yellow-400 rounded-lg"
               />
             </button>
           ))}
@@ -36,7 +40,7 @@ export default function RatingOverlay({ onRate, onRateLater, onClose }) {
 
         <button
           onClick={onRateLater}
-          className="bg-bordo-500 text-white px-6 py-2 rounded-full hover:bg-bordo-400 transition"
+          className="bg-bordo-500 cursor-pointer text-white px-6 py-2 rounded-full hover:bg-bordo-400 transition"
         >
           Rate later
         </button>
