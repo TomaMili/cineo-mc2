@@ -59,6 +59,8 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
           alt={movie.title}
           onMouseEnter={prefetch}
           onClick={handlePosterClick}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover rounded-lg cursor-pointer transition-all duration-300 ease-out hover:scale-103"
         />
       ) : (

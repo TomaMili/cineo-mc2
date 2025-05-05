@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import MovieCarousel from "../../ui/MovieCarousel";
 import Spinner from "../../ui/Spinner";
 import ErrorNotice from "../../ui/ErrorNotice";
@@ -11,16 +11,38 @@ export default function Section({ title, movies, emptyMessage }) {
     data,
     isLoading: infLoading = false,
     isError: infError = false,
-    fetchNextPage = () => {},
+    fetchNextPage = () => Promise.resolve(),
     hasNextPage = false,
     isFetchingNextPage = false,
   } = isInfinite ? movies : {};
 
+  // Flatten & dedupe
   const slides = isInfinite
-    ? (data?.pages ?? []).flatMap((page) => page.results)
+    ? Array.from(
+        new Map(
+          (data?.pages ?? []).flatMap((p) => p.results).map((m) => [m.id, m])
+        ).values()
+      )
     : Array.isArray(movies)
     ? movies
     : [];
+
+  // Pre‐fetch first extra page on mount
+  useEffect(() => {
+    if (isInfinite && hasNextPage && (data?.pages?.length ?? 0) === 1) {
+      fetchNextPage();
+    }
+  }, [isInfinite, hasNextPage, data?.pages?.length, fetchNextPage]);
+
+  // Show skeleton placeholders when fetching more
+  const SKELETON_COUNT = 5;
+  const displaySlides =
+    isInfinite && isFetchingNextPage
+      ? [...slides, ...Array(SKELETON_COUNT).fill(null)]
+      : slides;
+
+  // Fetch when within this many slides of the end
+  const PRELOAD_OFFSET = 10;
 
   const handleSelect = useCallback(
     (index) => {
@@ -28,12 +50,27 @@ export default function Section({ title, movies, emptyMessage }) {
         isInfinite &&
         hasNextPage &&
         !isFetchingNextPage &&
-        index >= slides.length - 2
+        index >= slides.length - PRELOAD_OFFSET
       ) {
-        fetchNextPage();
+        fetchNextPage().then(() => {
+          // Pre‐cache the new posters
+          const lastPage = data?.pages[data.pages.length - 1]?.results ?? [];
+          lastPage.forEach((m) => {
+            if (m.poster_path) {
+              new Image().src = `https://image.tmdb.org/t/p/w342${m.poster_path}`;
+            }
+          });
+        });
       }
     },
-    [isInfinite, hasNextPage, isFetchingNextPage, slides.length, fetchNextPage]
+    [
+      isInfinite,
+      hasNextPage,
+      isFetchingNextPage,
+      slides.length,
+      fetchNextPage,
+      data,
+    ]
   );
 
   if (infLoading) {
@@ -63,9 +100,9 @@ export default function Section({ title, movies, emptyMessage }) {
     <>
       <h2 className="text-3xl mt-18 first:mt-0">{title}</h2>
       <MovieCarousel
-        slides={slides}
-        options={{ align: "start" }}
-        onSelect={handleSelect}
+        slides={displaySlides}
+        options={{ align: "start", containScroll: "trimSnaps" }}
+        onSelect={isInfinite ? handleSelect : undefined}
       />
     </>
   );

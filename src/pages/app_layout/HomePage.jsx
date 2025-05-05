@@ -3,6 +3,7 @@ import Section from "../../features/homepage/Section";
 import { useCurrentUser } from "../../hooks/useAuth";
 import Spinner from "../../ui/Spinner";
 import ErrorNotice from "../../ui/ErrorNotice";
+import { useWatched } from "../../features/watched/useWatched";
 
 import useInfiniteClassics from "../../features/homepage/useInfiniteClassics";
 import useTrendingInfinite from "../../features/homepage/useTrendingInfinite";
@@ -18,9 +19,17 @@ import { useSuperSuggest } from "../../context/SuperSuggestContext";
 
 export default function HomePage() {
   const { profile, isLoading: uLoad, isError: uErr } = useCurrentUser();
+  const { data: watched = [] } = useWatched(profile?.id);
 
-  const recs = useRecommendationsForUser(profile?.id);
+  // grab the recommendations query object
+  const recsQuery = useRecommendationsForUser(profile?.id);
+  const {
+    data: recs = [],
+    isLoading: isLoadingRec,
+    isError: isErrorRec,
+  } = recsQuery;
 
+  // the other infinite‐scroll lists
   const classics = useInfiniteClassics();
   const trending = useTrendingInfinite();
   const topRated = useInfiniteTopRated();
@@ -32,9 +41,9 @@ export default function HomePage() {
 
   const { show } = useSuperSuggest();
 
-  const isLoading =
+  // page‐level loading / errors *exclude* the recs query
+  const isPageLoading =
     uLoad ||
-    recs.isLoading ||
     classics.isLoading ||
     trending.isLoading ||
     topRated.isLoading ||
@@ -44,9 +53,8 @@ export default function HomePage() {
     comedyMovies.isLoading ||
     sciFiMovies.isLoading;
 
-  const isError =
+  const isPageError =
     uErr ||
-    recs.isError ||
     classics.isError ||
     trending.isError ||
     topRated.isError ||
@@ -56,7 +64,7 @@ export default function HomePage() {
     comedyMovies.isError ||
     sciFiMovies.isError;
 
-  if (isLoading) {
+  if (isPageLoading) {
     return (
       <>
         <HeroSection />
@@ -67,7 +75,7 @@ export default function HomePage() {
     );
   }
 
-  if (isError) {
+  if (isPageError) {
     return (
       <>
         <HeroSection />
@@ -79,12 +87,29 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <div className="space-y-3 px-18 pt-12 pb-20">
-        <Section
-          title="Recommended For You"
-          movies={recs.data}
-          emptyMessage="Watch and rate some movies to get personalized suggestions!"
-        />
+
+      <div className="space-y-8 px-12 pt-12 pb-40">
+        {isLoadingRec ? (
+          <div className="pt-12 pb-36.5">
+            <h2 className="text-3xl mt-18 first:mt-0">Recommended For You</h2>
+
+            <div className="pt-40 flex justify-center">
+              <Spinner size={32} />
+            </div>
+          </div>
+        ) : isErrorRec ? (
+          <ErrorNotice title="Couldn’t load recommendations" />
+        ) : (
+          <Section
+            title="Recommended For You"
+            movies={recs}
+            emptyMessage={
+              watched.length === 0
+                ? "Watch and rate some movies to get personalized suggestions!"
+                : undefined
+            }
+          />
+        )}
 
         <Section title="Classics & Oldies" movies={classics} />
         <Section title="Trending This Week" movies={trending} />
@@ -95,20 +120,22 @@ export default function HomePage() {
         <Section title="Sci-Fi Spotlight" movies={sciFiMovies} />
         <Section title="Top Rated" movies={topRated} />
       </div>
-      <div className="max-w-2xl mx-auto flex flex-col items-center gap-6 mt-10 mb-30">
+
+      <div className="max-w-2xl mx-auto flex flex-col items-center gap-6 mt-10 mb-20">
         <p className="text-4xl font-light">
-          Still can't find anything to watch?
+          Still can’t find anything to watch?
         </p>
         <button
           onClick={show}
-          className="bg-bordo-500 z-0 px-6 pt-4 pb-3 rounded-4xl font-semibold cursor-pointer hover:bg-bordo-400 transition-colors duration-300 ease-out"
+          className="bg-bordo-500 px-6 pt-4 pb-3 rounded-3xl font-semibold hover:bg-bordo-400 transition"
         >
           SUPERSUGGESTION
         </button>
       </div>
-      <footer className="bg-[url('/bg-image.jpg')] bg-cover bg-center text-siva-200 py-8  text-center text-sm font-light  z-10">
+
+      <footer className="bg-[url('/bg-image.jpg')] bg-cover bg-center text-siva-200 py-8 text-center text-sm font-light">
         <p>© 2025 Cineo. All rights reserved.</p>
-        <p>Made with ❤️ by Cineo Team</p>
+        <p>Made with ❤️ by the Cineo Team</p>
       </footer>
     </>
   );
