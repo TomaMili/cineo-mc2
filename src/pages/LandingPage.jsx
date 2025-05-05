@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
+import { useRef } from "react";
+import { Icon } from "@iconify-icon/react";
 
 export default function LandingPage() {
+  const firstSectionRef = useRef(null);
+
+  const scrollDown = () =>
+    firstSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   return (
     <main className="w-full overflow-x-hidden">
       <section className="relative w-full h-[100vh] bg-[url('/bg-image.jpg')] bg-cover bg-center overflow-hidden">
@@ -26,15 +32,35 @@ export default function LandingPage() {
           >
             JOIN CINEO
           </Link>
+
+          <button
+            onClick={() =>
+              document
+                .getElementById("track-section")
+                .scrollIntoView({ behavior: "smooth", block: "center" })
+            }
+            className="relative top-15 "
+          >
+            <Icon
+              icon="formkit:arrowdown"
+              width={24}
+              height={24}
+              className=" animate-bounce items-center justify-center rounded-full bg-white p-2 ring-1 ring-gray-900/5 dark:bg-white/5 dark:ring-white/20"
+            />
+          </button>
         </div>
       </section>
 
-      <section className="relative bg-black bg-cover bg-center py-24 ">
+      <section
+        ref={firstSectionRef}
+        className="relative bg-black bg-cover bg-center py-24 "
+      >
         <div className="absolute -top-64 w-screen h-126 overflow-hidden pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-0  via-black/100 to-0 z-20" />
         </div>
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16 px-6">
           <img
+            id="track-section"
             src="/mock-phones.png"
             alt="Mobile mock-ups"
             className="w-2/3 drop-shadow-2xl"
