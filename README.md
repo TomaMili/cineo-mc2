@@ -64,6 +64,7 @@ npm run preview      # static preview of the build
 ---
 
 ## 4 · Database & API (Supabase)
+![shema-baze](https://github.com/user-attachments/assets/6848282c-1d33-4afc-9e66-6a05d81b151f)
 
 ### Key tables
 
