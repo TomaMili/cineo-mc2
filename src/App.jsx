@@ -1,47 +1,57 @@
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
-
-import LandingPage from "./pages/LandingPage";
-import Login from "./pages/Login";
-import PageNotFound from "./pages/PageNotFound";
-import WatchTogether from "./pages/WatchTogether";
-import WatchTogetherGroup from "../src/features/watch_together/WatchTogetherGroup";
-
-import RegisterLayout from "./features/register/RegisterLayout";
-import RegisterInfo from "./features/register/RegisterInfo";
-import RegisterGenres from "./features/register/RegisterGenres";
-import RegisterPlatforms from "./features/register/RegisterPlatforms";
-import RegisterActors from "./features/register/RegisterActors";
-import RegisterPaymentPlan from "./features/register/RegisterPaymentPlan";
-import RegisterFinish from "./features/register/RegisterFinish";
-
-import AppLayout from "./ui/AppLayout";
-import HomePage from "./pages/app_layout/HomePage";
-import Profile from "./pages/app_layout/Profile";
-import Achievements from "./pages/app_layout/Achievements";
-import Browse from "./pages/app_layout/Browse";
-import Collections from "./pages/app_layout/Collections";
-import MovieDetail from "./pages/app_layout/MovieDetail";
-import Settings from "./pages/app_layout/Settings";
-import SettingsInfo from "./features/settings/SettingsInfo";
-import SettingsPlatforms from "./features/settings/SettingsPlatforms";
-import SettingsPlan from "./features/settings/SettingsPlan";
-import Watched from "./pages/app_layout/Watched";
-import WatchLater from "./pages/app_layout/WatchLater";
-
+import Spinner from "./ui/Spinner";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import PublicRoute from "./routes/PublicRoute";
 import { MoviePopupProvider } from "./context/MoviePopupContext";
 import { SuperSuggestProvider } from "./context/SuperSuggestContext";
 import { RegistrationProvider } from "./features/register/RegistrationContext";
+import { Toaster } from "react-hot-toast";
 
-import ProtectedRoute from "./routes/ProtectedRoute";
-import PublicRoute from "./routes/PublicRoute";
+// lazy-load pages
+const AppLayout = lazy(() => import("./ui/AppLayout"));
+const HomePage = lazy(() => import("./pages/app_layout/HomePage"));
+const Profile = lazy(() => import("./pages/app_layout/Profile"));
+const Achievements = lazy(() => import("./pages/app_layout/Achievements"));
+const Browse = lazy(() => import("./pages/app_layout/Browse"));
+const Collections = lazy(() => import("./pages/app_layout/Collections"));
+const MovieDetail = lazy(() => import("./pages/app_layout/MovieDetail"));
+const Settings = lazy(() => import("./pages/app_layout/Settings"));
+const SettingsInfo = lazy(() => import("./features/settings/SettingsInfo"));
+const SettingsPlatforms = lazy(() =>
+  import("./features/settings/SettingsPlatforms")
+);
+const SettingsPlan = lazy(() => import("./features/settings/SettingsPlan"));
+const Watched = lazy(() => import("./pages/app_layout/Watched"));
+const WatchLater = lazy(() => import("./pages/app_layout/WatchLater"));
+const WatchTogether = lazy(() => import("./pages/WatchTogether"));
+const WatchTogetherGroup = lazy(() =>
+  import("./features/watch_together/WatchTogetherGroup")
+);
+
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+const Login = lazy(() => import("./pages/Login"));
+const RegisterLayout = lazy(() => import("./features/register/RegisterLayout"));
+const RegisterInfo = lazy(() => import("./features/register/RegisterInfo"));
+const RegisterGenres = lazy(() => import("./features/register/RegisterGenres"));
+const RegisterPlatforms = lazy(() =>
+  import("./features/register/RegisterPlatforms")
+);
+const RegisterActors = lazy(() => import("./features/register/RegisterActors"));
+const RegisterPaymentPlan = lazy(() =>
+  import("./features/register/RegisterPaymentPlan")
+);
+const RegisterFinish = lazy(() => import("./features/register/RegisterFinish"));
+const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 
 export default function App() {
   return (
-    <>
-      <BrowserRouter>
-        <MoviePopupProvider>
-          <SuperSuggestProvider>
+    <BrowserRouter>
+      <MoviePopupProvider>
+        <SuperSuggestProvider>
+          <Suspense
+            fallback={<Spinner size={48} className="fixed inset-0 m-auto" />}
+          >
             <Routes>
               <Route element={<ProtectedRoute />}>
                 <Route element={<AppLayout />}>
@@ -95,9 +105,9 @@ export default function App() {
                 <Route path="*" element={<PageNotFound />} />
               </Route>
             </Routes>
-          </SuperSuggestProvider>
-        </MoviePopupProvider>
-      </BrowserRouter>
+          </Suspense>
+        </SuperSuggestProvider>
+      </MoviePopupProvider>
 
       <Toaster
         position="bottom-right"
@@ -106,16 +116,8 @@ export default function App() {
         toastOptions={{
           success: { duration: 3000 },
           error: { duration: 5000 },
-          style: {
-            fontSize: "17px",
-            maxWidth: "500px",
-            padding: "16px 24px",
-            backgroundColor: "#121212",
-            color: "var(--color-grey-700)",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.5)",
-          },
         }}
       />
-    </>
+    </BrowserRouter>
   );
 }
