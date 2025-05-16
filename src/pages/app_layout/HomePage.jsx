@@ -90,7 +90,6 @@ export default function HomePage() {
     { key: "sciFi", title: "Sci-Fi Spotlight", hook: sciFiHook },
     { key: "topRated", title: "Top Rated", hook: topRatedHook },
   ];
-
   return (
     <>
       <Suspense
