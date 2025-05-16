@@ -105,44 +105,18 @@ export function useLogin() {
 
 export function useLogout() {
   const navigate = useNavigate();
-  const qc = useQueryClient();
-  const { setAuthUser, setProfile } = useCurrentUser();
+  const qc = useQueryClient(); // no setters needed
   const mutation = useMutation({
     mutationFn: async () => {
-      try {
-        const { error } = await supabase.auth.signOut();
-        if (error && !(error instanceof AuthSessionMissingError)) {
-          throw error;
-        }
-      } catch (e) {
-        if (!(e instanceof AuthSessionMissingError)) {
-          throw e;
-        }
-      }
-
-      await apiLogout();
+      await supabase.auth.signOut().catch(() => {}); // ignore 403
+      await apiLogout().catch(() => {});
     },
-    onSuccess: () => {
-      qc.removeQueries(["current-user"]);
-      qc.removeQueries(["user"]);
-      setAuthUser(null);
-      setProfile(null);
-
-      toast.success("Signed out successfully");
-      navigate("/landing-page", { replace: true });
-    },
-    onError: (err) => {
-      console.error("Logout error", err);
-      setAuthUser(null);
-      setProfile(null);
-      qc.removeQueries();
-      toast.error("Error signing out—redirecting anyway");
+    onSettled: () => {
+      // runs on success OR error
+      qc.clear(); // blow away every cache entry
+      toast.success("Signed out");
       navigate("/landing-page", { replace: true });
     },
   });
-
-  return {
-    logout: () => mutation.mutate(),
-    isLoading: mutation.isLoading,
-  };
+  return { logout: mutation.mutate, isLoading: mutation.isLoading };
 }
