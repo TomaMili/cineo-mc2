@@ -17,6 +17,22 @@ function Navigation({ isNavActive, setIsNavActive }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
+  const prefetchMap = {
+    "/homepage": () => import("../../pages/app_layout/HomePage"),
+    "/watchlater": () => import("../../pages/app_layout/WatchLater"),
+    "/watched": () => import("../../pages/app_layout/Watched"),
+    "/collections": () => import("../../pages/app_layout/Collections"),
+    "/watch-together": () => import("../../pages/WatchTogether"),
+    "/movie": () => import("../../pages/app_layout/MovieDetail"),
+    "/browse": () => import("../../pages/LandingPage"),
+    "/settings": () => import("../../pages/app_layout/Settings"),
+    "/profile": () => import("../../pages/app_layout/Profile"),
+  };
+  function handlePrefetch(path) {
+    const loader = prefetchMap[path];
+    if (loader) loader();
+  }
+
   return (
     <>
       <div
@@ -51,6 +67,7 @@ function Navigation({ isNavActive, setIsNavActive }) {
 
           <NavLink
             to="/homepage"
+            onMouseEnter={() => handlePrefetch("/homepage")}
             className="flex items-center gap-3 mb-4 hover:text-siva-100 h-10"
             onClick={() => setIsNavActive(false)}
           >
@@ -63,6 +80,7 @@ function Navigation({ isNavActive, setIsNavActive }) {
           </NavLink>
           <NavLink
             to="/watchlater"
+            onMouseEnter={() => handlePrefetch("/watchlater")}
             className="flex items-center gap-3 mb-4 hover:text-siva-100 h-10"
           >
             <IconWithSkeleton
@@ -74,6 +92,7 @@ function Navigation({ isNavActive, setIsNavActive }) {
           </NavLink>
           <NavLink
             to="/watched"
+            onMouseEnter={() => handlePrefetch("/watched")}
             className="flex items-center gap-3 mb-4 hover:text-siva-100 h-10"
           >
             <IconWithSkeleton
@@ -86,6 +105,7 @@ function Navigation({ isNavActive, setIsNavActive }) {
 
           <NavLink
             to="/collections"
+            onMouseEnter={() => handlePrefetch("/collections")}
             className="flex items-center gap-3 mb-4 hover:text-siva-100 h-10"
           >
             <IconWithSkeleton
@@ -97,6 +117,7 @@ function Navigation({ isNavActive, setIsNavActive }) {
           </NavLink>
           <NavLink
             to="/watch-together"
+            onMouseEnter={() => handlePrefetch("/watch-together")}
             className="flex items-center gap-3 mb-4 text-left hover:text-siva-100 h-10"
           >
             <IconWithSkeleton
@@ -125,6 +146,7 @@ function Navigation({ isNavActive, setIsNavActive }) {
 
           <NavLink
             to="/profile"
+            onMouseEnter={() => handlePrefetch("/profile")}
             className="flex items-center gap-3 mb-4 hover:text-siva-100 h-10"
           >
             <IconWithSkeleton
@@ -136,6 +158,7 @@ function Navigation({ isNavActive, setIsNavActive }) {
           </NavLink>
           <NavLink
             to="/settings/info"
+            onMouseEnter={() => handlePrefetch("/settings")}
             className="flex items-center gap-3 mb-4 hover:text-siva-100 cursor-pointer h-10"
           >
             <IconWithSkeleton
@@ -149,6 +172,7 @@ function Navigation({ isNavActive, setIsNavActive }) {
           <button
             onClick={logout}
             disabled={isLoading}
+            onMouseEnter={() => handlePrefetch("/landing-page")}
             className="flex items-center gap-3 text-left ml-0 hover:text-siva-100 cursor-pointer h-10 mb-2"
           >
             <IconWithSkeleton
