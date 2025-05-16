@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
 import MoviePopup from "../ui/MoviePopup";
 
 const PopupCtx = createContext(null);

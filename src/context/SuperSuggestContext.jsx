@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
 import SuperSuggestionPopup from "../features/supersuggestion/SuperSuggestionPopup";
 
 const Ctx = createContext(null);
