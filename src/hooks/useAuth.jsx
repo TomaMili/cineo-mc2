@@ -22,21 +22,22 @@ const AuthContext = createContext({ authUser: null, profile: null });
 export function AuthProvider({ children }) {
   const [authUser, setAuthUser] = useState(null);
   const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // 1) On mount, load session & subscribe
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setAuthUser(data.session?.user || null);
+      setLoading(false);
     });
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setAuthUser(session?.user || null);
+        setLoading(false);
       }
     );
     return () => listener.subscription.unsubscribe();
   }, []);
 
-  // 2) A reusable fetchProfile function
   const refreshProfile = useCallback(async () => {
     if (!authUser?.id) {
       setProfile(null);
@@ -55,13 +56,14 @@ export function AuthProvider({ children }) {
     }
   }, [authUser]);
 
-  // 3) Run it once whenever authUser changes
   useEffect(() => {
     refreshProfile();
   }, [refreshProfile]);
 
   return (
-    <AuthContext.Provider value={{ authUser, profile, refreshProfile }}>
+    <AuthContext.Provider
+      value={{ authUser, profile, refreshProfile, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -104,11 +106,9 @@ export function useLogin() {
 export function useLogout() {
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const { setAuthUser, setProfile } = useCurrentUser(); // assume you expose setters
-
+  const { setAuthUser, setProfile } = useCurrentUser();
   const mutation = useMutation({
     mutationFn: async () => {
-      // 1) Try to sign out of Supabase, but ignore if there's no session
       try {
         const { error } = await supabase.auth.signOut();
         if (error && !(error instanceof AuthSessionMissingError)) {
@@ -120,15 +120,11 @@ export function useLogout() {
         }
       }
 
-      // 2) Call your own backend logout if needed
       await apiLogout();
     },
     onSuccess: () => {
-      // 3) Clear any React-Query caches for user data
       qc.removeQueries(["current-user"]);
-      qc.removeQueries(["user"]); // whichever keys you use
-
-      // 4) Clear your AuthContext
+      qc.removeQueries(["user"]);
       setAuthUser(null);
       setProfile(null);
 
@@ -137,7 +133,6 @@ export function useLogout() {
     },
     onError: (err) => {
       console.error("Logout error", err);
-      // still clear local state & redirect
       setAuthUser(null);
       setProfile(null);
       qc.removeQueries();
