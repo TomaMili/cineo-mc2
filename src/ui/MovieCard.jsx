@@ -55,7 +55,13 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
     <div className="group relative w-40 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3]">
       {movie.poster_path ? (
         <img
-          src={poster(movie.poster_path)}
+          src={poster(movie.poster_path, 342)}
+          srcSet={`
+            ${poster(movie.poster_path, 92)}  92w,
+            ${poster(movie.poster_path, 342)} 342w,
+            ${poster(movie.poster_path, 500)} 500w
+          `}
+          sizes="(max-width: 640px) 50vw, 20vw"
           alt={movie.title}
           onMouseEnter={prefetch}
           onClick={handlePosterClick}
