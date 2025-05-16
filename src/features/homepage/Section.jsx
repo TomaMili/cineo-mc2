@@ -16,7 +16,6 @@ export default function Section({ title, movies, emptyMessage }) {
     isFetchingNextPage = false,
   } = isInfinite ? movies : {};
 
-  // Flatten & dedupe
   const slides = isInfinite
     ? Array.from(
         new Map(
@@ -27,7 +26,6 @@ export default function Section({ title, movies, emptyMessage }) {
     ? movies
     : [];
 
-  // Pre‐fetch first extra page on mount
   useEffect(() => {
     if (isInfinite && hasNextPage && (data?.pages?.length ?? 0) === 1) {
       fetchNextPage();
@@ -87,10 +85,10 @@ export default function Section({ title, movies, emptyMessage }) {
   if (slides.length === 0) {
     if (!isInfinite && emptyMessage) {
       return (
-        <>
+        <div className="h-[270px]">
           <h2 className="text-3xl font-medium mt-20 first:mt-0">{title}</h2>
           <p className="mt-4 text-center text-siva-200">{emptyMessage}</p>
-        </>
+        </div>
       );
     }
     return null;
