@@ -14,7 +14,7 @@ function HeroSection() {
           alt="Background image"
           className="h-full w-full object-cover"
           decoding="async"
-          fetchPriority="high"
+          fetchpriority="high"
         />
       </picture>
       <div className="flex flex-col items-center gap-6 z-1 -mt-24 pb-28 ">
@@ -23,7 +23,7 @@ function HeroSection() {
           alt="logo"
           className="relative mx-auto mt-34"
           decoding="async"
-          fetchPriority="high"
+          fetchpriority="high"
         />
         <h2 className="z-0 text-6xl font-light text-center pt-20">
           Ready for Your Next <br /> Watch?
