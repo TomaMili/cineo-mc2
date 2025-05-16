@@ -3,7 +3,7 @@ import Spinner from "../ui/Spinner";
 import { useCurrentUser } from "../hooks/useAuth";
 
 export default function ProtectedRoute() {
-  const { profile, loading } = useCurrentUser();
+  const { authUser, loading } = useCurrentUser();
 
   if (loading) {
     return (
@@ -13,7 +13,7 @@ export default function ProtectedRoute() {
     );
   }
 
-  if (!profile) {
+  if (!authUser) {
     return <Navigate to="/landing-page" replace />;
   }
 
