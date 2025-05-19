@@ -4,7 +4,7 @@ function HeroSection() {
   const { show } = useSuperSuggest();
 
   return (
-    <div className="relative w-full text-white z-0 h-2/3">
+    <div className="relative w-full text-white z-0 h-2/3 px-10">
       <picture className="absolute inset-0 z-0 w-full h-full">
         <source srcSet="/bg-image.jpg" type="image/jpg" />
         <source srcSet="/bg-image.avif" type="image/avif" />
@@ -25,12 +25,12 @@ function HeroSection() {
           decoding="async"
           fetchpriority="high"
         />
-        <h2 className="z-0 text-6xl font-light text-center pt-20">
+        <h2 className="z-0 lg:text-6xl text-3xl font-light text-center lg:pb-0 pb-3 lg:pt-20 pt-10">
           Ready for Your Next <br /> Watch?
         </h2>
         <button
           onClick={show}
-          className="bg-bordo-500 z-0 px-6 pt-4 pb-3 rounded-4xl font-semibold cursor-pointer hover:bg-bordo-400 transition-colors duration-300 ease-out"
+          className="bg-bordo-500 z-0 px-5 pt-3 pb-3 lg:px-6 lg:pt-4 lg:pb-3 rounded-4xl font-semibold cursor-pointer hover:bg-bordo-400 transition-colors duration-300 ease-out"
         >
           SUPERSUGGESTION
         </button>

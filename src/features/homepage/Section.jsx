@@ -95,13 +95,13 @@ export default function Section({ title, movies, emptyMessage }) {
   }
 
   return (
-    <>
-      <h2 className="text-3xl mt-18 first:mt-0">{title}</h2>
+    <div className="mb-20">
+      <h2 className="text-3xl ">{title}</h2>
       <MovieCarousel
         slides={displaySlides}
         options={{ align: "start", containScroll: "trimSnaps" }}
         onSelect={isInfinite ? handleSelect : undefined}
       />
-    </>
+    </div>
   );
 }

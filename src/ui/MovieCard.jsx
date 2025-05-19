@@ -52,7 +52,7 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
   };
 
   return (
-    <div className="group relative w-40 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3]">
+    <div className="group relative w-82 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3]">
       {movie.poster_path ? (
         <img
           src={poster(movie.poster_path, 342)}
@@ -67,12 +67,12 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
           onClick={handlePosterClick}
           loading="lazy"
           decoding="async"
-          className="w-full h-full object-cover rounded-lg cursor-pointer transition-all duration-300 ease-out hover:scale-103"
+          className="w-full h-full object-cover rounded-lg cursor-pointer transition-all duration-300  ease-out hover:scale-103"
         />
       ) : (
         <div
           onClick={handlePosterClick}
-          className="w-full h-full bg-gray-700 flex items-center justify-center text-sm  cursor-pointer"
+          className="w-full h-full bg-gray-700 flex items-center justify-center text-sm cursor-pointer"
         >
           {movie.title}
         </div>
@@ -99,7 +99,7 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
       <div className="mt-2 flex items-start justify-between">
         <p
           onClick={handlePosterClick}
-          className="text-sm font-medium  line-clamp-1 mr-1 hover:text-bordo-400 cursor-pointer"
+          className="lg:text-sm text-lg font-medium line-clamp-1 mr-1 hover:text-bordo-400 cursor-pointer"
         >
           {movie.title}
         </p>

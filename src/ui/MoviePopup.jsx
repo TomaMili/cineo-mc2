@@ -90,7 +90,7 @@ export default function MoviePopup({ movie, onClose }) {
       >
         <div
           onClick={(e) => e.stopPropagation()}
-          className="flex flex-col sm:flex-row max-w-4xl w-full
+          className="flex flex-row max-w-4xl w-full
                      bg-siva-800 rounded-lg overflow-hidden shadow-2xl"
         >
           {data.poster_path ? (
@@ -98,17 +98,17 @@ export default function MoviePopup({ movie, onClose }) {
               src={poster(data.poster_path)}
               alt={data.title}
               onClick={goToFullPage}
-              className="w-full sm:w-60 object-cover cursor-pointer"
+              className="w-full aspect-2/3 sm:w-60 sm:object-cover cursor-pointer max-[600px]:invisible max-[600px]:absolute "
             />
           ) : (
             <PosterPlaceholder
               title={data.title}
               onClick={goToFullPage}
-              className="sm:w-60 object-cover cursor-pointer bg-black/20!"
+              className="sm:w-60 object-cover cursor-pointer bg-black/20! max-[600px]:invisible"
             />
           )}
 
-          <div className="flex-1 p-6 space-y-4 overflow-y-auto max-h-[80vh]">
+          <div className="flex-1 p-6 max-[600px]:flex max-[600px]:flex-col max-[600px]:h-full max-[600px]:justify-between  space-y-4 overflow-y-auto max-h-[80vh]">
             <h2
               className="text-4xl font-medium cursor-pointer"
               onClick={goToFullPage}

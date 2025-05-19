@@ -61,7 +61,7 @@ export default function MovieCarousel({
               <div
                 key={`${movie.id}-${idx}`}
                 className="
-                  flex-none w-40 sm:w-44 lg:w-48 xl:w-52
+                  flex-none w-82 sm:w-44 lg:w-48 xl:w-52
                   transform-gpu
                 "
               >

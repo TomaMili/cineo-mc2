@@ -71,7 +71,7 @@ export default function SearchBar({ className = "" }) {
       {!expanded && (
         <button
           onClick={open}
-          className="w-14 h-14    flex items-center justify-center rounded-full cursor-pointer hover:bg-black/20  "
+          className="w-14 h-14 flex items-center justify-center rounded-full cursor-pointer hover:bg-black/20  "
         >
           <Icon
             icon="jam:search"

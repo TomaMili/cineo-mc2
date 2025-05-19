@@ -144,8 +144,8 @@ export default function HomePage() {
           </Suspense>
         ))}
       </main>
-      <div className="max-w-2xl mx-auto flex flex-col items-center gap-6 mt-10 mb-20">
-        <p className="text-4xl font-light">
+      <div className="max-w-lg px-18 mx-auto flex flex-col items-center gap-6 mb-30">
+        <p className="text-4xl font-light text-center">
           Still can’t find anything to watch?
         </p>
         <button
