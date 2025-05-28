@@ -9,11 +9,32 @@ import MovieCard from "./MovieCard";
 export default function MovieCarousel({
   slides = [],
   options = {},
-  onSelect,
+  onInit,
+  onReachEnd,
   onWatchLater,
   onBookmark,
 }) {
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onInit?.(emblaApi);
+    requestAnimationFrame(() => emblaApi.reInit());
+  }, [emblaApi, slides.length, onInit]);
+
+  useEffect(() => {
+    if (!emblaApi || typeof onReachEnd !== "function") return;
+    let fired = false;
+    const selectHandler = () => {
+      if (!emblaApi.canScrollNext() && !fired) {
+        fired = true;
+        onReachEnd();
+      }
+    };
+    emblaApi.on("select", selectHandler);
+    selectHandler();
+    return () => emblaApi.off("select", selectHandler);
+  }, [emblaApi, onReachEnd, slides.length]);
 
   const {
     prevBtnDisabled,
@@ -21,21 +42,6 @@ export default function MovieCarousel({
     onPrevButtonClick,
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
-
-  // Re-init offscreen
-  useEffect(() => {
-    if (!emblaApi) return;
-    requestAnimationFrame(() => emblaApi.reInit());
-  }, [emblaApi, slides.length]);
-
-  // Subscribe to select
-  useEffect(() => {
-    if (!emblaApi || typeof onSelect !== "function") return;
-    const handler = () => onSelect(emblaApi.selectedScrollSnap());
-    emblaApi.on("select", handler);
-    handler();
-    return () => emblaApi.off("select", handler);
-  }, [emblaApi, onSelect]);
 
   return (
     <section className="relative overflow-visible z-10">
@@ -60,10 +66,7 @@ export default function MovieCarousel({
             movie ? (
               <div
                 key={`${movie.id}-${idx}`}
-                className="
-                  flex-none w-82 sm:w-44 lg:w-48 xl:w-52
-                  transform-gpu
-                "
+                className="flex-none w-82 sm:w-44 lg:w-48 xl:w-52 transform-gpu"
               >
                 <MovieCard
                   movie={movie}

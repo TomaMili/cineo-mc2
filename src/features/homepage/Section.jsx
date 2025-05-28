@@ -1,11 +1,10 @@
-import { useCallback, useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import MovieCarousel from "../../ui/MovieCarousel";
 import Spinner from "../../ui/Spinner";
 import ErrorNotice from "../../ui/ErrorNotice";
 
 export default function Section({ title, movies, emptyMessage }) {
-  const isInfinite =
-    movies != null && typeof movies.fetchNextPage === "function";
+  const isInfinite = movies && typeof movies.fetchNextPage === "function";
 
   const {
     data,
@@ -14,7 +13,18 @@ export default function Section({ title, movies, emptyMessage }) {
     fetchNextPage = () => Promise.resolve(),
     hasNextPage = false,
     isFetchingNextPage = false,
-  } = isInfinite ? movies : {};
+  } = isInfinite
+    ? movies
+    : {
+        data: null,
+        isLoading: false,
+        isError: false,
+        fetchNextPage: () => Promise.resolve(),
+        hasNextPage: false,
+        isFetchingNextPage: false,
+      };
+
+  const [embla, setEmbla] = useState(null);
 
   const slides = isInfinite
     ? Array.from(
@@ -26,22 +36,18 @@ export default function Section({ title, movies, emptyMessage }) {
     ? movies
     : [];
 
+  const realSlideCount = slides.filter(Boolean).length;
   useEffect(() => {
-    if (isInfinite && hasNextPage && (data?.pages?.length ?? 0) === 1) {
-      fetchNextPage();
-    }
-  }, [isInfinite, hasNextPage, data?.pages?.length, fetchNextPage]);
+    if (embla) embla.reInit();
+  }, [embla, realSlideCount]);
 
-  // Show skeleton placeholders when fetching more
-  const SKELETON_COUNT = 5;
+  const SKELETON_COUNT = 0;
   const displaySlides =
     isInfinite && isFetchingNextPage
       ? [...slides, ...Array(SKELETON_COUNT).fill(null)]
       : slides;
 
-  // Fetch when within this many slides of the end
-  const PRELOAD_OFFSET = 10;
-
+  const PRELOAD_OFFSET = 15;
   const handleSelect = useCallback(
     (index) => {
       if (
@@ -50,26 +56,17 @@ export default function Section({ title, movies, emptyMessage }) {
         !isFetchingNextPage &&
         index >= slides.length - PRELOAD_OFFSET
       ) {
-        fetchNextPage().then(() => {
-          // Pre‐cache the new posters
-          const lastPage = data?.pages[data.pages.length - 1]?.results ?? [];
-          lastPage.forEach((m) => {
-            if (m.poster_path) {
-              new Image().src = `https://image.tmdb.org/t/p/w342${m.poster_path}`;
-            }
-          });
-        });
+        fetchNextPage();
       }
     },
-    [
-      isInfinite,
-      hasNextPage,
-      isFetchingNextPage,
-      slides.length,
-      fetchNextPage,
-      data,
-    ]
+    [isInfinite, hasNextPage, isFetchingNextPage, slides.length, fetchNextPage]
   );
+
+  const handleReachEnd = useCallback(() => {
+    if (isInfinite && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [isInfinite, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (infLoading) {
     return (
@@ -81,8 +78,7 @@ export default function Section({ title, movies, emptyMessage }) {
   if (infError) {
     return <ErrorNotice title={`Failed to load ${title}`} />;
   }
-
-  if (slides.length === 0) {
+  if (realSlideCount === 0) {
     if (!isInfinite && emptyMessage) {
       return (
         <div className="h-[270px]">
@@ -96,11 +92,13 @@ export default function Section({ title, movies, emptyMessage }) {
 
   return (
     <div className="mb-20">
-      <h2 className="text-3xl ">{title}</h2>
+      <h2 className="text-3xl">{title}</h2>
       <MovieCarousel
         slides={displaySlides}
         options={{ align: "start", containScroll: "trimSnaps" }}
+        onInit={setEmbla}
         onSelect={isInfinite ? handleSelect : undefined}
+        onReachEnd={isInfinite ? handleReachEnd : undefined}
       />
     </div>
   );
