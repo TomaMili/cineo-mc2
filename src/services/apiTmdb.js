@@ -8,16 +8,17 @@ function makeUrl(path, params = {}) {
   return url;
 }
 
-async function fetchJson(url, abortSignal) {
-  const res = await fetch(url, { signal: abortSignal });
+async function fetchJson(url, signal) {
+  const res = await fetch(url, { signal });
   if (!res.ok) {
-    const msg = `TMDB error ${res.status}: ${res.statusText}`;
-    throw new Error(msg);
+    throw new Error(`TMDB ${res.status}: ${res.statusText}`);
   }
   return res.json();
 }
 
-export function searchMovies(query, page = 1, abortSignal) {
+/* ─────────── generic helpers ─────────── */
+
+export function searchMovies(query, page = 1, signal) {
   return fetchJson(
     makeUrl("search/movie", {
       query,
@@ -25,46 +26,11 @@ export function searchMovies(query, page = 1, abortSignal) {
       include_adult: false,
       language: "en-US",
     }),
-    abortSignal
+    signal
   );
 }
 
-export function fetchPopularMovies(page = 1, abortSignal) {
-  return fetchJson(
-    makeUrl("movie/popular", { page, language: "en-US" }),
-    abortSignal
-  );
-}
-
-export function fetchMovieDetails(movieId, abortSignal) {
-  return fetchJson(
-    makeUrl(`movie/${movieId}`, {
-      append_to_response: "credits,videos,images",
-      language: "en-US",
-    }),
-    abortSignal
-  );
-}
-
-export function fetchTrending(window = "week", abortSignal) {
-  return fetchJson(makeUrl(`trending/movie/${window}`), abortSignal);
-}
-
-const IMG_BASE = "https://image.tmdb.org/t/p";
-
-// 92, 154, 185, 342, 500, 780, original
-export const poster = (path, size = 780) =>
-  path ? `${IMG_BASE}/w${size}${path}` : null;
-
-// 300, 780, 1280, original
-export const backdrop = (path, size = 1280) =>
-  path ? `${IMG_BASE}/w${size}${path}` : null;
-
-// 45, 185, 632, original
-export const profileImage = (path, size = 632) =>
-  path ? `${IMG_BASE}/h${size}${path}` : null;
-
-export function searchPeople(query, page = 1, abortSignal) {
+export function searchPeople(query, page = 1, signal) {
   return fetchJson(
     makeUrl("search/person", {
       query,
@@ -72,158 +38,140 @@ export function searchPeople(query, page = 1, abortSignal) {
       include_adult: false,
       language: "en-US",
     }),
-    abortSignal
+    signal
   );
 }
 
-export function fetchPersonDetails(personId, abortSignal) {
+export function fetchPersonDetails(id, signal) {
   return fetchJson(
-    makeUrl(`person/${personId}`, {
+    makeUrl(`person/${id}`, {
       append_to_response: "movie_credits,combined_credits,images",
       language: "en-US",
     }),
-    abortSignal
+    signal
   );
 }
 
-export function fetchMovieRecommendations(movieId, page = 1, abortSignal) {
+export function fetchMovieDetails(id, signal) {
   return fetchJson(
-    makeUrl(`movie/${movieId}/recommendations`, {
-      page,
+    makeUrl(`movie/${id}`, {
+      append_to_response: "credits,videos,images",
       language: "en-US",
     }),
-    abortSignal
-  );
-}
-
-export function fetchMovieReviews(movieId, page = 1, abortSignal) {
-  return fetchJson(
-    makeUrl(`movie/${movieId}/reviews`, { page, language: "en-US" }),
-    abortSignal
-  );
-}
-
-export const fetchMovieCredits = (movieId, abortSignal) =>
-  fetchJson(
-    makeUrl(`movie/${movieId}/credits`, { language: "en-US" }),
-    abortSignal
-  );
-
-export const fetchMovieVideos = (movieId, abortSignal) =>
-  fetchJson(
-    makeUrl(`movie/${movieId}/videos`, { language: "en-US" }),
-    abortSignal
-  );
-
-export function findDirector(credits) {
-  if (!credits) return null;
-
-  const crewArray = Array.isArray(credits)
-    ? credits
-    : credits.crew ?? credits?.credits?.crew ?? [];
-
-  return crewArray.find((person) => person.job === "Director") || null;
-}
-
-export function fetchMovieProviders(movieId, region = "HR", abortSignal) {
-  return fetchJson(
-    makeUrl(`movie/${movieId}/watch/providers`),
-    abortSignal
-  ).then((json) => json.results?.[region] ?? null);
-}
-
-export function fetchAllMovieProviders(region = "HR", signal) {
-  // This hits the same “watch/providers/movie” endpoint, but without tying it to a movie ID
-  return fetchJson(
-    makeUrl(`watch/providers/movie?watch_region=${region}`),
-    signal
-  ).then((json) => {
-    // json.results is an array of providers
-    return json.results || [];
-  });
-}
-
-export async function fetchGenres(signal) {
-  const json = await fetchJson(
-    makeUrl("genre/movie/list", { language: "en-US" }),
     signal
   );
-  return json.genres;
 }
 
-export function discoverMovies({ cast, crew, genres, page = 1 }, signal) {
-  const params = { page, language: "en-US", include_adult: false };
-  if (cast) params.with_cast = cast;
-  if (crew) params.with_crew = crew;
-  if (genres) params.with_genres = genres;
-  return fetchJson(makeUrl("discover/movie", params), signal);
-}
+/* ─────────── paged TMDB lists ─────────── */
 
-/**
- * Movies released on or before 1980-01-01, sorted by vote count desc.
- */
-export function fetchClassicMovies(page = 1, abortSignal) {
-  return fetchJson(
+export const fetchPopularMovies = (page = 1, signal) =>
+  fetchJson(makeUrl("movie/popular", { page, language: "en-US" }), signal);
+
+export const fetchTopRatedMovies = (page = 1, signal) =>
+  fetchJson(makeUrl("movie/top_rated", { page, language: "en-US" }), signal);
+
+export const fetchNowPlayingMovies = (page = 1, signal) =>
+  fetchJson(makeUrl("movie/now_playing", { page, language: "en-US" }), signal);
+
+export const fetchUpcomingMovies = (page = 1, signal) =>
+  fetchJson(makeUrl("movie/upcoming", { page, language: "en-US" }), signal);
+
+export const fetchTrendingMovies = (
+  window = "week", // "day" | "week"
+  page = 1,
+  signal
+) =>
+  fetchJson(
+    makeUrl(`trending/movie/${window}`, { page, language: "en-US" }),
+    signal
+  );
+
+/* classics = release date ≤ 1980-01-01 */
+export const fetchClassicMovies = (page = 1, signal) =>
+  fetchJson(
     makeUrl("discover/movie", {
       "primary_release_date.lte": "1980-01-01",
       sort_by: "vote_count.desc",
-      page,
-      language: "en-US",
       include_adult: false,
-    }),
-    abortSignal
-  );
-}
-
-/**
- * Movies trending over the last week.
- */
-export function fetchTrendingMovies(window = "week", abortSignal) {
-  return fetchTrending(window, abortSignal);
-}
-
-/**
- * Official “Top Rated” TMDB list.
- */
-export function fetchTopRatedMovies(page = 1, abortSignal) {
-  return fetchJson(
-    makeUrl("movie/top_rated", {
       page,
       language: "en-US",
-    }),
-    abortSignal
-  );
-}
-
-export function fetchNowPlaying(page = 1, abortSignal) {
-  return fetchJson(
-    makeUrl("movie/now_playing", {
-      page,
-      language: "en-US",
-    }),
-    abortSignal
-  );
-}
-
-export function fetchUpcomingMovies(page = 1, abortSignal) {
-  return fetchJson(
-    makeUrl("movie/upcoming", {
-      page,
-      language: "en-US",
-    }),
-    abortSignal
-  );
-}
-
-export function discoverByGenre(genreId, page = 1, signal) {
-  return fetchJson(
-    makeUrl("discover/movie", {
-      with_genres: genreId,
-      sort_by: "popularity.desc",
-      page,
-      language: "en-US",
-      include_adult: false,
     }),
     signal
   );
+
+/* discover by genre or cast/crew ----------------------------------------- */
+
+export const discoverByGenre = (genreId, page = 1, signal) =>
+  fetchJson(
+    makeUrl("discover/movie", {
+      with_genres: genreId,
+      sort_by: "popularity.desc",
+      include_adult: false,
+      page,
+      language: "en-US",
+    }),
+    signal
+  );
+
+export const discoverMovies = ({ cast, crew, genres, page = 1 }, signal) =>
+  fetchJson(
+    makeUrl("discover/movie", {
+      with_cast: cast || undefined,
+      with_crew: crew || undefined,
+      with_genres: genres || undefined,
+      include_adult: false,
+      page,
+      language: "en-US",
+    }),
+    signal
+  );
+
+/* misc single-movie helpers --------------------------------------------- */
+
+export const fetchMovieRecommendations = (id, page = 1, s) =>
+  fetchJson(
+    makeUrl(`movie/${id}/recommendations`, { page, language: "en-US" }),
+    s
+  );
+
+export const fetchMovieReviews = (id, page = 1, s) =>
+  fetchJson(makeUrl(`movie/${id}/reviews`, { page, language: "en-US" }), s);
+
+export const fetchMovieCredits = (id, s) =>
+  fetchJson(makeUrl(`movie/${id}/credits`, { language: "en-US" }), s);
+
+export const fetchMovieVideos = (id, s) =>
+  fetchJson(makeUrl(`movie/${id}/videos`, { language: "en-US" }), s);
+
+export const fetchMovieProviders = (id, region = "HR", s) =>
+  fetchJson(makeUrl(`movie/${id}/watch/providers`), s).then(
+    (j) => j.results?.[region] ?? null
+  );
+
+export const fetchAllMovieProviders = (region = "HR", s) =>
+  fetchJson(makeUrl("watch/providers/movie", { watch_region: region }), s).then(
+    (j) => j.results || []
+  );
+
+/* genres & utility ------------------------------------------------------- */
+
+export const fetchGenres = (s) =>
+  fetchJson(makeUrl("genre/movie/list", { language: "en-US" }), s).then(
+    (j) => j.genres
+  );
+
+export function findDirector(credits) {
+  const crew = credits?.crew ?? credits?.credits?.crew ?? credits ?? [];
+  return crew.find((p) => p.job === "Director") || null;
 }
+
+/* image helpers ---------------------------------------------------------- */
+
+const IMG_BASE = "https://image.tmdb.org/t/p";
+
+export const poster = (p, size = 780) =>
+  p ? `${IMG_BASE}/w${size}${p}` : null;
+export const backdrop = (p, size = 1280) =>
+  p ? `${IMG_BASE}/w${size}${p}` : null;
+export const profileImage = (p, size = 632) =>
+  p ? `${IMG_BASE}/h${size}${p}` : null;
