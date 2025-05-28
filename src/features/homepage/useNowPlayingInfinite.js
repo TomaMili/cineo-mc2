@@ -1,6 +1,8 @@
-import { fetchNowPlaying } from "../../services/apiTmdb";
+import { fetchNowPlayingMovies } from "../../services/apiTmdb";
 import useInfiniteCategory from "./useInfiniteCategory";
 
 export default function useNowPlayingInfinite() {
-  return useInfiniteCategory("now-playing", fetchNowPlaying);
+  return useInfiniteCategory(["nowPlaying"], (page, signal) =>
+    fetchNowPlayingMovies(page, signal)
+  );
 }
