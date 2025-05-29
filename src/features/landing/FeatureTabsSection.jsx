@@ -38,20 +38,20 @@ export default function FeatureTabsSection() {
           Take Control of Your Movie Experience
         </h2>
 
-        <img
+        {/* <img
           src="/brush-stroke-lines-collection.PNG"
           alt="doodle"
           className="absolute -bottom-16 -left-24 w-60 rotate-195"
-        />
+        /> */}
       </div>
 
       <section
         className="text-gray-300 pt-38"
         style={{ minHeight: "400px" }} // lock minimum height
       >
-        <div className="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row gap-12 items-center">
+        <div className="max-w-[1600px] mx-auto px-6 flex flex-col lg:flex-row gap-12 items-center">
           {/* Left Column */}
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-3/7">
             <div className="space-y-4">
               {features.map((feat, idx) => {
                 const isOpen = idx === openIndex;
@@ -103,11 +103,11 @@ export default function FeatureTabsSection() {
           </div>
 
           {/* Right Column */}
-          <div className="w-full lg:w-1/2 flex items-center justify-center">
+          <div className="w-full lg:w-4/7 flex items-center justify-center">
             <img
               src={features[openIndex].image}
               alt={features[openIndex].title}
-              className="w-full max-w-xl rounded-md shadow-[0_0_25px_10px_rgba(255,255,255,0.12)]"
+              className="w-full"
             />
           </div>
         </div>
