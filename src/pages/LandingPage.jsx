@@ -1,57 +1,29 @@
 import { Link } from "react-router-dom";
-import { useRef } from "react";
 import { Icon } from "@iconify-icon/react";
+import Hero from "../features/landing/Hero";
+import Feature from "../features/landing/Feature";
+import FeatureTabsSection from "../features/landing/FeatureTabsSection";
 
 export default function LandingPage() {
-  const firstSectionRef = useRef(null);
-
-  const scrollDown = () =>
-    firstSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   return (
     <main className="w-full overflow-x-hidden">
-      <section className="relative w-full h-[100vh] bg-[url('/bg-image.jpg')] bg-cover bg-center overflow-hidden">
-        <Link
-          to="/login"
-          className="z-60 absolute right-4 top-6 sm:right-10 sm:top-8 bg-bordo-500 hover:bg-bordo-400 text-sm font-semibold px-7 py-3 rounded tracking-wider transition-all duration-300"
-        >
-          LOGIN
-        </Link>
-        <div className="relative z-50 flex flex-col items-center justify-center text-center h-full px-6">
-          <img src="/logo-cineo.svg" alt="CINEO" className="w-1/3 mb-10" />
-          <h2 className="mt-6 mb-4 text-3xl sm:text-4xl font-medium">
-            Your personal AI movie library
-          </h2>
-          <p className="max-w-xl mt-4 leading-relaxed text-2xl font-light text-siva-200">
-            Follow all your movies, ones that you already watched or some that
-            you want to watch, mark your favourites and get personalised
-            suggestions
-          </p>
-          <Link
-            to="/info"
-            className="z-50 relative mt-8 bg-bordo-500 hover:bg-bordo-400 px-10 py-3 rounded-full tracking-wider text-sm font-semibold transition-all duration-300"
-          >
-            JOIN CINEO
-          </Link>
-
-          <button
-            onClick={() =>
-              document
-                .getElementById("track-section")
-                .scrollIntoView({ behavior: "smooth", block: "center" })
-            }
-            className="relative top-15 "
-          >
-            <Icon
-              icon="formkit:arrowdown"
-              width={24}
-              height={24}
-              className=" animate-bounce items-center justify-center rounded-full bg-white p-2 ring-1 ring-gray-900/5 dark:bg-white/5 dark:ring-white/20"
-            />
-          </button>
-        </div>
-      </section>
-
-      <section
+      <Hero />
+      <Feature>
+        {" "}
+        <FeatureTabsSection />
+      </Feature>
+      <img
+        src="/stacked-waves-haikei-1.svg"
+        alt="lines"
+        className="w-full rotate-180"
+      />
+      <img src="/stacked-waves-haikei-2.svg" alt="lines" className="w-full" />
+      <img
+        src="/stacked-waves-haikei-1.svg"
+        alt="lines"
+        className="w-full rotate-180"
+      />
+      {/* <section
         ref={firstSectionRef}
         className="relative bg-black bg-cover bg-center py-24 "
       >
@@ -76,8 +48,8 @@ export default function LandingPage() {
         <div className="absolute -bottom-62 w-screen h-126 overflow-hidden pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-0  via-black/100 to-0 z-20" />
         </div>
-      </section>
-
+      </section> */}
+      {/* 
       <section
         className="
           relative w-full h-[90vh] bg-[url('/bg-image-rotate.JPG')] bg-cover bg-center overflow-hidden"
@@ -136,7 +108,7 @@ export default function LandingPage() {
             JOIN CINEO
           </Link>
         </div>
-      </section>
+      </section> */}
     </main>
   );
 }
