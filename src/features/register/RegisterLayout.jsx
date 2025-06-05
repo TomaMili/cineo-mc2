@@ -61,7 +61,7 @@ export default function RegisterLayout() {
         <div className="flex items-center justify-between">
           <button
             onClick={goBack}
-            className="flex items-center gap-2 text-white/60 hover:text-white disabled:opacity-40 cursor-pointer"
+            className="flex items-center gap-2 px-6 text-white/60 hover:text-white disabled:opacity-40 cursor-pointer"
             disabled={false}
           >
             <Icon icon="mdi:arrow-left-thick" width="24" />
@@ -72,7 +72,7 @@ export default function RegisterLayout() {
             <button
               onClick={goNext}
               disabled={!stepValid}
-              className={`flex items-center gap-2 py-3 rounded-full text-white font-medium transition ${
+              className={`flex items-center gap-2 py-3 px-6 rounded-full text-white font-medium transition ${
                 stepValid
                   ? "bg-bordo-500 hover:bg-bordo-400 cursor-pointer"
                   : "cursor-not-allowed"
