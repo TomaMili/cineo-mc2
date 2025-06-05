@@ -1,0 +1,41 @@
+import { useMemo } from "react";
+
+export default function BlobBackground() {
+  const blobs = useMemo(() => {
+    const count = 3; // how many blobs you want
+    return Array.from({ length: count }).map(() => {
+      const size = Math.floor(Math.random() * 800 + 500); // between 200px and 400px
+      return {
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        width: `${size}px`,
+        height: `${size}px`,
+        // pick a semi‐transparent pastel color (adjust as desired)
+        background: `rgba(126, 20, 19, 0.15)`,
+        blur: Math.floor(Math.random() * 40 + 60), // blur between 60px and 100px
+      };
+    });
+  }, []);
+
+  return (
+    <div className="absolute inset-0 overflow-visible pointer-events-none z-0">
+      {blobs.map((b, i) => (
+        <div
+          key={i}
+          style={{
+            position: "absolute",
+            top: b.top,
+            left: b.left,
+            width: b.width,
+            height: b.height,
+            background: b.background,
+            filter: `blur(${b.blur}px)`,
+            borderRadius: "50%",
+            transform: "translate(-50%, -50%)",
+            opacity: 0.6,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
