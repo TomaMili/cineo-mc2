@@ -14,7 +14,7 @@ export default function DiscoverMoviesSection() {
 
         <section className="text-gray-300 pt-28 z-10">
           <div className="max-w-[1600px] mx-auto px-6 flex flex-col gap-12 items-center">
-            <div className="w-3/4 flex items-center justify-center overflow-hidden z-10">
+            <div className="w-3/5 flex items-center justify-center overflow-hidden z-10">
               <img src={"/article-5.png"} className="w-full rounded-xl" />
             </div>
             <p className="text-white mb-6 font-light text-3xl text-center">
