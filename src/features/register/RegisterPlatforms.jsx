@@ -42,7 +42,7 @@ export default function RegisterPlatforms() {
     );
 
   return (
-    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6  lg:grid-cols-7 xl:grid-cols-8 gap-2">
+    <div className="max-h-[65vh] overflow-auto grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6  lg:grid-cols-7 xl:grid-cols-8 gap-2">
       {allProviders.map((p) => (
         <button
           key={p.id}

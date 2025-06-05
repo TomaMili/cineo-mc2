@@ -52,7 +52,7 @@ export default function RegisterGenres() {
   return (
     <div
       className="
-        flex flex-wrap justify-center gap-6
+        flex flex-wrap justify-center gap-4
         max-h-[65vh] overflow-auto
         px-1 py-2
       "
@@ -71,16 +71,10 @@ export default function RegisterGenres() {
                 selected
                   ? "border-bordo-500 bg-bordo-500/20"
                   : "border-gray-600"
-              }
-              // width breakpoints to mimic your old grid:
-              w-1/2        // 2 cols on very small
-              sm:w-1/3     // 3 cols ≥640px
-              lg:w-1/4     // 4 cols ≥1024px
-              xl:w-1/5     // 5 cols ≥1280px
+              } w-3/7 sm:w-1/3 lg:w-1/4 xl:w-1/5     
             `}
             aria-pressed={selected}
           >
-            {/* circular icon */}
             <span
               className={`
                 flex items-center justify-center w-10 h-10 rounded-full text-2xl

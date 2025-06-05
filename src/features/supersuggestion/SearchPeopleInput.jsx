@@ -5,7 +5,12 @@ import useDebounce from "../../hooks/useDebounce";
 import { searchPeople, fetchGenres } from "../../services/apiTmdb";
 import TagButton from "../../ui/TagButton";
 
-export default function SearchPeopleInput({ type, selected, onSelect }) {
+export default function SearchPeopleInput({
+  type,
+  selected,
+  onSelect,
+  className,
+}) {
   const [q, setQ] = useState("");
   const [deb, setDeb] = useState("");
   useDebounce(() => setDeb(q.trim()), 300, [q]);
@@ -44,7 +49,7 @@ export default function SearchPeopleInput({ type, selected, onSelect }) {
   const suggestions = Array.from(new Set(raw)).slice(0, 5);
 
   return (
-    <div>
+    <div className={className}>
       <input
         value={q}
         onChange={(e) => setQ(e.target.value)}
@@ -52,7 +57,7 @@ export default function SearchPeopleInput({ type, selected, onSelect }) {
         className="w-full border-1 border-bordo-500 mb-2 rounded bg-siva-700/50 py-2 px-4 transition-all duration-300 text-sm placeholder-siva-400 focus:outline-none focus:ring-2 focus:ring-bordo-400"
       />
 
-      <div className="flex flex-wrap gap-2 py-2">
+      <div className="grid gap-2 max-h-full overflow-y-scroll px-10 ">
         {suggestions.length > 0
           ? suggestions.map((s) => (
               <TagButton

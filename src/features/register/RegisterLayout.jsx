@@ -52,7 +52,7 @@ export default function RegisterLayout() {
               initial={{ opacity: 1, y: 2 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="w-full "
+              className="w-full"
             >
               <Outlet />
             </motion.div>
@@ -72,7 +72,7 @@ export default function RegisterLayout() {
             <button
               onClick={goNext}
               disabled={!stepValid}
-              className={`flex items-center gap-2 px-6 py-3 rounded-full text-white font-medium transition ${
+              className={`flex items-center gap-2 py-3 rounded-full text-white font-medium transition ${
                 stepValid
                   ? "bg-bordo-500 hover:bg-bordo-400 cursor-pointer"
                   : "cursor-not-allowed"
@@ -84,11 +84,11 @@ export default function RegisterLayout() {
           )}
         </div>
         {!isLast && (
-          <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center">
+          <div className=" w-fit flex items-center mx-auto">
             {steps.map((_, i) => (
               <div key={i} className="flex items-center">
                 <span
-                  className={`w-6 h-6 rounded-full transition ${
+                  className={`w-4 h-4 lg:w-6 lg:h-6 rounded-full transition ${
                     i <= currentIndex
                       ? "bg-bordo-500"
                       : "border-1 border-white/30"
@@ -96,7 +96,7 @@ export default function RegisterLayout() {
                 />
                 {i < steps.length - 1 && (
                   <span
-                    className={`w-14 h-[1px]  transition ${
+                    className={`w-7 lg:w-14 h-[1px]  transition ${
                       i < currentIndex ? "bg-bordo-500" : "bg-white/30"
                     }`}
                   />

@@ -48,7 +48,7 @@ export default function RegisterPaymentPlan() {
             whileHover={{ scale: 1.03 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className={`
-              cursor-pointer p-6 rounded-lg border-2 flex flex-col justify-between h-120
+              cursor-pointer p-6 rounded-lg border-2 flex flex-col justify-between lg:h-120 h-100
               ${
                 selected
                   ? "border-bordo-500 bg-bordo-500/10"
@@ -57,10 +57,10 @@ export default function RegisterPaymentPlan() {
             `}
           >
             <div className="h-full">
-              <h3 className="text-2xl font-semibold">{p.label}</h3>
-              <p className="mt-2 text-lg text-siva-200">{p.price}</p>
+              <h3 className="text-xl lg:text-2xl font-semibold">{p.label}</h3>
+              <p className="mt-2 text-md lg:text-lg text-siva-200">{p.price}</p>
 
-              <ul className="mt-12 font-light space-y-6 list-none list-inside text-lg text-siva-200">
+              <ul className="mt-6 lg:mt-12 font-light space-y-3 lg:space-y-6 list-none list-inside text-lg text-siva-200">
                 {p.features.map((f) => (
                   <li key={f}>{f}</li>
                 ))}

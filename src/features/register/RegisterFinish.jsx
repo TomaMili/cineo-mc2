@@ -36,7 +36,7 @@ export default function RegisterFinish() {
       className="flex flex-col items-center justify-center min-h-[60vh] px-4"
     >
       <h2 className="text-4xl -mt-8 mb-10 text-white">You are all set!</h2>
-      <p className="text-center text-2xl font-light text-siva-200 max-w-xl mb-14">
+      <p className="text-center text-xl lg:text-2xl font-light text-siva-200 max-w-xl mb-14">
         Rate movies you watched and add movies to your watch later list to
         further personalize your profile
       </p>
