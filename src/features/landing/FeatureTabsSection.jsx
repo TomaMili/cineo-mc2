@@ -7,13 +7,13 @@ import { Icon } from "@iconify-icon/react";
 
 const features = [
   {
-    title: "Discover new movies to watch",
+    title: "Discover new movies",
     description:
       "Browse hand-picked collections, trending titles, and hidden gems—curated just for your taste.",
     image: "/article-1.png",
   },
   {
-    title: "Add them to your watchlists",
+    title: "Add them to watchlists",
     description:
       "Save upcoming releases or classic favorites to your personal watchlists so you never lose track.",
     image: "/article-2.png",
@@ -25,7 +25,7 @@ const features = [
     image: "/article-3.png",
   },
   {
-    title: "AI driven recommendations",
+    title: "AI recommendations",
     description:
       "Let our AI analyze your ratings and watch history to suggest the perfect next movie for you.",
     image: "/article-4.png",

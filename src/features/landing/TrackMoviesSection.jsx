@@ -32,7 +32,7 @@ export default function TrackMoviesSection() {
           <img
             src="/doodle-2.png"
             alt="doodle"
-            className="absolute w-15 lg:w-20 rotate-100 -top-12 lg:-top-15 left-0 lg:-left-20"
+            className="absolute w-15 lg:w-20 rotate-100 -top-12 lg:-top-15 -left-8 lg:-left-20"
           />
           <p className="text-gray-400 mb-6 font-light text-xl lg:text-left text-center lg:text-3xl">
             Keep a record of all the films you’ve watched, rate them, and let AI
