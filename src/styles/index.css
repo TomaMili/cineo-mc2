@@ -63,6 +63,26 @@ body {
   color: white;
 }
 
+.myModal {
+  scrollbar-width: inherit; /* Firefox */
+  scrollbar-color: #b71c1c #6b7280; /* thumb track */
+}
+/* Chrome / Edge */
+.myModal::-webkit-scrollbar {
+  width: 6px;
+}
+.myModal::-webkit-scrollbar-track {
+  background: #6b7280;
+  border-radius: 9999px;
+}
+.myModal::-webkit-scrollbar-thumb {
+  background: #b71c1c;
+  border-radius: 9999px;
+}
+.myModal::-webkit-scrollbar-thumb:hover {
+  background: #b71c1c;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

@@ -8,7 +8,7 @@ export default function TagButton({ label, active, onToggle, className = "" }) {
       animate={{
         opacity: active ? 1 : 0.8,
         backgroundColor: active
-          ? "rgba(153, 27, 27, 0.9)"
+          ? "rgba(153, 27, 27, 0.4)"
           : "rgba(75, 85, 99, 0.4)",
       }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -16,12 +16,12 @@ export default function TagButton({ label, active, onToggle, className = "" }) {
       whileTap={{ scale: 0.95 }}
       className={`
         w-full
-        px-4 py-1.5 rounded-sm text-sm border cursor-pointer truncate
+        px-4 py-1.5 rounded-sm text-sm border-2 cursor-pointer text-clip
         border-siva-400
         ${
           active
-            ? "text-siva-100 border-bordo-400"
-            : "text-white hover:border-siva-300"
+            ? "text-white font-medium border-bordo-400"
+            : "text-siva-100 hover:border-siva-300"
         }
         ${className}
       `}

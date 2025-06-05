@@ -62,7 +62,10 @@ export default function SuperSuggestionPopup({ onClose }) {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
-        className="fixed left-1/2 top-56 -translate-x-1/2 w-full max-w-3xl bg-siva-800 rounded-2xl p-8 z-50 shadow-2xl"
+        className=" myModal fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
+  w-full max-w-3xl
+  max-h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain          
+  bg-siva-800 rounded-2xl p-8 z-50 shadow-2xl"
       >
         <div className="flex mb-6 border-b border-siva-600">
           {["Directors", "Actors", "Genres"].map((t) => (
@@ -71,8 +74,8 @@ export default function SuperSuggestionPopup({ onClose }) {
               onClick={() => setTab(t)}
               className={`flex-1 text-center py-2 font-medium transition cursor-pointer ${
                 t === tab
-                  ? "border-b-4 border-bordo-500 text-white"
-                  : "text-siva-400 hover:text-white"
+                  ? "border-b-4  border-bordo-500 text-siva-100"
+                  : "text-siva-200 hover:text-siva-100"
               }`}
             >
               {t}
@@ -86,8 +89,11 @@ export default function SuperSuggestionPopup({ onClose }) {
           selected={selected}
           onSelect={toggle}
         />
+        <p className="w-full font-medium text-siva-100 mt-2">
+          Picked {tab.toLowerCase()}:
+        </p>
 
-        <div className="grid grid-cols-3 gap-2 mt-6 mb-4">
+        <div className="grid grid-cols-3 gap-2 mt-3 mb-4">
           {selected.map((v) => (
             <TagButton
               key={v}
@@ -98,14 +104,14 @@ export default function SuperSuggestionPopup({ onClose }) {
             />
           ))}
         </div>
-
+        <hr className="w-full h-px bg-white/20" />
         <button
           disabled={!canGenerate}
           onClick={generate}
-          className={`w-full py-3 rounded-full font-semibold transition  ${
+          className={`block w-1/2 py-3 rounded-full font-semibold transition mt-5  mx-auto  ${
             canGenerate
               ? "bg-bordo-500 hover:bg-bordo-400 text-white cursor-pointer"
-              : "bg-siva-700 text-siva-500 cursor-not-allowed"
+              : "bg-siva-300 text-siva-100 cursor-not-allowed"
           }`}
         >
           Generate
