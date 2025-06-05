@@ -25,7 +25,7 @@ const features = [
     image: "/article-3.png",
   },
   {
-    title: "Get AI driven recommendations",
+    title: "AI driven recommendations",
     description:
       "Let our AI analyze your ratings and watch history to suggest the perfect next movie for you.",
     image: "/article-4.png",
@@ -39,13 +39,13 @@ export default function FeatureTabsSection() {
     <Feature>
       <div className="mt-40 h-screen relative overflow-visible mb-20">
         <BlobBackground />
-        <div className="relative block mb-10 w-fit mx-auto z-10">
-          <h2 className="text-7xl font-regular text-white text-center mx-auto">
+        <div className="relative block lg:mb-10 w-fit mx-auto z-10">
+          <h2 className="text-4xl lg:text-7xl px-8 font-regular text-white text-center mx-auto">
             Take Control of Your Movie Experience
           </h2>
         </div>
 
-        <section className="text-gray-300 pt-38 z-10">
+        <section className="text-gray-300 pt-20 lg:pt-38 z-10">
           <div className="max-w-[1600px] mx-auto px-6 flex flex-col lg:flex-row gap-12 items-center">
             <div className="w-full lg:w-3/7">
               <div className="space-y-4">
@@ -66,8 +66,8 @@ export default function FeatureTabsSection() {
                           <span
                             className={`transition-all duration-200 ${
                               isOpen
-                                ? "text-white text-4xl font-semibold"
-                                : "text-gray-300 text-3xl"
+                                ? "text-white text-2xl lg:text-4xl font-semibold"
+                                : "text-gray-300 text-2xl lg:text-3xl"
                             }`}
                           >
                             {feat.title}{" "}
@@ -89,7 +89,7 @@ export default function FeatureTabsSection() {
                               exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.3 }}
                             >
-                              <p className="text-gray-400 font-light text-3xl pt-2">
+                              <p className="text-gray-400 font-light text-xl lg:text-3xl pt-2">
                                 {feat.description}
                               </p>
                             </motion.div>

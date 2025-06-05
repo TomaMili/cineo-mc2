@@ -96,8 +96,8 @@ export default function TestimonialsSection() {
       <section className="mt-10 min-h-screen relative overflow-visible z-10">
         <BlobBackground />
         <div className="w-full mx-auto px-6 text-center">
-          <div className="flex justify-between items-center px-10 mb-10 ">
-            <h2 className="text-6xl font-medium text-white text-left">
+          <div className="flex flex-col gap-10 lg:gap-0 lg:flex-row justify-between items-center lg:px-10 mb-10 ">
+            <h2 className="text-4xl lg:text-6xl font-medium text-white text-left">
               What Our Users Say?
             </h2>
             <Link
@@ -117,14 +117,14 @@ export default function TestimonialsSection() {
               {testimonials.map((t, i) => (
                 <div
                   key={i}
-                  className={`flex-none z-10 w-5/13 bg-siva-300/10 p-10 rounded-[50px] select-none ${
+                  className={`flex-none z-10 w-10/12 lg:w-5/13 bg-siva-300/10 p-8 lg:p-10 rounded-[50px] select-none ${
                     mouseDrag ? "cursor-grabbing" : "cursor-grab"
                   }`}
                   onMouseDown={() => setMouseDrag(true)}
                   onMouseUp={() => setMouseDrag(false)}
                 >
                   <div className="flex flex-col justify-between h-full">
-                    <p className="text-gray-300 font-light text-2xl mb-4">
+                    <p className="text-gray-300 font-light text-md lg:text-2xl mb-4">
                       &ldquo;{t.quote}&rdquo;
                     </p>
                     <div className="flex items-center space-x-3">
