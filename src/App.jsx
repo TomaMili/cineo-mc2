@@ -114,8 +114,18 @@ export default function App() {
         gutter={12}
         containerStyle={{ margin: "8px" }}
         toastOptions={{
-          success: { duration: 3000 },
-          error: { duration: 5000 },
+          style: {
+            background: "#121212",
+            color: "white",
+            border: "none",
+            boxShadow: "0 2px 12px rgba(0, 0, 0, 0.4)",
+          },
+          success: {
+            duration: 3000,
+          },
+          error: {
+            duration: 5000,
+          },
         }}
       />
     </BrowserRouter>
