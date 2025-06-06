@@ -1,22 +1,42 @@
+/* eslint-disable no-unused-vars */
 import { useState, useRef, useEffect } from "react";
 import { Icon } from "@iconify-icon/react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
-// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import useDebounce from "../../hooks/useDebounce";
 import { searchMovies } from "../../services/apiTmdb";
 
-const POSTER_BASE = "https://image.tmdb.org/t/p/w92"; // 92px posters
+const POSTER_BASE = "https://image.tmdb.org/t/p/w92";
 
 export default function SearchBar({ className = "" }) {
   const navigate = useNavigate();
   const location = useLocation();
-
   const inputRef = useRef(null);
 
   const [expanded, setExpanded] = useState(false);
   const [query, setQuery] = useState("");
+
+  const [isMobile, setIsMobile] = useState(
+    window.matchMedia("(max-width: 788px)").matches
+  );
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 788px)");
+    const handler = (e) => setIsMobile(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+
+  useEffect(() => {
+    if (expanded) {
+      document.documentElement.style.overflowX = "hidden";
+    } else {
+      document.documentElement.style.overflowX = "";
+    }
+    return () => {
+      document.documentElement.style.overflowX = "";
+    };
+  }, [expanded]);
 
   const open = () => {
     setExpanded(true);
@@ -59,25 +79,34 @@ export default function SearchBar({ className = "" }) {
 
   useEffect(() => {
     close();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname + location.search]);
+  }, [location.pathname, location.search]);
+
+  const iconLeftClass = expanded && isMobile ? "left-4" : "left-5";
+  const iconRightClass = "right-4";
+
+  const computedWidth = expanded
+    ? isMobile
+      ? "calc(100% - 2rem)"
+      : "min(40rem, 100vw - 2rem)"
+    : "3.5rem";
+
+  const positionClass = "fixed top-4 right-4";
 
   return (
-    <motion.div
-      className={`relative ${className}`}
-      animate={{ width: expanded ? "40%" : "3.5rem" }} /* 14px * 3.5 = 56px */
-      transition={{ type: "spring", stiffness: 260, damping: 26 }}
+    <div
+      className={`${positionClass} z-50 origin-right transition-[width] duration-300 ease-out ${className}`}
+      style={{ width: computedWidth }}
     >
       {!expanded && (
         <button
           onClick={open}
-          className="w-14 h-14 flex items-center justify-center rounded-full cursor-pointer hover:bg-black/20  "
+          className="w-full h-14 flex items-center justify-center rounded-full cursor-pointer hover:bg-black/20 transition"
         >
           <Icon
             icon="jam:search"
             width="36"
             height="36"
-            className="text-white stroke-black stroke-[0.5] "
+            className="text-white"
           />
         </button>
       )}
@@ -91,20 +120,31 @@ export default function SearchBar({ className = "" }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onBlur={() => !query && close()}
-            className="w-full h-14 pl-16 pr-12 rounded-full bg-black/70 text-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-bordo-400"
+            className={`
+              w-full
+              h-14
+              ${isMobile ? "bg-black" : "bg-black/70"}
+              text-lg text-white placeholder-white/40
+              rounded-full
+              pl-16 pr-12
+              focus:outline-none focus:ring-2 focus:ring-bordo-400
+            `}
           />
+
           <Icon
             icon="jam:search"
             width="32"
             height="32"
-            className="absolute left-5 top-1/2 -translate-y-1/2 text-white/75 pointer-events-none"
+            className={`absolute ${iconLeftClass} top-1/2 -translate-y-1/2
+                        text-white/75 pointer-events-none`}
           />
           <Icon
             icon="mdi:close"
             width="22"
             height="22"
             onClick={close}
-            className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer hover:opacity-80"
+            className={`absolute ${iconRightClass} top-1/2 -translate-y-1/2
+                        cursor-pointer hover:opacity-80 text-white/80`}
           />
         </form>
       )}
@@ -117,7 +157,10 @@ export default function SearchBar({ className = "" }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.15 }}
-            className="absolute left-0 top-[calc(100%+0.5rem)] w-full max-h-[32rem] overflow-auto bg-[#0e1512]/95 backdrop-blur-lg rounded-lg shadow-2xl text-white z-50"
+            className="absolute left-0 top-[calc(100%+0.5rem)]
+                       w-full max-h-[32rem] overflow-auto
+                       bg-[#0e1512]/95 backdrop-blur-lg
+                       rounded-lg shadow-2xl text-white z-50"
           >
             {results.map((movie) => (
               <li
@@ -191,6 +234,6 @@ export default function SearchBar({ className = "" }) {
           className="absolute right-6 top-1/2 -translate-y-1/2 animate-spin text-siva-100/70"
         />
       )}
-    </motion.div>
+    </div>
   );
 }
