@@ -41,7 +41,7 @@ function Notification({ className = "", onEmpty }) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -12, scale: 0.97 }}
           transition={{ duration: 0.18, ease: "easeOut" }}
-          className={`absolute top-24 left-6 z-50 w-100 rounded-lg shadow-2xl overflow-hidden bg-[#0e1512]/95 text-siva-100 backdrop-blur-sm ${className}`}
+          className={`absolute top-24 left-6 z-50 w-7/8 sm:w-100 rounded-lg shadow-2xl overflow-hidden bg-[#0e1512]/95 text-siva-100 backdrop-blur-sm ${className}`}
         >
           <AnimatePresence>
             {items.map((item, idx) => (
