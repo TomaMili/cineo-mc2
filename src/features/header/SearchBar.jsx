@@ -94,7 +94,7 @@ export default function SearchBar({ className = "" }) {
 
   return (
     <div
-      className={`${positionClass} z-50 origin-right transition-[width] duration-300 ease-out ${className}`}
+      className={`${positionClass} z-10 origin-right transition-[width] duration-300 ease-out ${className}`}
       style={{ width: computedWidth }}
     >
       {!expanded && (
