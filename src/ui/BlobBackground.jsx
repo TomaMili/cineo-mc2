@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 
-export default function BlobBackground() {
+export default function BlobBackground({ blobNum }) {
   const blobs = useMemo(() => {
-    const count = 3; // how many blobs you want
+    const count = blobNum || 3; // how many blobs you want
     return Array.from({ length: count }).map(() => {
       const size = Math.floor(Math.random() * 800 + 500); // between 200px and 400px
       return {
