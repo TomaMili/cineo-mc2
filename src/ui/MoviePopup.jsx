@@ -98,17 +98,17 @@ export default function MoviePopup({ movie, onClose }) {
               src={poster(data.poster_path)}
               alt={data.title}
               onClick={goToFullPage}
-              className="w-full aspect-2/3 sm:w-60 sm:object-cover cursor-pointer max-[600px]:invisible max-[600px]:absolute "
+              className="w-full aspect-2/3 sm:w-60 sm:object-cover cursor-pointer max-[640px]:invisible max-[640px]:absolute "
             />
           ) : (
             <PosterPlaceholder
               title={data.title}
               onClick={goToFullPage}
-              className="sm:w-60 object-cover cursor-pointer bg-black/20! max-[600px]:invisible"
+              className="sm:w-60 object-cover cursor-pointer bg-black/20! max-[640px]:invisible"
             />
           )}
 
-          <div className="flex-1 p-6 max-[600px]:flex max-[600px]:flex-col max-[600px]:h-full max-[600px]:justify-between  space-y-4 overflow-y-auto max-h-[80vh]">
+          <div className="flex-1 p-6 max-[640px]:flex max-[640px]:flex-col max-[640px]:h-full max-[640px]:justify-between  space-y-4 overflow-y-auto max-h-[80vh]">
             <h2
               className="text-4xl font-medium cursor-pointer"
               onClick={goToFullPage}
@@ -170,7 +170,7 @@ export default function MoviePopup({ movie, onClose }) {
                 onClick={goToFullPage}
                 className="px-4 text-sm rounded cursor-pointer"
               >
-                <div className="flex flex-col items-center pt-10 text-siva-200 font-light">
+                <div className="flex flex-col ml-5 sm:ml-0 items-center pt-10 text-siva-200 font-light">
                   <p>SHOW MORE</p>
                   <Icon
                     icon="weui:arrow-filled"
