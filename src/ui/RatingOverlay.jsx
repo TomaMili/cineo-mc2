@@ -1,10 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "@iconify-icon/react";
 
 export default function RatingOverlay({ onRate, onRateLater, onClose }) {
   const [hovered, setHovered] = useState(0);
 
   const close = onClose ?? onRateLater;
+
+  const [isMobile, setIsMobile] = useState(
+    window.matchMedia("(max-width: 1050px)").matches
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 1050px)");
+    const handler = (e) => setIsMobile(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
 
   return (
     <div
@@ -30,8 +41,8 @@ export default function RatingOverlay({ onRate, onRateLater, onClose }) {
                     ? "material-symbols:star-rounded"
                     : "material-symbols:star-outline-rounded"
                 }
-                width="34"
-                height="34"
+                width={isMobile ? "22" : "34"}
+                height={isMobile ? "22" : "34"}
                 className="text-yellow-400 rounded-lg"
               />
             </button>
@@ -40,7 +51,7 @@ export default function RatingOverlay({ onRate, onRateLater, onClose }) {
 
         <button
           onClick={onRateLater}
-          className="bg-bordo-500 cursor-pointer text-white px-6 py-2 rounded-full hover:bg-bordo-400 transition"
+          className="bg-bordo-500 cursor-pointer text-sm sm:text-md text-white px-3 sm:px-6 py-2 rounded-full hover:bg-bordo-400 transition"
         >
           Rate later
         </button>
