@@ -52,7 +52,7 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
   };
 
   return (
-    <div className="group relative w-82 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3]">
+    <div className="group relative w-32 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3]">
       {movie.poster_path ? (
         <img
           src={poster(movie.poster_path, 342)}
@@ -72,7 +72,7 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
       ) : (
         <div
           onClick={handlePosterClick}
-          className="w-full h-full bg-gray-700 flex items-center justify-center text-sm cursor-pointer"
+          className="w-full h-full bg-gray-700 flex items-center justify-center text-sm cursor-pointer "
         >
           {movie.title}
         </div>
@@ -101,15 +101,15 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
           onClick={handlePosterClick}
           className="lg:text-sm text-lg font-medium line-clamp-1 mr-1 hover:text-bordo-400 cursor-pointer"
         >
-          {movie.title}
+          <span className="hidden sm:inline text-sm">{movie.title}</span>
         </p>
 
         {!hideActions && (
-          <div className="flex gap-2 flex-shrink-0">
+          <div className="sm:flex hidden gap-2 flex-shrink-0">
             <button
               title={watched ? "Remove from Watched" : "Mark watched"}
               onClick={handleEye}
-              className=" hover:text-bordo-400 cursor-pointer"
+              className="hover:text-bordo-400 cursor-pointer"
             >
               <Icon
                 icon={watched ? "mdi:eye-check" : "mdi:eye-plus-outline"}

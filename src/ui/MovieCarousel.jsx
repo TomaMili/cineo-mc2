@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import usePrevNextButtons, {
   PrevButton,
@@ -36,6 +36,17 @@ export default function MovieCarousel({
     return () => emblaApi.off("select", selectHandler);
   }, [emblaApi, onReachEnd, slides.length]);
 
+  const [isMobile, setIsMobile] = useState(
+    window.matchMedia("(max-width: 1050px)").matches
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 1050px)");
+    const handler = (e) => setIsMobile(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+
   const {
     prevBtnDisabled,
     nextBtnDisabled,
@@ -45,16 +56,21 @@ export default function MovieCarousel({
 
   return (
     <section className="relative overflow-visible z-10">
-      <PrevButton
-        disabled={prevBtnDisabled}
-        onClick={onPrevButtonClick}
-        className="absolute -left-6 top-1/2 -translate-y-1/2 -translate-x-1/2"
-      />
-      <NextButton
-        disabled={nextBtnDisabled}
-        onClick={onNextButtonClick}
-        className="absolute -right-6 top-1/2 -translate-y-1/2 translate-x-1/2"
-      />
+      {!isMobile && (
+        <PrevButton
+          disabled={prevBtnDisabled}
+          onClick={onPrevButtonClick}
+          className="sm:absolute -left-6 top-1/2 -translate-y-1/2 -translate-x-1/2"
+        />
+      )}
+
+      {!isMobile && (
+        <NextButton
+          disabled={nextBtnDisabled}
+          onClick={onNextButtonClick}
+          className="sm:absolute -right-6 top-1/2 -translate-y-1/2 translate-x-1/2"
+        />
+      )}
 
       <div
         ref={emblaRef}
@@ -66,7 +82,7 @@ export default function MovieCarousel({
             movie ? (
               <div
                 key={`${movie.id}-${idx}`}
-                className="flex-none w-82 sm:w-44 lg:w-48 xl:w-52 transform-gpu"
+                className="flex-none w-28 sm:w-44 lg:w-48 xl:w-52 transform-gpu"
               >
                 <MovieCard
                   movie={movie}
