@@ -57,16 +57,12 @@ export default function WatchLaterList({
       {Object.entries(groups).map(([groupKey, items]) => (
         <section key={groupKey} className="mb-12">
           {groupKey && (
-            <h2 className="text-3xl font-normal text-siva-100 mb-4">
+            <h2 className="text-2xl lg:text-3xl font-normal text-siva-100 mb-4">
               {groupKey}
             </h2>
           )}
 
-          <div
-            className="grid gap-6 gap-y-10
-          grid-cols-2 min-[570px]:grid-cols-3 min-[770px]:grid-cols-4 min-[1100px]:grid-cols-5 min-[1400px]:grid-cols-6
-          min-[1670px]:grid-cols-7 min-[1860px]:grid-cols-8"
-          >
+          <div className="flex gap-3 lg:gap-6 flex-nowrap sm:flex-wrap overflow-auto">
             {items.map((movie) => (
               <WatchLaterItem
                 key={movie.id}
