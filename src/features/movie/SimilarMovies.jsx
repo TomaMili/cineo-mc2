@@ -37,8 +37,8 @@ export default function SimilarMoviesSection({
     );
 
   return (
-    <section className="mt-16 mx-[calc(2rem+2vw)] md:mx-[calc(2rem+3vw)] pb-14 px-6">
-      <h2 className="text-3xl font-normal tracking-wide mb-3 text-siva-100 px-4 uppercase">
+    <section className="mt-16 sm:mx-[calc(2rem+2vw)] md:mx-[calc(2rem+3vw)] pb-14 px-6">
+      <h2 className="text-2xl lg:text-3xl font-normal tracking-wide mb-3 text-siva-100 px-1 lg:px-4 uppercase">
         {title}
       </h2>
 
