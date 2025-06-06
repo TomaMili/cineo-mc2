@@ -49,12 +49,12 @@ function Navigation({ isNavActive, setIsNavActive }) {
       <nav
         className={`
           fixed inset-y-0 left-0 lg:w-64 w-full
-          text-siva-200 lg:text-lg text-xl
+          text-siva-200 lg:text-2xl text-xl
           transform transition-all duration-300 ease-in-out z-20
           ${isNavActive ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="flex flex-col items-start  h-full bg-siva-800 text-3xl lg:text-xl pt-6 pb-6 px-10 lg:px-5">
+        <div className="flex flex-col items-start  h-full bg-siva-800 text-2xl lg:text-xl pt-6 pb-6 px-6 lg:px-6 ">
           <div className="flex items-center justify-center min-w-[30px] min-h-[30px] h-10 mb-6">
             <IconWithSkeleton
               icon="mdi:menu"
