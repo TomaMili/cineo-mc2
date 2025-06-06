@@ -91,7 +91,7 @@ export default function Section({ title, movies, emptyMessage }) {
   }
 
   return (
-    <div className="mb-20">
+    <div className="mb-10 lg:mb-20">
       <h2 className="text-3xl">{title}</h2>
       <MovieCarousel
         slides={displaySlides}

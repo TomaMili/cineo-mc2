@@ -4,7 +4,7 @@ function HeroSection() {
   const { show } = useSuperSuggest();
 
   return (
-    <div className="relative w-full text-white z-0 h-2/3 px-10">
+    <div className="relative w-full text-white z-0 h-1/2 lg:h-2/3 px-10">
       <picture className="absolute inset-0 z-0 w-full h-full">
         <source srcSet="/bg-image.jpg" type="image/jpg" />
         <source srcSet="/bg-image.avif" type="image/avif" />
@@ -17,7 +17,7 @@ function HeroSection() {
           fetchpriority="high"
         />
       </picture>
-      <div className="flex flex-col items-center gap-6 z-1 -mt-24 pb-28 ">
+      <div className="flex flex-col items-center gap-6 z-1 -mt-24 pb-10 lg:pb-28 ">
         <img
           src="/logo-cineo.svg"
           alt="logo"
