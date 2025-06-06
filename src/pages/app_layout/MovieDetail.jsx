@@ -71,7 +71,7 @@ export default function MovieDetail() {
       <MovieHero details={details} director={director} providers={providers} />
 
       <TrailerSection youtubeKey={youtubeKey} />
-      <hr className="mb-30 border-0.5 border-siva-300/30 mx-10" />
+      <hr className="mb-20 lg:mb-30 border-0.5 border-siva-300/30 mx-4 lg:mx-10" />
       <CastSection slides={details.credits?.cast ?? []} />
       <ReviewsSection reviews={reviews?.results ?? []} />
       <SimilarMoviesSection movieId={movieId} />
