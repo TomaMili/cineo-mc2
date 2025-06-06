@@ -91,7 +91,7 @@ export default function MovieHero({ details, director, providers }) {
         </div>
       )}
 
-      <div className="z-10 w-full mx-2 md:mx-[calc(2rem+3vw)] pb-12 lg:pb-30 px-6 mt-30 flex flex-col justify-between">
+      <div className="z-10 w-full md:mx-[calc(2rem+3vw)] pb-12 lg:pb-30 px-6 mt-30 flex flex-col justify-between">
         <div>
           <ul className="flex mt-5 mb-4 flex-wrap">
             {genreChips.map((g) => (
@@ -121,25 +121,31 @@ export default function MovieHero({ details, director, providers }) {
                 icon="ic:round-star"
                 width="22"
                 height="22"
-                className="text-yellow-400 mb-1"
+                className="text-yellow-400 mb-0.5"
               />
               <span className="font-semibold">{rating}</span>
-              <span className="text-siva-300">/10</span>
+              <span className="text-siva-300">/ 10</span>
             </span>
           </div>
 
           <div className="mt-2 flex gap-4">
             {runtime > 0 && (
-              <span className="flex items-center gap-2">
-                <Icon icon="akar-icons:clock" width="22" height="22" />
+              <span className="flex items-center gap-2 text-sm lg:text-md">
+                <Icon
+                  icon="akar-icons:clock"
+                  width="22"
+                  height="22"
+                  className="mb-0.5"
+                />
                 {hours}h&nbsp;{minutes}m
               </span>
             )}
-            <span className="flex items-center gap-2">
+            <span className="flex items-center gap-2 text-sm lg:text-md">
               <Icon
                 icon="material-symbols-light:movie-edit-outline"
                 width="28"
                 height="28"
+                className="mb-0.5"
               />
               {director && <p>{director.name}</p>}
             </span>
@@ -177,7 +183,7 @@ export default function MovieHero({ details, director, providers }) {
                 width={isMobile ? "28" : "38"}
                 height={isMobile ? "28" : "38"}
               />
-              <span className="text-xl sm:text-2xl mt-1">Notify me</span>
+              <span className="text-lg sm:text-2xl mt-1">Notify me</span>
             </button>
 
             <div className="flex gap-2">
