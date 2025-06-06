@@ -82,7 +82,9 @@ export default function Section({ title, movies, emptyMessage }) {
     if (!isInfinite && emptyMessage) {
       return (
         <div className="h-[270px]">
-          <h2 className="text-3xl font-medium mt-20 first:mt-0">{title}</h2>
+          <h2 className="text-2xl lg:text-3xl font-medium mt-20 first:mt-0">
+            {title}
+          </h2>
           <p className="mt-4 text-center text-siva-200">{emptyMessage}</p>
         </div>
       );
@@ -92,7 +94,7 @@ export default function Section({ title, movies, emptyMessage }) {
 
   return (
     <div className="mb-10 lg:mb-20">
-      <h2 className="text-3xl">{title}</h2>
+      <h2 className="text-2xl lg:text-3xl">{title}</h2>
       <MovieCarousel
         slides={displaySlides}
         options={{ align: "start", containScroll: "trimSnaps" }}

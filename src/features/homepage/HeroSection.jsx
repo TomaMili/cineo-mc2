@@ -17,7 +17,7 @@ function HeroSection() {
           fetchpriority="high"
         />
       </picture>
-      <div className="flex flex-col items-center gap-6 z-1 -mt-24 pb-10 lg:pb-28 ">
+      <div className="flex flex-col items-center gap-6 z-1 -mt-24 pb-100000000000000000000000 lg:pb-28 ">
         <img
           src="/logo-cineo.svg"
           alt="logo"

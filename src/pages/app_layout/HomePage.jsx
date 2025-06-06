@@ -145,7 +145,7 @@ export default function HomePage() {
         ))}
       </main>
       <div className="max-w-lg px-18 mx-auto flex flex-col items-center gap-6 mb-30">
-        <p className="text-4xl font-light text-center">
+        <p className="text-2xl lg:text-4xl font-light text-center">
           Still can’t find anything to watch?
         </p>
         <button
@@ -156,9 +156,8 @@ export default function HomePage() {
         </button>
       </div>
 
-      <footer className="bg-cover bg-[url('/bg-image.jpg')] bg-center text-siva-200 py-8 text-center text-sm font-light">
+      <footer className="bg-cover bg-[url('/bg-image.jpg')] bg-center text-siva-200 py-6 text-center text-sm font-light">
         <p>© 2025 Cineo. All rights reserved.</p>
-        <p>Made with ❤️ by the Cineo Team</p>
       </footer>
     </>
   );
