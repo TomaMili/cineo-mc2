@@ -45,7 +45,7 @@ export default function Collections() {
   if (isLoading)
     return (
       <>
-        <div className="w-full mx-auto px-6 pt-6">
+        <div className="w-full mx-auto px-3 sm:px-6 sm:pt-6 text-sm sm:text-md font-light">
           <TabNav
             tabs={[
               ["../watchlater", "Watch later"],
@@ -62,7 +62,7 @@ export default function Collections() {
 
   return (
     <div className="min-h-screen  text-siva-100 pb-12">
-      <div className="px-6 pt-6">
+      <div className="w-full mx-auto px-3 sm:px-6 sm:pt-6 text-sm sm:text-md font-light">
         <TabNav
           tabs={[
             ["../watchlater", "Watch later"],
@@ -72,10 +72,10 @@ export default function Collections() {
         />
       </div>
 
-      <div className="flex justify-end gap-4 mt-4 px-10">
+      <div className="w-full mx-auto flex justify-end items-center gap-4 mt-2 sm:mt-4 px-3 sm:px-6">
         <button
           onClick={() => setShowNew(true)}
-          className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 cursor-pointer text-white"
+          className="bg-bordo-500 hover:bg-bordo-400 px-3 sm:px-4 py-1.5 sm:py-2.5 rounded flex items-center gap-2 cursor-pointer transition-all duration-300 text-sm sm:text-md"
         >
           <Icon icon="mdi:plus" /> New Collection
         </button>

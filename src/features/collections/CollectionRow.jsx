@@ -41,7 +41,9 @@ export default function CollectionRow({
   return (
     <div className="mb-18">
       <div className="flex items-center gap-6 mb-3 bg-siva-700 rounded-lg">
-        <h1 className="text-3xl font-normal mb-1">{collection.name}</h1>
+        <h1 className="text-2xl lg:text-3xl font-normal mb-1">
+          {collection.name}
+        </h1>
         <div className="flex gap-2">
           <button
             onClick={() => onShareCollection?.(collection)}
