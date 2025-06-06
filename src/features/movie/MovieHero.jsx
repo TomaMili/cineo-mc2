@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { backdrop } from "../../services/apiTmdb";
 import { Icon } from "@iconify-icon/react";
 
@@ -59,9 +59,20 @@ export default function MovieHero({ details, director, providers }) {
     setShowRating(false);
   };
 
+  const [isMobile, setIsMobile] = useState(
+    window.matchMedia("(max-width: 1050px)").matches
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 1050px)");
+    const handler = (e) => setIsMobile(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+
   return (
     <header
-      className="relative isolate h-[95vh] -mt-24  text-white flex bg-black"
+      className="relative isolate min-h-[105dvh] -mt-24 text-white flex bg-black"
       style={{
         backgroundImage: `url(${backdrop(backdrop_path)})`,
         backgroundSize: "cover",
@@ -80,20 +91,20 @@ export default function MovieHero({ details, director, providers }) {
         </div>
       )}
 
-      <div className="z-10 w-full mx-[calc(2rem+2vw)] md:mx-[calc(2rem+3vw)] pb-30 px-6 mt-30 flex flex-col justify-between">
+      <div className="z-10 w-full mx-2 md:mx-[calc(2rem+3vw)] pb-12 lg:pb-30 px-6 mt-30 flex flex-col justify-between">
         <div>
           <ul className="flex mt-5 mb-4 flex-wrap">
             {genreChips.map((g) => (
               <li
                 key={g.id}
-                className="pr-3 py-1 rounded-lg font-normal text-md"
+                className="pr-3 py-1 rounded-lg font-normal text-sm lg:text-md"
               >
                 {g.name}
               </li>
             ))}
           </ul>
 
-          <span className="font-medium text-6xl sm:text-8xl drop-shadow-lg gap-2 flex items-start">
+          <span className="font-medium text-4xl sm:text-8xl drop-shadow-lg gap-2 flex items-start">
             <h1>{title}</h1>
             <Icon
               icon="gridicons:share"
@@ -103,7 +114,7 @@ export default function MovieHero({ details, director, providers }) {
             />
           </span>
 
-          <div className="flex items-center flex-wrap gap-4 text-sm sm:text-base mt-8">
+          <div className="flex items-center flex-wrap gap-4 text-sm sm:text-base mt-4 lg:mt-8">
             <span>{year}</span>
             <span className="flex items-center gap-1">
               <Icon
@@ -135,12 +146,12 @@ export default function MovieHero({ details, director, providers }) {
           </div>
 
           {overview && (
-            <p className="italic text-2xl font-light text-white mt-6 max-w-2/3">{`"${overview}"`}</p>
+            <p className="italic text-md lg:text-2xl font-light text-white mt-6 w-full lg:max-w-2/3">{`"${overview}"`}</p>
           )}
         </div>
 
-        <div className="flex gap-4 justify-between">
-          <ul className="flex flex-wrap mt-5 mb-4">
+        <div className="flex flex-col lg:flex-row gap-4 justify-between">
+          <ul className="flex flex-wrap mt-20 lg:mt-5 mb-4">
             <li className="pr-3 py-1 rounded-lg text-md text-white font-light">
               {providersList.length > 0
                 ? "Platforms:"
@@ -149,47 +160,57 @@ export default function MovieHero({ details, director, providers }) {
             {providersList.map((p) => (
               <li
                 key={p.provider_id}
-                className="pr-3 py-1 rounded-lg text-md font-normal"
+                className="pr-3 py-1 rounded-lg lg:text-md font-normal "
               >
                 {p.provider_name}
               </li>
             ))}
           </ul>
 
-          <div className="flex gap-5 items-end mb-1">
+          <div className="flex justify-between gap-10 items-end mb-1">
             <button
               title="Notify me"
-              className="text-white gap-1 backdrop-blur-xl hover:text-bordo-400 transition-all cursor-pointer flex h-14 leading-0 rounded-lg w-40 pl-1.5 items-center bg-white/3"
-            >
-              <Icon icon="mdi:bell-outline" width="38" height="38" />
-              <span className="text-2xl mt-1">Notify me</span>
-            </button>
-
-            <button
-              title={watched ? "Remove from Watched" : "Mark watched"}
-              onClick={handleEye}
-              className="text-white hover:text-bordo-400 cursor-pointer h-14 leading-0 rounded-lg w-14 backdrop-blur-xl transition-all bg-white/3"
+              className="text-white gap-1 backdrop-blur-xl hover:text-bordo-400 transition-all cursor-pointer flex h-12 sm:h-14 leading-0 rounded-lg sm:w-40 px-2.5 items-center bg-white/3"
             >
               <Icon
-                icon={watched ? "mdi:eye-check" : "mdi:eye-plus-outline"}
-                width="38"
-                height="38"
+                icon="mdi:bell-outline"
+                width={isMobile ? "28" : "38"}
+                height={isMobile ? "28" : "38"}
               />
+              <span className="text-xl sm:text-2xl mt-1">Notify me</span>
             </button>
 
-            <button
-              title={savedWL ? "Remove from Watch-Later" : "Add to Watch-Later"}
-              onClick={() => toggleWL(details, savedWL)}
-              className="text-white hover:text-bordo-400 cursor-pointer h-14 leading-0 backdrop-blur-xl transition-all bg-white/3 w-14 rounded-lg"
-            >
-              <Icon
-                icon={
-                  savedWL ? "material-symbols:bookmark" : "mdi:bookmark-outline"
+            <div className="flex gap-2">
+              <button
+                title={watched ? "Remove from Watched" : "Mark watched"}
+                onClick={handleEye}
+                className="text-white hover:text-bordo-400 cursor-pointer h-12 sm:h-14 leading-0 rounded-lg w-12 lg:w-14 backdrop-blur-xl transition-all bg-white/3"
+              >
+                <Icon
+                  icon={watched ? "mdi:eye-check" : "mdi:eye-plus-outline"}
+                  width={isMobile ? "28" : "38"}
+                  height={isMobile ? "28" : "38"}
+                />
+              </button>
+
+              <button
+                title={
+                  savedWL ? "Remove from Watch-Later" : "Add to Watch-Later"
                 }
-                width="38"
-                height="38"
-              />
-            </button>
+                onClick={() => toggleWL(details, savedWL)}
+                className="text-white hover:text-bordo-400 cursor-pointer h-12 sm:h-14 leading-0 backdrop-blur-xl transition-all bg-white/3 w-12 lg:w-14 rounded-lg"
+              >
+                <Icon
+                  icon={
+                    savedWL
+                      ? "material-symbols:bookmark"
+                      : "mdi:bookmark-outline"
+                  }
+                  width={isMobile ? "28" : "38"}
+                  height={isMobile ? "28" : "38"}
+                />
+              </button>
+            </div>
           </div>
         </div>
       </div>
