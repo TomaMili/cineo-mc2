@@ -81,7 +81,7 @@ export default function Collections() {
         </button>
       </div>
 
-      <section className="px-6 my-8.5">
+      <section className="px-4 sm:px-6 my-8.5">
         <CollectionsList
           collections={collections}
           onCreateCollection={(name) => createCollection.mutate({ name })}
