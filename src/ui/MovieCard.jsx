@@ -52,7 +52,8 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
   };
 
   return (
-    <div className="group relative w-32 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3]">
+    // <div className="group relative w-32 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3]">
+    <div className="group relative w-full aspect-[2/3] md:max-w-[200px] sm:max-w-none">
       {movie.poster_path ? (
         <img
           src={poster(movie.poster_path, 342)}
@@ -61,7 +62,7 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
             ${poster(movie.poster_path, 342)} 342w,
             ${poster(movie.poster_path, 500)} 500w
           `}
-          sizes="(max-width: 640px) 50vw, 20vw"
+          sizes="(max-width: 640px) 12vw,"
           alt={movie.title}
           onMouseEnter={prefetch}
           onClick={handlePosterClick}
