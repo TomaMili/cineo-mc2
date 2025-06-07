@@ -15,7 +15,7 @@ export default function NewCollectionModal({
     <AnimatePresence>
       <motion.div
         key="backdrop"
-        className="fixed inset-0 z-50 flex items-center justify-center"
+        className="fixed inset-0 z-50 flex items-center justify-center px-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -30,7 +30,7 @@ export default function NewCollectionModal({
 
         <motion.div
           key="modal"
-          className="relative bg-siva-800 rounded-xl shadow-2xl w-full max-w-md p-6"
+          className="relative bg-siva-800/99 rounded-xl shadow-2xl w-full max-w-md p-6"
           initial={{ y: -30, scale: 0.9, opacity: 0 }}
           animate={{ y: 0, scale: 1, opacity: 1 }}
           exit={{ y: -30, scale: 0.9, opacity: 0 }}
@@ -43,7 +43,7 @@ export default function NewCollectionModal({
             <Icon icon="gridicons:cross-circle" width={28} height={28} />
           </button>
 
-          <h2 className="text-2xl font-semibold text-siva-100 mb-4">
+          <h2 className="text-xl font-medium text-siva-100 mb-4">
             New Collection
           </h2>
 
@@ -53,7 +53,7 @@ export default function NewCollectionModal({
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="mt-1 w-full px-4 py-2 bg-siva-700 rounded-lg ring-1 focus:outline-none focus:ring-2 focus:ring-bordo-400 text-siva-300 placeholder-siva-400"
+              className="mt-1 w-full px-4 py-2 font-light bg-siva-700 rounded-lg ring-1 focus:outline-none focus:ring-2 focus:ring-bordo-400 text-siva-300 placeholder-siva-400"
               placeholder="My Sci-Fi Faves"
             />
           </label>
@@ -63,7 +63,7 @@ export default function NewCollectionModal({
               onClick={onCancel}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="px-5 py-2 bg-siva-300 hover:bg-siva-200  text-siva-800 rounded-lg transition cursor-pointer"
+              className="bg-gray-700 hover:bg-gray-700 px-3 sm:px-4 py-1 sm:py-2 rounded transition-colors duration-300 cursor-pointer text-sm sm:text-md"
             >
               Cancel
             </motion.button>
@@ -73,11 +73,11 @@ export default function NewCollectionModal({
               disabled={!name.trim()}
               whileHover={name.trim() ? { scale: 1.03 } : {}}
               whileTap={name.trim() ? { scale: 0.97 } : {}}
-              className={`px-5 py-2 rounded-lg transition
+              className={`px-3 sm:px-4 py-1 sm:py-2 rounded transition-colors duration-300 text-sm sm:text-md
                 ${
                   name.trim()
                     ? "bg-bordo-500 hover:bg-bordo-400 text-white cursor-pointer"
-                    : "bg-bordo-500/50 text-siva-400 cursor-not-allowed"
+                    : "bg-bordo-500/20 text-siva-400 cursor-not-allowed"
                 }`}
             >
               Create
