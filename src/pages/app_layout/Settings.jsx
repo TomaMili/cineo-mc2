@@ -27,7 +27,7 @@ export default function Settings() {
         className="w-full bg-cover bg-center -mt-24 "
         style={{ backgroundImage: "url(/bg-image.jpg)" }}
       >
-        <h1 className="text-4xl font-bold text-white text-center pt-10 pb-40 mb-8">
+        <h1 className="text-4xl font-medium text-white text-center pt-26 sm:pt-10 sm:pb-40 mb-8">
           SETTINGS
         </h1>
         <div className="flex justify-center items-end">
@@ -35,8 +35,8 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="bg-siva-800 pt-12 pb-12">
-        <nav className="max-w-3xl mx-auto flex bg-gray-500/40  rounded-full overflow-hidden mb-20">
+      <div className="bg-siva-800 pt-12 pb-12 sm:px-0 px-4">
+        <nav className="max-w-3xl mx-auto flex bg-gray-500/40  rounded-full overflow-hidden mb-20 text-sm sm:text-md">
           {[
             ["info", "Info & Password"],
             ["platforms", "Platforms"],
@@ -59,7 +59,7 @@ export default function Settings() {
           ))}
         </nav>
 
-        <div className="max-w-6xl mx-auto  rounded-lg p-6">
+        <div className="w-full sm:max-w-6xl mx-auto  rounded-lg sm:p-6">
           <Outlet />
         </div>
       </div>

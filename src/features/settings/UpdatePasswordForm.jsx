@@ -31,7 +31,7 @@ export default function UpdatePasswordForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <h2 className="text-xl font-semibold">Change Password</h2>
+      <h2 className="sm:text-xl font-medium">Change Password</h2>
 
       <AnimatePresence mode="wait" key="update-password-form">
         <motion.div
@@ -40,7 +40,7 @@ export default function UpdatePasswordForm() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <label htmlFor="password" className="block font-medium">
+          <label htmlFor="password" className="block text-sm sm:text-md">
             New password (min 8 chars)
           </label>
           <input
@@ -75,7 +75,7 @@ export default function UpdatePasswordForm() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <label htmlFor="passwordConfirm" className="block font-medium">
+          <label htmlFor="passwordConfirm" className="block text-sm sm:text-md">
             Confirm password
           </label>
           <input
@@ -108,14 +108,14 @@ export default function UpdatePasswordForm() {
           type="button"
           onClick={() => reset()}
           disabled={isSubmitting}
-          className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600 cursor-pointer transition-all duration-300"
+          className="bg-gray-700 hover:bg-gray-700 px-3 sm:px-4 py-1 sm:py-2 rounded flex items-center gap-2 transition-colors duration-300 cursor-pointer text-sm sm:text-md"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="px-4 py-2 bg-bordo-500 rounded hover:bg-bordo-400 text-white cursor-pointer transition-all duration-300"
+          className="bg-bordo-500 hover:bg-bordo-400 px-3 sm:px-4 py-1 sm:py-2 rounded flex items-center gap-2 transition-colors duration-300 cursor-pointer text-sm sm:text-md"
         >
           {isSubmitting ? "Updating…" : "Update Password"}
         </button>

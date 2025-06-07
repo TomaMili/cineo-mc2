@@ -52,7 +52,7 @@ export default function SettingsPlatforms() {
   return (
     <div
       className={`
-        flex flex-wrap justify-center gap-6 overflow-auto px-1 py-2
+        grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8  lg:grid-cols-9 xl:grid-cols-10 gap-2 overflow-auto px-1 py-2
         ${isUpdating ? "opacity-50 pointer-events-none" : ""}
       `}
     >

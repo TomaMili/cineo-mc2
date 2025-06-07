@@ -66,7 +66,7 @@ export default function SettingsPlan() {
 
   return (
     <div
-      className={`flex flex-row justify-center gap-8 h-[50vh] ${
+      className={`grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-50 h-full px-8 ${
         isUpdating ? "opacity-50 pointer-events-none" : ""
       }`}
     >
@@ -79,7 +79,7 @@ export default function SettingsPlan() {
             whileHover={{ scale: 1.03 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className={`
-              cursor-pointer h-full p-6 rounded-lg border-2 flex flex-col justify-between  w-1/3
+              cursor-pointer p-6 rounded-lg border-2 flex flex-col justify-between  h-100
               ${
                 isSelected
                   ? "border-bordo-500 bg-bordo-500/10"
