@@ -91,7 +91,7 @@ export default function MovieHero({ details, director, providers }) {
         </div>
       )}
 
-      <div className="z-10 w-full md:mx-[calc(2rem+3vw)] pb-12 lg:pb-30 px-6 mt-30 flex flex-col justify-between">
+      <div className="z-10 w-full md:mx-[calc(2rem+3vw)] pb-12 lg:pb-30 px-6 mt-28 sm:mt-30 flex flex-col justify-between">
         <div>
           <ul className="flex mt-5 mb-4 flex-wrap">
             {genreChips.map((g) => (
