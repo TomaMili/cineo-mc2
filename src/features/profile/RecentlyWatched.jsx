@@ -11,12 +11,16 @@ export default function RecentlyWatched() {
   if (isLoading) return null;
 
   return (
-    <section className="max-w-6xl mx-auto mt-12 pb-10 text-siva-100">
-      <h3 className="text-3xl font-normal mb-6 ml-9">RECENTLY WATCHED</h3>
+    <section className="sm:max-w-6xl mx-auto mt-22 pb-10 text-siva-100">
+      <h3 className="text-2xl sm:text-3xl font-normal mb-4 sm:mb-6 ml-4 sm:ml-9">
+        RECENTLY WATCHED
+      </h3>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 justify-items-center">
+      <div className="flex justify-around gap-3 px-4 sm:px-0 lg:gap-6 flex-nowrap sm:flex-wrap overflow-auto">
         {movies.map((m) => (
-          <MovieCard key={m.id} movie={m} hideActions />
+          <div>
+            <MovieCard key={m.id} movie={m} hideActions />
+          </div>
         ))}
       </div>
     </section>

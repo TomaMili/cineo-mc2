@@ -52,7 +52,7 @@ export default function Favorites() {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto my-12 grid grid-cols-1 md:grid-cols-3 gap-y-8 justify-items-center text-center text-siva-100">
+    <div className="max-w-5xl mx-auto my-12  z-40 flex justify-evenly flex-wrap gap-y-8 justify-items-center text-center text-siva-100 px-4 gap-4 lg:pt-20">
       {items.map(({ title, name, count, img, isPerson }) => (
         <div key={title} className="space-y-2">
           <h4 className="text-lg font-semibold">{title}</h4>
@@ -62,7 +62,7 @@ export default function Favorites() {
               img ? (isPerson ? profileImage(img) : poster(img)) : PLACEHOLDER
             }
             alt={name}
-            className="mx-auto w-48 h-64 object-cover rounded-lg"
+            className="mx-auto w-38 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3] object-cover rounded-lg"
           />
 
           <p className="mt-1 font-medium">{name}</p>

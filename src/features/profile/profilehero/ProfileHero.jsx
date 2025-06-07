@@ -32,23 +32,30 @@ export default function ProfileHero() {
 
   return (
     <div
-      className="w-full bg-cover bg-center -mt-24"
+      className="w-full bg-cover bg-center -mt-24 relative z-10"
       style={{ backgroundImage: "url(/bg-image.jpg)" }}
     >
-      <h2 className="text-4xl font-medium text-white text-center pt-10 pb-40 md:pb-0 mb-20 md:mb-10">
+      <h2 className="text-3xl sm:text-4xl font-medium text-white text-center pt-22 sm:pt-26 pb-10 sm:pb-30">
         PROFILE
       </h2>
 
-      <div className="max-w-6xl mx-auto px-6 flex flex-col items-center md:flex-row md:items-end md:justify-around gap-3">
+      <div className="flex flex-col relative h-fit">
+        <div
+          className="absolute bg-siva-800 w-full sm:top-40 top-22 z-20"
+          style={{ height: "calc(100% - 5.5rem)" }}
+        ></div>
         <AvatarCard
           name={p.username.toUpperCase() || "Anonymous"}
-          // subtitle={`Favourite actor: ${profile.favActor ?? "—"}`}
           trophyCount={`${completed}/${19}`}
         />
-
-        <div className="flex flex-col items-center gap-6 pb-10">
-          <DonutChart data={profile.donutData} total={profile.watchedCount} />
-          <ActivityChart data={profile.activityData} />
+        <div className="z-40 w-full sm:w-xl md:w-3xl xl:w-5xl sm:mx-auto mt-20 lg:mt-40">
+          <h2 className="text-xl sm:text-3xl font-medium text-white z-20 lg:text-left text-center pb-5">
+            STATISTICS
+          </h2>
+          <div className="flex flex-col lg:flex-row justify-between items-center sm:px-0 px-10 z-40">
+            <ActivityChart data={profile.activityData} />
+            <DonutChart data={profile.donutData} total={profile.watchedCount} />
+          </div>
         </div>
       </div>
     </div>
