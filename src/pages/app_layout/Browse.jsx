@@ -118,7 +118,7 @@ export default function Browse() {
 
   return (
     <section className="min-h-screen -mt-24 bg-siva-800 px-6 xl:px-12 pb-32 text-siva-100">
-      <h1 className="text-4xl font-semibold pt-24 pb-10 text-center">
+      <h1 className="text-2xl sm:text-4xl font-semibold pt-24 pb-10 text-center">
         {isDiscover
           ? `Found ${visibleMovies.length} titles`
           : `Results for “${query || "…"}”`}
@@ -132,14 +132,14 @@ export default function Browse() {
 
       <div
         className="
-          grid gap-6
+          grid gap-3 sm:gap-6
           grid-cols-2
           min-[570px]:grid-cols-3
           min-[770px]:grid-cols-4
           min-[1100px]:grid-cols-5
           min-[1400px]:grid-cols-6
           min-[1670px]:grid-cols-7
-          min-[1860px]:grid-cols-8
+          min-[1860px]:grid-cols-8 place-items-center 
         "
       >
         {visibleMovies.map((m) => (
