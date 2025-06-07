@@ -18,8 +18,11 @@ export default function RecentlyWatched() {
 
       <div className="flex flex-nowrap gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory xl:grid xl:gap-4 xl:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] xl:overflow-x-visible xl:snap-none min-w-full">
         {movies.map((m) => (
-          <div className="flex-none snap-start w-36 xl:flex-auto xl:w-auto">
-            <MovieCard key={m.id} movie={m} hideActions />
+          <div
+            className="flex-none snap-start w-36 xl:flex-auto xl:w-auto"
+            key={m.id}
+          >
+            <MovieCard movie={m} hideActions />
           </div>
         ))}
       </div>

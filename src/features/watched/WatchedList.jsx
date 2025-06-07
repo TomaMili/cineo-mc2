@@ -65,8 +65,11 @@ export default function WatchedList({ movies, sortMode, onRemove }) {
           )}
           <div className="flex flex-nowrap gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory sm:grid sm:gap-4 sm:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] sm:overflow-x-visible sm:snap-none min-w-full ">
             {items.map((m) => (
-              <div className="flex-none snap-start w-36 sm:flex-auto sm:w-auto">
-                <WatchedItem key={m.dbId} movie={m} onRemove={onRemove} />
+              <div
+                className="flex-none snap-start w-36 sm:flex-auto sm:w-auto"
+                key={m.dbId}
+              >
+                <WatchedItem movie={m} onRemove={onRemove} />
               </div>
             ))}
           </div>

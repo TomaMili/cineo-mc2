@@ -1,4 +1,5 @@
 import { Icon } from "@iconify-icon/react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function AvatarCard({
@@ -7,6 +8,17 @@ export default function AvatarCard({
   subtitle = "The Adventurer",
   trophyCount = "8/45",
 }) {
+  const [isMobile, setIsMobile] = useState(
+    window.matchMedia("(max-width: 1050px)").matches
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 1050px)");
+    const handler = (e) => setIsMobile(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+
   const navigate = useNavigate();
   return (
     <div className="z-30 flex items-center justify-between px-10 sm:px-8 sm:w-xl md:w-3xl xl:w-6xl sm:mx-auto">
@@ -25,7 +37,7 @@ export default function AvatarCard({
       </div>
       <div
         onClick={() => navigate(`./achievements`)}
-        className="cursor-pointer mb-10 flex flex-col items-center text-yellow-400 bg-bordo-500  hover:bg-bordo-400 rounded-lg mr-6 sm:mr-12 px-4 py-2 sm:px-5 sm:py-4 h-fit "
+        className="cursor-pointer mb-10 flex flex-col items-center text-yellow-400 bg-bordo-500  hover:bg-bordo-400 rounded-lg mr-6 sm:mt-50 sm:mr-22 px-4 py-2 sm:px-5 sm:py-4 h-fit "
       >
         <Icon
           icon="material-symbols:trophy-outline-sharp"
@@ -33,6 +45,11 @@ export default function AvatarCard({
           height="36"
         />
         <span className="text-lg sm:text-2xl text-gray-200">{trophyCount}</span>
+        {isMobile || (
+          <span className="text-lg sm:text-2xl text-gray-300 uppercase font-semibold">
+            Achievements
+          </span>
+        )}
       </div>
     </div>
   );
