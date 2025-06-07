@@ -5,7 +5,7 @@ export default function AddMovieCard({ onClick }) {
     <div>
       <div
         onClick={onClick}
-        className="group relative w-32 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3] flex flex-col items-center justify-center border-2 rounded-lg cursor-pointer hover:border-bordo-500  transition-all duration-300 ease-out hover:scale-105"
+        className="group relative sm:w-full w-36 aspect-[2/3] lg:max-w-[200px] h-full flex flex-col items-center justify-center border-2 rounded-lg cursor-pointer hover:border-bordo-500  transition-all duration-300 ease-out hover:scale-105"
       >
         <Icon
           icon="mdi:plus"
