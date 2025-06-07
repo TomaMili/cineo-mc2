@@ -1,186 +1,146 @@
-import { useState } from "react";
-import { createPortal } from "react-dom";
-import { Icon } from "@iconify-icon/react";
+// src/features/watch_together/CreateRoomModal.jsx
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { createPortal } from "react-dom";
+import clsx from "clsx";
+import { useCreateRoom } from "../../hooks/useCreateRoom";
+import { useUpdateRoom } from "../../hooks/useUpdateRoom";
 
-/**
- * Modal for creating a Watch‑together room.
- * Now supports a **timer** (hours / minutes) in addition to name, type and limit.
- * `onCreate` gets `(name, type, limit, durationSeconds)`.
- */
-export default function CreateRoomModal({
-  initial = { name: "", type: "Generate", limit: 2, duration: 0 },
-  onCreate,
-  onCancel,
-}) {
-  const [name, setName] = useState(initial.name);
-  const [type, setType] = useState(initial.type);
-  const [limit, setLimit] = useState(initial.limit);
+export default function CreateRoomModal({ isOpen = false, room, onClose }) {
+  const createRoom = useCreateRoom();
+  const updateRoom = useUpdateRoom(room?.id);
 
-  // timer state (store separately so the user sees each field)
-  const [hours, setHours] = useState(() => Math.floor(initial.duration / 3600));
-  const [mins, setMins] = useState(() =>
-    Math.floor((initial.duration % 3600) / 60)
-  );
-  const [secs, setSecs] = useState(() => initial.duration % 60);
+  const [form, setForm] = useState({
+    name: "",
+    timer: "01:30:00", // za <input type="time" step="1">
+    type: "Generate",
+    limit: 2,
+  });
 
-  // derived total
-  const durationSeconds = hours * 3600 + mins * 60 + secs;
+  useEffect(() => {
+    if (!room) return;
+    const diff = Math.max(0, new Date(room.expires_at).getTime() - Date.now());
+    const hh = String(Math.floor(diff / 3_600_000)).padStart(2, "0");
+    const mm = String(Math.floor((diff % 3_600_000) / 60_000)).padStart(2, "0");
+    const ss = String(Math.floor((diff % 60_000) / 1_000)).padStart(2, "0");
 
-  const canSubmit = name.trim() && limit > 0 && durationSeconds > 0;
+    setForm({
+      name: room.name,
+      timer: `${hh}:${mm}:${ss}`,
+      type: room.room_type,
+      limit: room.movie_limit,
+    });
+  }, [room]);
 
-  /* helpers */
-  const clamp = (val, max) => Math.max(0, Math.min(val, max));
+  const update = (key) => (e) =>
+    setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  const handleSubmit = async () => {
+    const [h, m, s] = form.timer.split(":").map(Number);
+    const ms = h * 3_600_000 + m * 60_000 + s * 1_000;
+    const expires_at = new Date(Date.now() + ms).toISOString();
+
+    const payload = {
+      name: form.name.trim(),
+      room_type: form.type,
+      movie_limit: Number(form.limit),
+      expires_at,
+    };
+
+    try {
+      if (room) {
+        await updateRoom.mutateAsync(payload);
+      } else {
+        await createRoom.mutateAsync(payload);
+      }
+      onClose();
+    } catch (err) {
+      console.error("Failed to save room:", err);
+    }
+  };
 
   return createPortal(
     <AnimatePresence>
-      <motion.div
-        className="fixed inset-0 z-50 flex items-center justify-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      >
-        {/* backdrop */}
-        <motion.div
-          className="absolute inset-0 bg-black/70"
-          onClick={onCancel}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.7 }}
-          exit={{ opacity: 0 }}
-        />
-
-        {/* modal box */}
-        <motion.div
-          className="relative bg-siva-800 rounded-xl p-6 w-full max-w-md shadow-2xl"
-          initial={{ y: -30, scale: 0.9, opacity: 0 }}
-          animate={{ y: 0, scale: 1, opacity: 1 }}
-          exit={{ y: -30, scale: 0.9, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 25 }}
-        >
-          {/* close btn */}
-          <button
-            onClick={onCancel}
-            className="absolute top-4 right-4 text-siva-400 hover:text-white"
+      {isOpen && (
+        <>
+          <motion.div
+            className="fixed inset-0 z-40 bg-black/60"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+          />
+          <motion.div
+            className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2
+                       rounded-2xl bg-slate-800/60 p-8 backdrop-blur shadow-2xl"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
           >
-            <Icon icon="gridicons:cross-circle" width={28} height={28} />
-          </button>
-
-          <h2 className="text-2xl font-semibold text-siva-100 mb-6">
-            Create a room
-          </h2>
-
-          {/* name */}
-          <label className="block mb-4">
-            <span className="text-siva-100">Room name</span>
+            <h2 className="mb-8 text-center text-2xl font-semibold">
+              {room ? "Edit room" : "Create a room"}
+            </h2>
+            <label className="mb-1 block text-sm">Room name</label>
             <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="mt-1 w-full px-4 py-2 bg-siva-700 rounded-lg ring-2 ring-bordo-600 focus:outline-none focus:ring-bordo-400 text-siva-100 placeholder-siva-400"
-              placeholder="Sci-fi Movie Night"
+              value={form.name}
+              onChange={update("name")}
+              className="mb-4 w-full rounded-md bg-slate-700/50 px-4 py-2
+                         focus:outline-none focus:ring-2 focus:ring-bordo-400"
             />
-          </label>
-
-          {/* timer */}
-          <fieldset className="mb-4">
-            <legend className="text-siva-100 mb-1 ">Set timer</legend>
-            <div className="flex gap-2 max-w-xs ">
-              {[
-                {
-                  label: "h",
-                  value: hours,
-                  set: setHours,
-                  max: 12,
-                },
-                {
-                  label: "m",
-                  value: mins,
-                  set: setMins,
-                  max: 59,
-                },
-                {
-                  label: "s",
-                  value: secs,
-                  set: setSecs,
-                  max: 59,
-                },
-              ].map(({ label, value, set, max }) => (
-                <div key={label} className="flex flex-col items-center flex-1">
-                  <input
-                    type="number"
-                    min={0}
-                    max={max}
-                    value={value}
-                    onChange={(e) => set(clamp(Number(e.target.value), max))}
-                    className="w-full px-3 py-2 bg-siva-700 rounded-lg ring-2 ring-bordo-600 focus:ring-bordo-400 focus:outline-none text-center text-siva-100"
-                  />
-                  <span className="text-xs text-siva-300 mt-1">{label}</span>
-                </div>
-              ))}
-            </div>
-          </fieldset>
-
-          {/* room type */}
-          <fieldset className="mb-4">
-            <legend className="text-siva-100 mb-1">Room type</legend>
-            <div className="flex gap-4">
-              {["Generate", "Random"].map((opt) => (
-                <label
-                  key={opt}
-                  className={`flex items-center gap-2 cursor-pointer px-3 py-1 rounded-lg ${
-                    type === opt ? "bg-bordo-600" : "bg-siva-700"
-                  }`}
+            <label className="mb-1 block text-sm">Set timer</label>
+            <input
+              type="time"
+              step="1"
+              value={form.timer}
+              onChange={update("timer")}
+              className="mb-4 w-full rounded-md bg-slate-700/50 px-4 py-2
+                         focus:outline-none focus:ring-2 focus:ring-bordo-400"
+            />
+            <div className="mb-6 grid grid-cols-2 gap-4">
+              <div>
+                <label className="mb-1 block text-sm">Room type</label>
+                <select
+                  value={form.type}
+                  onChange={update("type")}
+                  className="w-full rounded-md bg-slate-700/50 px-4 py-2
+                             focus:outline-none focus:ring-2 focus:ring-bordo-400"
                 >
-                  <input
-                    type="radio"
-                    name="room-type"
-                    value={opt}
-                    checked={type === opt}
-                    onChange={() => setType(opt)}
-                    className="form-radio text-bordo-500 focus:ring-bordo-400"
-                  />
-                  {opt}
-                </label>
-              ))}
+                  <option>Generate</option>
+                  <option>Random</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-sm">Movie limit</label>
+                <select
+                  value={form.limit}
+                  onChange={update("limit")}
+                  className="w-full rounded-md bg-slate-700/50 px-4 py-2
+                             focus:outline-none focus:ring-2 focus:ring-bordo-400"
+                >
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <option key={n} value={n}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-          </fieldset>
-
-          {/* limit */}
-          <label className="block mb-8 max-w-[180px]">
-            <span className="text-siva-100">Movie limit / person</span>
-            <input
-              type="number"
-              min={1}
-              value={limit}
-              onChange={(e) => setLimit(Number(e.target.value))}
-              className="mt-1 w-full px-4 py-2 bg-siva-700 rounded-lg ring-2 ring-bordo-600 focus:ring-bordo-400 focus:outline-none text-siva-100"
-            />
-          </label>
-
-          {/* actions */}
-          <div className="flex justify-end gap-3">
             <button
-              onClick={onCancel}
-              className="px-5 py-2 bg-siva-600 rounded-lg text-white hover:bg-siva-500"
+              onClick={handleSubmit}
+              disabled={!form.name.trim()}
+              className={clsx(
+                "w-full rounded-full py-3 font-semibold transition",
+                form.name.trim()
+                  ? "bg-bordo-600 hover:bg-bordo-500 text-white"
+                  : "cursor-not-allowed bg-slate-600 text-slate-400"
+              )}
             >
-              Cancel
+              {room ? "Save changes" : "Create"}
             </button>
-
-            <button
-              onClick={() =>
-                onCreate(name.trim(), type, limit, durationSeconds)
-              }
-              disabled={!canSubmit}
-              className={`px-5 py-2 rounded-lg text-white transition-colors ${
-                canSubmit
-                  ? "bg-bordo-500 hover:bg-bordo-400"
-                  : "bg-bordo-500/50 cursor-not-allowed"
-              }`}
-            >
-              Create
-            </button>
-          </div>
-        </motion.div>
-      </motion.div>
+          </motion.div>
+        </>
+      )}
     </AnimatePresence>,
     document.body
   );

@@ -1,3 +1,4 @@
+//CollectionRow.jsx
 import { useState } from "react";
 import { Icon } from "@iconify-icon/react";
 import AddMovieCard from "./AddMovieCard";

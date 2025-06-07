@@ -1,192 +1,244 @@
-// src/features/watch_together/WatchTogetherGroup.jsx
-import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { Icon } from "@iconify-icon/react";
+/* src/features/watch_together/WatchTogetherGroup.jsx */
+import { useState, useMemo, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Plus, Share2, Clock, Settings2 } from "lucide-react";
+import clsx from "clsx";
+import supabase from "../../services/supabase";
+
+import { useCurrentUser } from "../../hooks/useAuth";
+import { useRoom } from "../../hooks/useRoom";
+import { useMembers } from "../../hooks/useMembers";
+import {
+  useWatchTogetherMovies,
+  useAddMovieToWatchTogether,
+} from "../../hooks/useWatchTogetherMovies";
+import { useToggleReady } from "../../hooks/useToggleReady";
+import { useUpdateRoom } from "../../hooks/useUpdateRoom";
+
+import CreateRoomModal from "./CreateRoomModal";
 import MemberRow from "./MemberRow";
+import RandomPickDialog from "./RandomPickDialog";
+import GenerateListDialog from "./GenerateListDialog";
+import AddMovieDialog from "./AddMovieDialog";
 
-const ICON_SIZE = 32;
+/* ------------------------------------------------------------------ */
+/*  Helpers                                                           */
+/* ------------------------------------------------------------------ */
+function Countdown({ target }) {
+  if (!target) return null; // ← ako nema datuma, ništa ne prikazuj
 
-/* ───────────  DEMO fetch  ─────────── */
-async function fetchRoomById(id) {
-  const creatorId = 1;
-  return {
-    id,
-    name: "Room name",
-    creatorId,
-    type: "Generate",
-    limit: 2,
-    endsAt: Date.now() + 1000 * 60 * 90,
-    members: [
-      {
-        id: 1,
-        name: "You",
-        avatar: "/avatars/you.jpg",
-        ready: false,
-        movies: [],
-      },
-      {
-        id: 2,
-        name: "Frank",
-        avatar: "/avatars/frank.jpg",
-        ready: false,
-        movies: [238, 129],
-      },
-      {
-        id: 3,
-        name: "Jessica",
-        avatar: "/avatars/jess.jpg",
-        ready: false,
-        movies: [],
-      },
-      {
-        id: 4,
-        name: "John",
-        avatar: "/avatars/john.jpg",
-        ready: true,
-        movies: [238, 129],
-      },
-      {
-        id: 5,
-        name: "Peter",
-        avatar: "/avatars/peter.jpg",
-        ready: true,
-        movies: [157336],
-      },
-    ],
-  };
-}
-
-const diffToHms = (to) => {
-  const s = Math.max(0, Math.floor((to - Date.now()) / 1000));
-  return `${String(Math.floor(s / 3600)).padStart(2, "0")}h ${String(
-    Math.floor((s % 3600) / 60)
-  ).padStart(2, "0")}m ${String(s % 60).padStart(2, "0")}s`;
-};
-
-export default function WatchTogetherGroup() {
-  const { groupId } = useParams();
-  const { state } = useLocation();
-  const navigate = useNavigate();
-
-  const preview = state?.preview;
-  const [room, setRoom] = useState(
-    preview || { id: groupId, name: "Loading…" }
-  );
-
+  const [now, setNow] = useState(Date.now());
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const full = await fetchRoomById(groupId);
-        if (!cancelled) setRoom(full);
-      } catch (err) {
-        console.error(err);
-        navigate("/watch-together");
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [groupId, navigate]);
-
-  useEffect(() => {
-    const id = setInterval(() => setRoom((r) => ({ ...r })), 1000);
+    const id = setInterval(() => setNow(Date.now()), 1_000);
     return () => clearInterval(id);
   }, []);
 
-  const userId = 1;
-  const isHost = room.creatorId === userId;
-  const me = room.members?.find((m) => m.id === userId);
+  const diff = Math.max(0, new Date(target).getTime() - now);
+  if (!diff) return null; // safety net
 
-  const toggleReady = () =>
-    setRoom((r) => ({
-      ...r,
-      members: r.members.map((m) =>
-        m.id === userId ? { ...m, ready: !m.ready } : m
-      ),
-    }));
-
-  if (!room.members) return null;
+  const hh = String(Math.floor(diff / 3_600_000)).padStart(2, "0");
+  const mm = String(Math.floor((diff % 3_600_000) / 60_000)).padStart(2, "0");
+  const ss = String(Math.floor((diff % 60_000) / 1_000)).padStart(2, "0");
 
   return (
-    <section className="min-h-screen px-6 py-8 text-white">
-      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-12">
-        <div className="text-siva-100">
-          <h1 className="text-5xl font-light mb-4">{room.name}</h1>
-          <p className="text-lg">
-            Room type: <span className="font-semibold">{room.type}</span>
-          </p>
-          <p className="text-lg">
-            Movie limit:{" "}
-            <span className="font-semibold">{room.limit} per person</span>
+    <span className="flex items-center gap-1 text-sm text-slate-300">
+      <Clock size={14} /> {hh}:{mm}:{ss}
+    </span>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Main component                                                    */
+/* ------------------------------------------------------------------ */
+export default function WatchTogetherGroup() {
+  const { groupId } = useParams();
+  const nav = useNavigate();
+
+  const { profile } = useCurrentUser();
+  const currentUserId = profile?.id;
+
+  useEffect(() => {
+    if (!groupId || !currentUserId) return;
+    (async () => {
+      const { data, error } = await supabase
+        .from("watch_room_members")
+        .select("room_id")
+        .eq("room_id", groupId)
+        .eq("user_id", currentUserId)
+        .maybeSingle();
+      if (!error && !data) {
+        await supabase.from("watch_room_members").insert({
+          room_id: groupId,
+          user_id: currentUserId,
+        });
+      }
+    })();
+  }, [groupId, currentUserId]);
+
+  const { data: room, isLoading: roomLoading } = useRoom(groupId);
+  const { data: members } = useMembers(groupId);
+  const { data: movies } = useWatchTogetherMovies(groupId);
+
+  const toggleReady = useToggleReady(groupId);
+  const addMovie = useAddMovieToWatchTogether(groupId);
+  const updateRoom = useUpdateRoom(groupId);
+
+  const sortedMembers = useMemo(() => {
+    if (!members) return [];
+    return [
+      ...members.filter((m) => m.id === currentUserId),
+      ...members
+        .filter((m) => m.id !== currentUserId)
+        .sort((a, b) => a.username.localeCompare(b.username)),
+    ];
+  }, [members, currentUserId]);
+
+  const moviesByUser = useMemo(() => {
+    if (!movies) return {};
+    return movies.reduce((acc, m) => {
+      (acc[m.user_id] ||= []).push(m);
+      return acc;
+    }, {});
+  }, [movies]);
+
+  const myMember = sortedMembers.find((m) => m.id === currentUserId);
+
+  const [showAdd, setShowAdd] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [result, setResult] = useState(null);
+
+  useEffect(() => {
+    if (room?.status === "awaiting_accept") {
+      (async () => {
+        const res = await fetch(`/api/rooms/${groupId}/result`);
+        if (res.ok) setResult(await res.json());
+      })();
+    }
+  }, [room?.status, groupId]);
+
+  if (roomLoading)
+    return <p className="py-20 text-center text-slate-300">Loading…</p>;
+  if (!room?.id)
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-3">
+        <p className="text-xl">Room not found</p>
+        <button
+          className="rounded bg-bordo-600 px-4 py-2 text-white"
+          onClick={() => nav("/watch-together")}
+        >
+          Back
+        </button>
+      </div>
+    );
+
+  return (
+    <section className="mx-auto max-w-4xl px-4 pb-32 text-white">
+      <header className="mb-10 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="mb-1 text-4xl font-light">{room.name}</h1>
+          <p className="text-sm text-slate-400">
+            <span className="capitalize">{room.room_type || "…"}</span> • Movie
+            limit {room.movie_limit ?? "?"}/user
           </p>
         </div>
-
-        <div className="flex flex-col items-start lg:items-end gap-4">
-          <div className="flex items-center gap-3">
-            <Icon
-              icon="mdi:clock-outline"
-              width={20}
-              className="text-siva-100"
-            />
-            <span className="text-lg text-siva-100">
-              {diffToHms(room.endsAt)}
-            </span>
-
-            <button
-              onClick={() =>
-                navigator.clipboard.writeText(window.location.href)
-              }
-              className="bg-bordo-500 hover:bg-bordo-400 px-4 py-2 rounded flex items-center gap-2 cursor-pointer transition-colors duration-200"
-            >
-              <Icon icon="gridicons:share" width="18" height="18" />
-              Share
-            </button>
-          </div>
-
-          <div className="flex gap-3">
-            <button
-              onClick={toggleReady}
-              className="bg-bordo-500 hover:bg-bordo-400 px-6 py-2 rounded cursor-pointer transition-colors duration-200 text-lg"
-            >
-              {me?.ready ? "Cancel ready" : "Mark as ready"}
-            </button>
-
-            {!me?.ready && (
-              <button className="bg-bordo-500 hover:bg-bordo-400 px-6 py-2 rounded flex items-center gap-1 cursor-pointer transition-colors duration-200">
-                <Icon icon="mdi:plus" width={18} /> Add movie
-              </button>
+        <div className="flex items-center gap-3">
+          <Countdown target={room.expires_at} />
+          <button
+            onClick={() => navigator.clipboard.writeText(window.location.href)}
+            className="flex items-center gap-1 rounded-full bg-slate-700/30 px-3 py-1.5 text-xs hover:bg-slate-700/60"
+          >
+            <Share2 size={14} /> Invite
+          </button>
+          <button
+            onClick={() => toggleReady.mutate({ value: !myMember?.is_ready })}
+            className={clsx(
+              "rounded-full px-4 py-1.5 text-sm font-semibold transition",
+              myMember?.is_ready
+                ? "bg-green-600/20 text-green-200 hover:bg-green-600/30"
+                : "bg-yellow-600/20 text-yellow-200 hover:bg-yellow-600/30"
             )}
-          </div>
-
-          {isHost && (
+          >
+            {myMember?.is_ready ? "Ready ✔" : "Mark as ready"}
+          </button>
+          <button
+            onClick={() => setShowAdd(true)}
+            className="flex items-center gap-1 rounded bg-bordo-600 px-3 py-1.5 text-sm hover:bg-bordo-500"
+          >
+            <Plus size={14} /> Add movie
+          </button>
+          {room.owner_id === currentUserId && (
             <button
-              onClick={() => navigate("/watch-together")}
-              className="bg-bordo-500 hover:bg-bordo-400 px-6 py-2 rounded cursor-pointer transition-colors duration-200"
+              onClick={() => setShowEdit(true)}
+              className="hidden items-center gap-1 rounded bg-slate-700/30 px-3 py-1.5 text-xs hover:bg-slate-700/60 sm:flex"
+              title="Edit room"
             >
-              End room
+              <Settings2 size={14} />
             </button>
           )}
         </div>
-      </div>
-
-      <ul className="space-y-4">
-        {room.members.map((m) => (
+      </header>
+      <div className="flex flex-col gap-3">
+        {sortedMembers.map((m) => (
           <MemberRow
             key={m.id}
             member={m}
-            limit={room.limit}
-            isHost={m.id === room.creatorId}
+            movies={moviesByUser[m.id] || []}
+            limit={room.movie_limit}
+            isMe={m.id === currentUserId}
           />
         ))}
-      </ul>
-
-      <Link
-        to="/watch-together"
-        className="inline-block mt-12 text-lg underline text-siva-100 hover:text-bordo-400"
+      </div>
+      <button
+        onClick={() => setShowAdd(true)}
+        className="fixed bottom-8 right-8 size-14 place-content-center rounded-full bg-bordo-600 text-white shadow-lg hover:bg-bordo-500 md:hidden"
       >
-        ← Back to rooms
-      </Link>
+        <Plus size={26} />
+      </button>
+
+      {/* Add Movie Modal */}
+      {showAdd && (
+        <AddMovieDialog
+          roomId={groupId}
+          onClose={() => setShowAdd(false)}
+          alreadyAdded={moviesByUser[currentUserId]?.map((m) => m.api_id) || []}
+        />
+      )}
+
+      {/* Edit Room Modal */}
+      {showEdit && (
+        <CreateRoomModal
+          isOpen
+          room={room}
+          onSave={(payload) =>
+            updateRoom.mutateAsync(payload).then(() => setShowEdit(false))
+          }
+          onClose={() => setShowEdit(false)}
+        />
+      )}
+
+      {/* RESULT dialogs */}
+      {result?.result_type === "Random" && (
+        <RandomPickDialog
+          isOpen
+          movie={result.picked_movie}
+          onAccept={() =>
+            fetch(`/api/rooms/${groupId}/accept`, { method: "POST" })
+          }
+        />
+      )}
+      {result?.result_type === "Generate" && (
+        <GenerateListDialog
+          isOpen
+          movies={result.picked_list}
+          onAccept={(movieId) =>
+            fetch(`/api/rooms/${groupId}/accept`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ movie_id: movieId }),
+            })
+          }
+        />
+      )}
     </section>
   );
 }
