@@ -49,7 +49,17 @@ export default function WatchLaterList({
       }, {});
     }
 
-    return { "": arr };
+    arr.sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
+    return arr.reduce((acc, m) => {
+      const d = new Date(m.addedAt);
+      const today = new Date();
+      const label =
+        d.toDateString() === today.toDateString()
+          ? "Today"
+          : `${d.getDate()}. ${d.toLocaleString("default", { month: "long" })}`;
+      (acc[label] ||= []).push(m);
+      return acc;
+    }, {});
   }, [movies, sortMode]);
 
   return (

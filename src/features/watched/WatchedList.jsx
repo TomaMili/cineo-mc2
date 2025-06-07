@@ -5,9 +5,22 @@ export default function WatchedList({ movies, sortMode, onRemove }) {
   const groups = useMemo(() => {
     let arr = [...movies];
     if (sortMode === "rating") {
-      arr.sort((a, b) => (b.userRating || 0) - (a.userRating || 0));
-      return { "": arr };
+      arr.sort((a, b) => {
+        const ra = a.userRating ?? -1;
+        const rb = b.userRating ?? -1;
+        if (ra === rb) return a.title.localeCompare(b.title);
+        return rb - ra;
+      });
+
+      const groups = arr.reduce((acc, m) => {
+        const key = m.userRating ? `${m.userRating} ★` : "Not rated";
+        (acc[key] ||= []).push(m);
+        return acc;
+      }, {});
+
+      return groups;
     }
+
     if (sortMode === "title") {
       arr.sort((a, b) => a.title.localeCompare(b.title));
       return arr.reduce((acc, m) => {
