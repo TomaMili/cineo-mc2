@@ -86,11 +86,11 @@ export default function SearchBar({ className = "" }) {
 
   const computedWidth = expanded
     ? isMobile
-      ? "calc(100% - 2rem)"
+      ? "calc(100% - 1rem)"
       : "min(40rem, 100vw - 2rem)"
     : "3.5rem";
 
-  const positionClass = "fixed top-4 right-4";
+  const positionClass = "fixed top-3.5 sm:right-4 right-2";
 
   return (
     <div
@@ -104,8 +104,8 @@ export default function SearchBar({ className = "" }) {
         >
           <Icon
             icon="jam:search"
-            width="36"
-            height="36"
+            width={isMobile ? "28" : "36"}
+            height={isMobile ? "28" : "36"}
             className="text-white"
           />
         </button>
