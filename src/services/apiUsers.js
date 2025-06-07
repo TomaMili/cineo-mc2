@@ -128,33 +128,37 @@ export async function getUserProfile(id) {
   }
 
   const palette = [
-    "#DC2626",
-    "#FBBF24",
-    "#6B21A8",
-    "#1D4ED8",
-    "#059669",
-    "#EA580C",
-    "#D946EF",
-    "#14B8A6",
-    "#F43F5E",
-    "#52525B",
-    "#B91C1C",
-    "#F59E0B",
-    "#7C3AED",
-    "#2563EB",
-    "#047857",
-    "#C2410C",
-    "#A21CAF",
-    "#0E7490",
-    "#BE123C",
-    "#374151",
+    "#b91c1c", // muted red (bordo-400)
+    "#d97706", // burnt orange
+    "#b45309", // earthy amber
+    "#a16207", // mustard
+    "#15803d", // muted emerald
+    "#0f766e", // desaturated teal
+    "#2563eb", // softened blue
+    "#1e40af", // royal blue
+    "#6d28d9", // deep purple
+    "#7c3aed", // muted violet
+    "#9333ea", // dusty grape
+    "#c026d3", // dusty pink-purple
+    "#db2777", // antique rose
+    "#e11d48", // crimson red
+    "#881337", // dark burgundy
+    "#6b7280", // slate gray
+    "#52525b", // deep gray
+    "#374151", // onyx
+    "#3f3f46", // charcoal gray
+    "#171717", // near-black
   ];
+
   const colorOf = (name) => {
     if (name === "Other") return "#9CA3AF";
-    let h = 0;
-    for (let i = 0; i < name.length; i++)
-      h = (h + name.charCodeAt(i)) % palette.length;
-    return palette[h];
+
+    let hash = 5381;
+    for (let i = 0; i < name.length; i++) {
+      hash = (hash * 33) ^ name.charCodeAt(i);
+    }
+    const index = Math.abs(hash) % palette.length;
+    return palette[index];
   };
 
   const donutData = [...genreMap].map(([name, value]) => ({
