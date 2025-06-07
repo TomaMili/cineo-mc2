@@ -48,7 +48,7 @@ export default function ProfileHero() {
           name={p.username.toUpperCase() || "Anonymous"}
           trophyCount={`${completed}/${19}`}
         />
-        <div className="z-40 w-full sm:w-xl md:w-3xl xl:w-5xl sm:mx-auto mt-20 lg:mt-40">
+        <div className="z-40 w-full sm:w-xl md:w-3xl xl:w-5xl sm:mx-auto mt-20 lg:mt-20">
           <h2 className="text-xl sm:text-3xl font-medium text-white z-20 lg:text-left text-center pb-5">
             STATISTICS
           </h2>
