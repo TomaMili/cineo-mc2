@@ -41,8 +41,8 @@ export default function RatingOverlay({ onRate, onRateLater, onClose }) {
                     ? "material-symbols:star-rounded"
                     : "material-symbols:star-outline-rounded"
                 }
-                width={isMobile ? "22" : "34"}
-                height={isMobile ? "22" : "34"}
+                width={isMobile ? "28" : "34"}
+                height={isMobile ? "28" : "34"}
                 className="text-yellow-400 rounded-lg"
               />
             </button>
