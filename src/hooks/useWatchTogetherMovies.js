@@ -1,68 +1,60 @@
 // src/hooks/useWatchTogetherMovies.js
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCurrentUser } from "../hooks/useAuth";
+import { useCurrentUser } from "./useAuth";
 import {
-  getWatchTogetherMovies,
-  addMovieToWatchTogether,
-  removeMovieFromWatchTogether,
+  getWatchRooms,
+  getWatchRoomMovies,
+  addMovieToWatchRoom,
+  removeMovieFromWatchRoom,
 } from "../services/apiWatchTogether";
 
-const key = (roomId) => ["watchtogether", roomId, "movies"];
+/* ─────────────── query keys ─────────────── */
 
-export function useWatchTogetherMovies(roomId) {
+const roomsKey = (ownerId) => ["watchRooms", ownerId];
+const roomMoviesKey = (roomId) => ["watchRoomMovies", roomId];
+
+/* ─────────────── rooms (owner ⇒ list) ───── */
+
+export function useWatchRooms(ownerId) {
   return useQuery({
-    queryKey: key(roomId),
+    queryKey: roomsKey(ownerId),
+    enabled: !!ownerId,
+    queryFn: () => getWatchRooms(ownerId),
+  });
+}
+
+/* ─────────────── movies in one room ─────── */
+
+export function useWatchRoomMovies(roomId) {
+  return useQuery({
+    queryKey: roomMoviesKey(roomId),
     enabled: !!roomId,
-    queryFn: () => getWatchTogetherMovies(roomId),
+    queryFn: () => getWatchRoomMovies(roomId),
+    // optional: poll room every 5 s while it’s open
     refetchInterval: 5000,
   });
 }
 
-export function useAddMovieToWatchTogether(roomId) {
+/* ─────────────── add movie mutation ─────── */
+
+export function useAddMovieToWatchRoom(roomId) {
   const qc = useQueryClient();
   const { profile } = useCurrentUser();
-  const user_id = profile?.id;
+  const userId = profile?.id;
 
   return useMutation({
-    mutationFn: (vars) => addMovieToWatchTogether(roomId, { ...vars, user_id }),
-
-    onMutate: async ({ movie_id, tmdbMovie }) => {
-      await qc.cancelQueries(moviesKey(roomId));
-      const previous = qc.getQueryData(moviesKey(roomId)) || [];
-      qc.setQueryData(moviesKey(roomId), [
-        ...previous,
-        {
-          room_id: +roomId,
-          user_id,
-          movie_id,
-          movies: {
-            poster: tmdbMovie.poster_path,
-            title: tmdbMovie.title,
-          },
-        },
-      ]);
-      return { previous };
-    },
-
-    onError: (_err, _vars, context) => {
-      qc.setQueryData(moviesKey(roomId), context.previous);
-    },
-
-    onSettled: () => {
-      // na kraju obavezno refetch, da uskladimo sve
-      qc.invalidateQueries(moviesKey(roomId));
-    },
+    mutationFn: (tmdbMovie) => addMovieToWatchRoom(userId, roomId, tmdbMovie),
+    onSuccess: () => qc.invalidateQueries(roomMoviesKey(roomId)),
   });
 }
 
-export function useRemoveMovieFromWatchTogether(roomId) {
+/* ─────────────── remove movie mutation ──── */
+
+export function useRemoveMovieFromWatchRoom(roomId) {
   const qc = useQueryClient();
-  const { profile } = useCurrentUser();
-  const user_id = profile?.id;
 
   return useMutation({
-    mutationFn: (vars) =>
-      removeMovieFromWatchTogether(roomId, { ...vars, user_id }),
-    onSuccess: () => qc.invalidateQueries(moviesKey(roomId)),
+    mutationFn: (movieId) => removeMovieFromWatchRoom(roomId, movieId),
+    onSuccess: () => qc.invalidateQueries(roomMoviesKey(roomId)),
   });
 }

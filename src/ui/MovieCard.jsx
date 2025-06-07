@@ -70,6 +70,22 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
           decoding="async"
           className="w-full h-full object-cover rounded-lg cursor-pointer transition-all duration-300  ease-out hover:scale-103"
         />
+      ) : movie.poster ? (
+        <img
+          src={poster(movie.poster, 342)}
+          srcSet={`
+            ${poster(movie.poster, 92)}  92w,
+            ${poster(movie.poster, 342)} 342w,
+            ${poster(movie.poster, 500)} 500w
+          `}
+          sizes="(max-width: 640px) 50vw, 20vw"
+          alt={movie.title}
+          onMouseEnter={prefetch}
+          onClick={handlePosterClick}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover rounded-lg cursor-pointer transition-all duration-300  ease-out hover:scale-103"
+        />
       ) : (
         <div
           onClick={handlePosterClick}

@@ -67,7 +67,7 @@ export default function App() {
                   <Route path="collections" element={<Collections />} />
                   <Route path="watch-together" element={<WatchTogether />} />
                   <Route
-                    path="watch-together/:groupId"
+                    path="watch-together/:roomId"
                     element={<WatchTogetherGroup />}
                   />
                   <Route path="movie/:movieId" element={<MovieDetail />} />

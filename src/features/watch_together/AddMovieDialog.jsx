@@ -1,28 +1,31 @@
-// src/features/watch_together/AddMovieDialog.jsx
 import { useRef, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Icon } from "@iconify-icon/react";
-import useDebounce from "../../hooks/useDebounce";
 import { useQuery } from "@tanstack/react-query";
+
+import useDebounce from "../../hooks/useDebounce";
 import { searchMovies, fetchMovieDetails } from "../../services/apiTmdb";
-import { useAddMovieToWatchTogether } from "../../hooks/useWatchTogetherMovies";
+import { useAddMovieToWatchRoom } from "../../hooks/useWatchTogetherMovies";
 
 const POSTER_BASE = "https://image.tmdb.org/t/p/w342";
 
+/* ------------------------------------------------------------------ */
+
 export default function AddMovieDialog({ roomId, onClose, alreadyAdded = [] }) {
+  /* refs & local state ------------------------------------------------ */
   const modalRef = useRef(null);
   const inputRef = useRef(null);
+
   const [query, setQuery] = useState("");
   const [debounced, setDebounced] = useState("");
   useDebounce(() => setDebounced(query.trim()), 350, [query]);
 
+  /* TMDB search ------------------------------------------------------- */
   const { data, isFetching } = useQuery({
     queryKey: ["tmdb-search", debounced],
     queryFn: ({ signal }) => searchMovies(debounced, 1, signal),
     enabled: debounced.length > 0,
   });
-
-  const addMovie = useAddMovieToWatchTogether(roomId);
 
   const candidates = (data?.results || [])
     .filter((m) => m.poster_path && m.vote_average != null)
@@ -30,6 +33,10 @@ export default function AddMovieDialog({ roomId, onClose, alreadyAdded = [] }) {
       (a, b) => b.vote_average - a.vote_average || b.popularity - a.popularity
     );
 
+  /* mutation: add movie to this room ---------------------------------- */
+  const addMovie = useAddMovieToWatchRoom(roomId);
+
+  /* keyboard & focus helpers ----------------------------------------- */
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
@@ -38,24 +45,41 @@ export default function AddMovieDialog({ roomId, onClose, alreadyAdded = [] }) {
 
   useEffect(() => inputRef.current?.focus(), []);
 
+  /* add-button handler ------------------------------------------------ */
+  const handleAdd = async (tmdbMovie) => {
+    try {
+      await addMovie.mutateAsync(tmdbMovie);
+      onClose(); // close modal on success
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  /* ------------------------------------------------------------------ */
   return createPortal(
     <div
       className="fixed inset-0 flex items-center justify-center z-50"
-      onClick={onClose} // ← zatvori kad klikneš na tamni backdrop
+      onClick={onClose} /* close when clicking backdrop   */
     >
       <div className="absolute inset-0 bg-black/70" />
       <div
         ref={modalRef}
-        onClick={(e) => e.stopPropagation()} // ← spriječi da klik unutar moda prođe na backdrop
+        onClick={(e) => e.stopPropagation()} /* stop clicks inside modal  */
         className="relative z-10 bg-siva-800 rounded-lg p-6 text-white w-11/12 max-w-4xl"
       >
+        {/* close button */}
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-siva-300 hover:text-white"
         >
           <Icon icon="gridicons:cross-circle" width={24} height={24} />
         </button>
-        <h2 className="text-2xl font-semibold mb-4">Search & add a movie</h2>
+
+        <h2 className="text-2xl font-semibold mb-4">
+          Search &amp; add a movie
+        </h2>
+
+        {/* search input */}
         <div className="relative mb-6">
           <Icon
             icon="jam:search"
@@ -81,12 +105,14 @@ export default function AddMovieDialog({ roomId, onClose, alreadyAdded = [] }) {
           )}
         </div>
 
+        {/* results grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 overflow-y-auto max-h-[60vh] py-4 px-2">
           {debounced && candidates.length === 0 && !isFetching && (
             <p className="col-span-full text-center text-siva-300">
               No results.
             </p>
           )}
+
           {candidates.map((m) => {
             const taken = alreadyAdded.includes(m.id);
             return (
@@ -100,10 +126,7 @@ export default function AddMovieDialog({ roomId, onClose, alreadyAdded = [] }) {
                 onClick={async () => {
                   if (taken) return;
                   const full = await fetchMovieDetails(m.id);
-                  addMovie.mutate(
-                    { movie_id: m.id, tmdbMovie: full },
-                    { onSuccess: onClose }
-                  );
+                  handleAdd(full);
                 }}
               >
                 <img
