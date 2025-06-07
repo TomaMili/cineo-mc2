@@ -49,7 +49,17 @@ export default function WatchLaterList({
       }, {});
     }
 
-    return { "": arr };
+    arr.sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
+    return arr.reduce((acc, m) => {
+      const d = new Date(m.addedAt);
+      const today = new Date();
+      const label =
+        d.toDateString() === today.toDateString()
+          ? "Today"
+          : `${d.getDate()}. ${d.toLocaleString("default", { month: "long" })}`;
+      (acc[label] ||= []).push(m);
+      return acc;
+    }, {});
   }, [movies, sortMode]);
 
   return (
@@ -62,14 +72,19 @@ export default function WatchLaterList({
             </h2>
           )}
 
-          <div className="flex gap-3 lg:gap-6 flex-nowrap sm:flex-wrap overflow-auto">
+          <div className="flex flex-nowrap gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory sm:grid sm:gap-4 sm:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] sm:overflow-x-visible sm:snap-none min-w-full">
             {items.map((movie) => (
-              <WatchLaterItem
+              <div
                 key={movie.id}
-                movie={movie}
-                onSelect={onSelect}
-                onToggleWL={onToggleWL}
-              />
+                className="flex-none snap-start w-36 sm:flex-auto sm:w-auto"
+              >
+                <WatchLaterItem
+                  key={movie.id}
+                  movie={movie}
+                  onSelect={onSelect}
+                  onToggleWL={onToggleWL}
+                />
+              </div>
             ))}
           </div>
         </section>

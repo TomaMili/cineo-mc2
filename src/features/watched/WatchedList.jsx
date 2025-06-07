@@ -5,9 +5,22 @@ export default function WatchedList({ movies, sortMode, onRemove }) {
   const groups = useMemo(() => {
     let arr = [...movies];
     if (sortMode === "rating") {
-      arr.sort((a, b) => (b.userRating || 0) - (a.userRating || 0));
-      return { "": arr };
+      arr.sort((a, b) => {
+        const ra = a.userRating ?? -1;
+        const rb = b.userRating ?? -1;
+        if (ra === rb) return a.title.localeCompare(b.title);
+        return rb - ra;
+      });
+
+      const groups = arr.reduce((acc, m) => {
+        const key = m.userRating ? `${m.userRating} ★` : "Not rated";
+        (acc[key] ||= []).push(m);
+        return acc;
+      }, {});
+
+      return groups;
     }
+
     if (sortMode === "title") {
       arr.sort((a, b) => a.title.localeCompare(b.title));
       return arr.reduce((acc, m) => {
@@ -44,15 +57,17 @@ export default function WatchedList({ movies, sortMode, onRemove }) {
   return (
     <section className="min-h-screen pb-32 text-siva-100">
       {Object.entries(groups).map(([group, items]) => (
-        <section key={group} className="mb-12 mt-2">
+        <section key={group} className="mb-12 mt-2 ">
           {group && (
             <h2 className="text-2xl lg:text-3xl font-normal text-siva-100  mt-2 mb-4">
               {group}
             </h2>
           )}
-          <div className="flex gap-3 lg:gap-6 flex-nowrap sm:flex-wrap overflow-auto">
+          <div className="flex flex-nowrap gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory sm:grid sm:gap-4 sm:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] sm:overflow-x-visible sm:snap-none min-w-full ">
             {items.map((m) => (
-              <WatchedItem key={m.dbId} movie={m} onRemove={onRemove} />
+              <div className="flex-none snap-start w-36 sm:flex-auto sm:w-auto">
+                <WatchedItem key={m.dbId} movie={m} onRemove={onRemove} />
+              </div>
             ))}
           </div>
         </section>

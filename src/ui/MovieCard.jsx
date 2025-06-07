@@ -52,7 +52,8 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
   };
 
   return (
-    <div className="group relative w-32 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3]">
+    // <div className="group relative  sm:w-44 lg:w-48 xl:w-52 aspect-[2/3]">
+    <div className="group relative w-full aspect-[2/3] lg:max-w-[200px]">
       {movie.poster_path ? (
         <img
           src={poster(movie.poster_path, 342)}

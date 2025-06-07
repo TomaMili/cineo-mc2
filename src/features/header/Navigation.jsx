@@ -50,7 +50,7 @@ function Navigation({ isNavActive, setIsNavActive }) {
         className={`
           fixed inset-y-0 left-0 lg:w-64 w-full
           text-siva-200 lg:text-2xl text-xl
-          transform transition-all duration-300 ease-in-out z-20
+          transform transition-all duration-300 ease-in-out z-40
           ${isNavActive ? "translate-x-0" : "-translate-x-full"}
         `}
       >

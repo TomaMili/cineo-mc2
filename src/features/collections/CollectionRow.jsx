@@ -78,48 +78,53 @@ export default function CollectionRow({
         />
       )}
 
-      <div className="flex gap-3 lg:gap-6 flex-nowrap sm:flex-wrap overflow-auto py-5">
+      <div className="flex flex-nowrap gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory sm:grid sm:gap-4 sm:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] sm:overflow-x-visible sm:snap-none min-w-full py-5">
         {movies.map((movie) => (
-          <div className="relative group">
-            <div
-              key={movie.dbId}
-              className="group relative w-32 sm:w-44 lg:w-48 xl:w-52 aspect-[2/3]"
-            >
-              <img
-                src={poster(movie.poster)}
-                srcSet={`
+          <div
+            key={movie.id}
+            className="flex-none snap-start w-36 sm:flex-auto sm:w-auto"
+          >
+            <div className="relative group">
+              <div
+                key={movie.dbId}
+                className="group relative w-full aspect-[2/3] lg:max-w-[200px]"
+              >
+                <img
+                  src={poster(movie.poster, 342)}
+                  srcSet={`
                         ${poster(movie.poster, 92)}  92w,
                         ${poster(movie.poster, 342)} 342w,
                         ${poster(movie.poster, 500)} 500w
                       `}
-                alt={movie.title}
-                sizes="(max-width: 640px) 50vw, 20vw"
-                className="w-full h-full object-cover rounded-lg cursor-pointer transition-all duration-300 ease-out hover:scale-103"
-                onClick={() => open(movie)}
-              />
-              <button
-                onClick={() =>
-                  removeMovie.mutate({
-                    collectionId: collection.id,
-                    movieId: movie.dbId,
-                  })
-                }
-                className=" absolute top-2 right-2
+                  alt={movie.title}
+                  sizes="(max-width: 640px) 50vw, 20vw"
+                  className="w-full h-full object-cover rounded-lg cursor-pointer transition-all duration-300 ease-out hover:scale-103"
+                  onClick={() => open(movie)}
+                />
+                <button
+                  onClick={() =>
+                    removeMovie.mutate({
+                      collectionId: collection.id,
+                      movieId: movie.dbId,
+                    })
+                  }
+                  className=" absolute top-2 right-2
                           bg-black/50 p-1 rounded-full
                           hover:bg-bordo-500
                           flex justify-center items-center
                           transition-all duration-300 ease-out
                           opacity-0            
                           group-hover:opacity-100 cursor-pointer"
-                title="Remove from collection"
-              >
-                <Icon
-                  icon="gridicons:cross-circle"
-                  className="text-white"
-                  width="20"
-                  height="20"
-                />
-              </button>
+                  title="Remove from collection"
+                >
+                  <Icon
+                    icon="gridicons:cross-circle"
+                    className="text-white"
+                    width="20"
+                    height="20"
+                  />
+                </button>
+              </div>
             </div>
           </div>
         ))}
