@@ -2,7 +2,7 @@ export default function ReviewsSection({ reviews = [] }) {
   if (reviews.length === 0) return null;
 
   return (
-    <section className="sm:mx-[calc(2rem+2vw)] md:mx-[calc(2rem+3vw)] lg:pb-14 px-6 mt-20 text-siva-100">
+    <section className="sm:mx-[calc(2rem+2vw)] md:mx-[calc(2rem+3vw)] lg:pb-14 px-3 mt-20 text-siva-100">
       <h2 className="text-2xl lg:text-3xl uppercase tracking-wide mb-6 ml-1">
         Featured Reviews
       </h2>
