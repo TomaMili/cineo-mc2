@@ -101,10 +101,10 @@ export default function HomePage() {
       >
         <HeroSection />
       </Suspense>
-      <main className="lg:space-y-8 px-4 lg:px-12 pt-12 pb-40">
+      <main className="lg:space-y-8 px-4 lg:px-12 pt-12 pb-16 sm:pb-40">
         {recsHook.isLoading ? (
           <div className="pt-12">
-            <h2 className="text-2xl lg:text-3xl">Recommended For You</h2>
+            <h2 className="text-3xl">Recommended For You</h2>
             <div className="pt-10 flex justify-center">
               <Spinner size={32} />
             </div>

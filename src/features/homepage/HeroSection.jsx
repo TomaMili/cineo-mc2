@@ -25,7 +25,7 @@ function HeroSection() {
           decoding="async"
           fetchpriority="high"
         />
-        <h2 className="z-0 lg:text-6xl text-3xl font-light text-center lg:pb-0 pb-3 lg:pt-20 pt-10">
+        <h2 className="z-0 lg:text-6xl text-2xl font-light text-center lg:pb-0 pb-3 lg:pt-20 pt-6">
           Ready for Your Next <br /> Watch?
         </h2>
         <button
