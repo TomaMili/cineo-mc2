@@ -18,14 +18,14 @@ export default function MemberRow({ member, movies, limit, isMe }) {
         "rounded-lg transition-colors",
         isMe
           ? member.is_ready
-            ? "bg-bordo-700" // ti  ready
-            : "bg-siva-800" // ti + waiting
+            ? "bg-bordo-700" // you ready
+            : "bg-siva-800" // you waiting
           : member.is_ready
-          ? "bg-bordo-600" // drugi ready
-          : "bg-siva-900" // drugi waiting
+          ? "bg-bordo-600" // other ready
+          : "bg-siva-900" // other waiting
       )}
     >
-      {/* gornja linija ------------------------------------------------ */}
+      {/* Header row */}
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
@@ -36,7 +36,7 @@ export default function MemberRow({ member, movies, limit, isMe }) {
             icon="ix:user-profile"
             width="50"
             height="50"
-            className="rounded-full  p-1 text-siva-200"
+            className="rounded-full p-1 text-siva-200"
           />
 
           <div className="text-left">
@@ -53,18 +53,22 @@ export default function MemberRow({ member, movies, limit, isMe }) {
           <p>
             Movies ({movies.length}/{limit})
           </p>
-          <ChevronDown
-            size={18}
-            className={clsx("transition-transform", open && "rotate-180")}
-          />
+          {open ? (
+            <ChevronUp size={18} className="transition-transform" />
+          ) : (
+            <ChevronDown size={18} className="transition-transform" />
+          )}
         </div>
       </button>
 
-      {/* kolapsibilni popis filmova ---------------------------------- */}
+      {/* Collapsible list of movies */}
       {open && movies.length > 0 && (
         <div className="flex gap-3 overflow-x-auto px-6 pb-4">
           {movies.map((m) => (
-            <figure key={m.movie_id} className="w-[90px] shrink-0">
+            <figure
+              key={`${m.user_id}-${m.movie_id}`}
+              className="w-[90px] shrink-0"
+            >
               <img
                 src={m.movies?.poster || "/no-poster.jpg"}
                 alt={m.movies?.title}
