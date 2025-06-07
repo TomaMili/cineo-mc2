@@ -77,12 +77,12 @@ export default function MovieCarousel({
         className="overflow-hidden w-full"
         style={{ willChange: "transform" }}
       >
-        <div className="flex gap-6 pt-2 px-1">
+        <div className="flex gap-3 sm:gap-6 pt-2 px-1">
           {slides.map((movie, idx) =>
             movie ? (
               <div
                 key={`${movie.id}-${idx}`}
-                className="flex-none w-28 sm:w-44 lg:w-48 xl:w-52 transform-gpu"
+                className="flex-none w-34 sm:w-44 lg:w-48 xl:w-52 transform-gpu"
               >
                 <MovieCard
                   movie={movie}
