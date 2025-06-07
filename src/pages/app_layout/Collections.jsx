@@ -45,7 +45,7 @@ export default function Collections() {
   if (isLoading)
     return (
       <>
-        <div className="w-full mx-auto px-3 sm:px-6 sm:pt-6 text-sm sm:text-md font-light">
+        <div className="w-full mx-auto px-3 sm:px-6 sm:pt-6 text-sm sm:text-md font-light mb-6">
           <TabNav
             tabs={[
               ["../watchlater", "Watch later"],
@@ -62,7 +62,7 @@ export default function Collections() {
 
   return (
     <div className="min-h-screen  text-siva-100 pb-12">
-      <div className="w-full mx-auto px-3 sm:px-6 sm:pt-6 text-sm sm:text-md font-light">
+      <div className="w-full mx-auto px-3 sm:px-6 sm:pt-6 text-sm sm:text-md font-light mb-6">
         <TabNav
           tabs={[
             ["../watchlater", "Watch later"],

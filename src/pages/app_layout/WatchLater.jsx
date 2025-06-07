@@ -49,7 +49,7 @@ export default function WatchLater() {
   if (isLoading)
     return (
       <>
-        <div className="w-full mx-auto px-3 sm:px-6 sm:pt-6 text-sm sm:text-md font-light">
+        <div className="w-full mx-auto px-3 sm:px-6 sm:pt-6 text-sm sm:text-md font-light mb-6">
           <TabNav
             tabs={[
               ["", "Watch later"],
@@ -66,7 +66,7 @@ export default function WatchLater() {
 
   return (
     <div className="min-h-screen bg-siva-800 text-white pb-12">
-      <div className="w-full mx-auto px-3 sm:px-6 sm:pt-6 text-sm sm:text-md font-light">
+      <div className="w-full mx-auto px-3 sm:px-6 sm:pt-6 text-sm sm:text-md font-light mb-6">
         <TabNav
           tabs={[
             ["", "Watch later"],
