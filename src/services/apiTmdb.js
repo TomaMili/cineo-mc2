@@ -1,3 +1,6 @@
+// src/services/apiTmdb.js
+import supabase from "./supabase";
+
 const BASE = "https://api.themoviedb.org/3";
 const APIKEY = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -163,6 +166,32 @@ export const fetchGenres = (s) =>
 export function findDirector(credits) {
   const crew = credits?.crew ?? credits?.credits?.crew ?? credits ?? [];
   return crew.find((p) => p.job === "Director") || null;
+}
+
+/* upsert movie in Supabase --------------------------------------------- */
+export async function upsertMovieFromTmdb(tmdbMovie) {
+  const {
+    id: api_id,
+    title,
+    overview,
+    release_date,
+    poster_path,
+    backdrop_path,
+  } = tmdbMovie;
+
+  const record = {
+    api_id,
+    title,
+    overview,
+    release_date: release_date ? Number(release_date) : null,
+    poster: poster_path,
+    backdrop: backdrop_path,
+  };
+
+  const { error } = await supabase
+    .from("movies")
+    .upsert(record, { onConflict: "api_id" });
+  if (error) throw error;
 }
 
 /* image helpers ---------------------------------------------------------- */
