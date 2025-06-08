@@ -6,75 +6,135 @@
 
 2. **Open the SQL Editor ▸ New Query** and run the schema below (feel free to tweak names or add indexes):
 
-   ```sql
-   -- Users & profiles
-   create table users (
-     id uuid primary key default uuid_generate_v4(),
-     email text unique not null,
-     username text unique not null,
-     favourite_genres jsonb,
-     favourite_actors jsonb,
-     platforms jsonb,
-     plan text default 'free',
-     avatar text,
-     created_at timestamptz default now()
-   );
+  ```sql
+-- USERS
+create table users (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  username text,
+  platforms json,
+  plan text,
+  favourite_actors json,
+  favourite_genres json,
+  profile_id uuid not null default gen_random_uuid() unique,
+  foreign key (profile_id) references auth.users(id)
+);
 
-   -- Movies pulled from TMDB
-   create table movies (
-     id bigint generated always as identity primary key,
-     api_id integer unique not null,
-     title text not null,
-     overview text,
-     release_date date,
-     poster text,
-     backdrop text,
-     tagline text,
-     duration integer,
-     imdb_rating numeric,
-     genres jsonb,
-     actors jsonb,
-     directors jsonb
-   );
+-- MOVIES
+create table movies (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  title text,
+  overview text,
+  release_date smallint,
+  genres json,
+  actors json,
+  directors json,
+  poster text,
+  backdrop text,
+  trailer text,
+  platforms json,
+  writers json,
+  imdb_rating real,
+  user_rating smallint,
+  duration bigint,
+  tagline text,
+  api_id bigint unique,
+  fetched_at timestamptz default now()
+);
 
-   -- Watched & watch-later relations
-   create table watched (
-     id bigint generated always as identity primary key,
-     user_id uuid references users(id) on delete cascade,
-     movie_id bigint references movies(id) on delete cascade,
-     user_rating numeric,
-     created_at timestamptz default now()
-   );
+-- WATCHED / WATCH LATER
+create table watched (
+  created_at timestamptz not null default now(),
+  users_id bigint not null,
+  movie_id bigint not null,
+  user_rating smallint,
+  primary key (users_id, movie_id),
+  foreign key (users_id) references users(id),
+  foreign key (movie_id) references movies(id)
+);
 
-   create table watch_later (
-     id bigint generated always as identity primary key,
-     user_id uuid references users(id) on delete cascade,
-     movie_id bigint references movies(id) on delete cascade,
-     created_at timestamptz default now()
-   );
+create table watch_later (
+  created_at timestamptz not null default now(),
+  user_id bigint not null,
+  movie_id bigint not null,
+  primary key (user_id, movie_id),
+  foreign key (user_id) references users(id),
+  foreign key (movie_id) references movies(id)
+);
 
-   -- Collections (many-to-many)
-   create table collections (
-     id bigint generated always as identity primary key,
-     user_id uuid references users(id) on delete cascade,
-     name text not null,
-     created_at timestamptz default now()
-   );
+-- COLLECTIONS
+create table collections (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  user_id bigint not null,
+  name text,
+  foreign key (user_id) references users(id)
+);
 
-   create table movies_collections (
-     movie_id bigint references movies(id) on delete cascade,
-     collection_id bigint references collections(id) on delete cascade,
-     primary key (movie_id, collection_id)
-   );
+create table movies_collections (
+  movies_id bigint generated always as identity,
+  created_at timestamptz not null default now(),
+  collections_id bigint not null,
+  primary key (movies_id, collections_id),
+  foreign key (movies_id) references movies(id),
+  foreign key (collections_id) references collections(id)
+);
 
-   -- Achievements / gamification
-   create table achievements (
-     id bigint generated always as identity primary key,
-     user_id uuid references users(id) on delete cascade,
-     achievement_name text not null,
-     date_achieved timestamptz default now()
-   );
-   ```
+-- ACHIEVEMENTS
+create table achivements (
+  id bigint generated always as identity primary key,
+  date_achieved timestamptz not null default now(),
+  achivement_name varchar,
+  user_id bigint,
+  foreign key (user_id) references users(id)
+);
+
+-- WATCH TOGETHER ROOMS
+create table watch_rooms (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  name text not null,
+  owner_id bigint not null,
+  room_type text not null check (room_type in ('Random', 'Generate')),
+  movie_limit smallint not null default 2 check (movie_limit between 1 and 5),
+  expires_at timestamptz not null,
+  status text not null default 'draft' check (status in ('draft', 'active', 'awaiting_accept', 'final', 'cancelled')),
+  foreign key (owner_id) references users(id)
+);
+
+create table watch_room_members (
+  room_id bigint not null,
+  user_id bigint not null,
+  is_ready boolean not null default false,
+  joined_at timestamptz not null default now(),
+  primary key (room_id, user_id),
+  foreign key (room_id) references watch_rooms(id),
+  foreign key (user_id) references users(id)
+);
+
+create table watch_room_movies (
+  room_id bigint not null,
+  user_id bigint not null,
+  movie_id bigint not null,
+  added_at timestamptz not null default now(),
+  primary key (room_id, user_id, movie_id),
+  foreign key (room_id) references watch_rooms(id),
+  foreign key (user_id) references users(id),
+  foreign key (movie_id) references movies(id)
+);
+
+create table watch_room_results (
+  room_id bigint primary key,
+  result_type text not null check (result_type in ('Random', 'Generate')),
+  picked_movie bigint,
+  picked_list json[],
+  accepted_at timestamptz,
+  foreign key (room_id) references watch_rooms(id),
+  foreign key (picked_movie) references movies(id)
+);
+
+```
 
 3. **Enable Row Level Security** on each table (Settings ▸ Auth ▸ Enable RLS) and add policies, e.g.:
 
