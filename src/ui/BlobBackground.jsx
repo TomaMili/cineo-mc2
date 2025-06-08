@@ -2,20 +2,19 @@ import { useMemo } from "react";
 
 export default function BlobBackground({ blobNum }) {
   const blobs = useMemo(() => {
-    const count = blobNum || 3; // how many blobs you want
+    const count = blobNum || 3;
     return Array.from({ length: count }).map(() => {
-      const size = Math.floor(Math.random() * 800 + 500); // between 200px and 400px
+      const size = Math.floor(Math.random() * 800 + 500);
       return {
         top: `${Math.random() * 100}%`,
         left: `${Math.random() * 100}%`,
         width: `${size}px`,
         height: `${size}px`,
-        // pick a semi‐transparent pastel color (adjust as desired)
         background: `rgba(126, 20, 19, 0.15)`,
-        blur: Math.floor(Math.random() * 40 + 60), // blur between 60px and 100px
+        blur: Math.floor(Math.random() * 40 + 60),
       };
     });
-  }, []);
+  }, [blobNum]);
 
   return (
     <div className="absolute inset-0 overflow-visible pointer-events-none z-0">

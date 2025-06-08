@@ -1,5 +1,6 @@
 // src/features/watch_together/CreateRoomModal.jsx
 import { useState, useEffect } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
@@ -72,7 +73,7 @@ export default function CreateRoomModal({ isOpen = false, room, onClose }) {
           />
           <motion.div
             className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2
-                       rounded-2xl  bg-siva-800/99 p-8 backdrop-blur shadow-2xl"
+                       rounded-2xl  bg-siva-800/60 p-8 backdrop-blur-lg shadow-2xl "
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
@@ -94,7 +95,7 @@ export default function CreateRoomModal({ isOpen = false, room, onClose }) {
               step="1"
               value={form.timer}
               onChange={update("timer")}
-              className="mb-4 w-full rounded-md bg-siva-300/50 px-4 py-2
+              className="mb-4 w-full rounded-md bg-siva-300/50 px-4 py-2 transition-all duration-300 cursor-pointer
                          focus:outline-none focus:ring-2 focus:ring-bordo-400 accent-bordo hover:accent-bordo-light"
             />
             <div className="mb-6 grid grid-cols-2 gap-4">
@@ -103,7 +104,7 @@ export default function CreateRoomModal({ isOpen = false, room, onClose }) {
                 <select
                   value={form.type}
                   onChange={update("type")}
-                  className="w-full rounded-md bg-siva-300/50 px-4 py-2
+                  className="w-full rounded-md bg-siva-300/50 px-4 py-2 cursor-pointer transition-all duration-300
                              focus:outline-none focus:ring-2 focus:ring-bordo-400"
                 >
                   <option className="text-siva-800">Generate</option>
@@ -115,7 +116,7 @@ export default function CreateRoomModal({ isOpen = false, room, onClose }) {
                 <select
                   value={form.limit}
                   onChange={update("limit")}
-                  className="w-full rounded-md bg-siva-300/50 px-4 py-2
+                  className="w-full rounded-md bg-siva-300/50 px-4 py-2 transition-all duration-300 cursor-pointer
                              focus:outline-none focus:ring-2 focus:ring-bordo-400"
                 >
                   {[1, 2, 3, 4, 5].map((n) => (
@@ -130,7 +131,7 @@ export default function CreateRoomModal({ isOpen = false, room, onClose }) {
               onClick={handleSubmit}
               disabled={!form.name.trim()}
               className={clsx(
-                "w-full rounded-full py-3 font-semibold transition",
+                "w-full rounded-full py-3 font-semibold cursor-pointer transition-all duration-300",
                 form.name.trim()
                   ? "bg-bordo-600 hover:bg-bordo-500 text-white"
                   : "cursor-not-allowed bg-slate-600 text-slate-400"

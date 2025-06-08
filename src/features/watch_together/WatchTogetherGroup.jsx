@@ -1,5 +1,4 @@
-// src/features/watch_together/WatchTogetherGroup.jsx
-import { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Plus, Share2, Clock, Settings, Heading2 } from "lucide-react";
 import clsx from "clsx";
@@ -21,6 +20,9 @@ import CreateRoomModal from "./CreateRoomModal";
 import AddMovieDialog from "./AddMovieDialog";
 
 import Spinner from "../../ui/Spinner";
+import toast from "react-hot-toast";
+
+import BlobBackground from "../../ui/BlobBackground";
 
 function Countdown({ target }) {
   const [now, setNow] = useState(Date.now());
@@ -50,7 +52,6 @@ export default function WatchTogetherGroup() {
   const { profile } = useCurrentUser();
   const currentUserId = profile?.id;
 
-  /* ---------- make sure current user is a member ---------- */
   useEffect(() => {
     if (!roomId || !currentUserId) return;
     (async () => {
@@ -68,7 +69,6 @@ export default function WatchTogetherGroup() {
     })();
   }, [roomId, currentUserId]);
 
-  /* ---------------- queries & mutations ------------------- */
   const { data: room, isLoading: loadingRoom } = useRoom(roomId);
   const { data: members } = useMembers(roomId);
   const { data: movies = [] } = useWatchRoomMovies(roomId);
@@ -78,7 +78,6 @@ export default function WatchTogetherGroup() {
   const toggleReady = useToggleReady(roomId);
   const updateRoom = useUpdateRoom(roomId);
 
-  /* ---------------- derived data -------------------------- */
   const sortedMembers = useMemo(() => {
     if (!members) return [];
     return [
@@ -89,6 +88,7 @@ export default function WatchTogetherGroup() {
     ];
   }, [members, currentUserId]);
 
+  console.log(sortedMembers);
   const allReady =
     sortedMembers.length > 0 && sortedMembers.every((m) => m.is_ready);
 
@@ -130,7 +130,7 @@ export default function WatchTogetherGroup() {
 
   return (
     <section className="mx-auto max-w-4xl px-4 pb-32 text-white">
-      {/* header */}
+      <BlobBackground blobNum={2} />
       <header className="mb-10 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="mb-1 text-4xl font-light">{room.name}</h1>
@@ -144,10 +144,11 @@ export default function WatchTogetherGroup() {
           {!allReady && <Countdown target={room.expires_at} />}
           {!allReady && (
             <button
-              onClick={() =>
-                navigator.clipboard.writeText(window.location.href)
-              }
-              className="flex items-center gap-1 rounded-full bg-slate-700/30 px-3 py-1.5 text-sm hover:bg-slate-700/60"
+              onClick={() => {
+                navigator.clipboard.writeText(window.location.href);
+                toast.success("Link copied to clipboard");
+              }}
+              className="flex items-center gap-1 rounded-lg bg-slate-700/30 px-3 transition-all duration-300 py-1.5 text-sm hover:bg-slate-700/60 cursor-pointer"
             >
               <Share2 size={18} /> Invite
             </button>
@@ -162,10 +163,10 @@ export default function WatchTogetherGroup() {
                 })
               }
               className={clsx(
-                "rounded-full px-4 py-1.5 text-sm font-semibold transition",
+                "rounded-lg px-4 py-1.5 text-sm font-semibold transition-all duration-300 cursor-pointer",
                 sortedMembers.find((m) => m.id === currentUserId)?.is_ready
-                  ? "bg-emerald-500 text-green-200 hover:bg-emerald-500/50"
-                  : "bg-bordo-500/40 border border-bordo-400 text-white hover:bg-bordo-400/50"
+                  ? "bg-emerald-500 text-white hover:bg-emerald-500/50"
+                  : "bg-bordo-500/40 text-white"
               )}
             >
               {sortedMembers.find((m) => m.id === currentUserId)?.is_ready
@@ -177,7 +178,7 @@ export default function WatchTogetherGroup() {
           {!allReady && (
             <button
               onClick={() => setShowAdd(true)}
-              className="flex items-center gap-1 rounded-full bg-bordo-600 px-3 py-1.5 text-sm hover:bg-bordo-500"
+              className="flex items-center gap-1 rounded-lg bg-bordo-600 px-3 py-1.5 text-sm hover:bg-bordo-500 transition-all duration-300 cursor-pointer"
             >
               <Plus size={14} /> Add movie
             </button>
@@ -186,7 +187,7 @@ export default function WatchTogetherGroup() {
           {room.owner_id === currentUserId && !allReady && (
             <button
               onClick={() => setShowEdit(true)}
-              className="hidden items-center gap-1 rounded-full bg-siva-300/50 px-2 py-1.5 text-xs hover:bg-slate-700/60 sm:flex"
+              className="hidden items-center gap-1 rounded-full bg-siva-300/50 px-2 py-1.5 text-xs hover:bg-slate-700/60 sm:flex transition-all duration-300 cursor-pointer"
               title="Edit room"
             >
               <Settings size={18} />
