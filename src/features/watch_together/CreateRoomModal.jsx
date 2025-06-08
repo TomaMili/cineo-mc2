@@ -72,7 +72,7 @@ export default function CreateRoomModal({ isOpen = false, room, onClose }) {
           />
           <motion.div
             className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2
-                       rounded-2xl bg-slate-800/60 p-8 backdrop-blur shadow-2xl"
+                       rounded-2xl  bg-siva-800/99 p-8 backdrop-blur shadow-2xl"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
@@ -85,7 +85,7 @@ export default function CreateRoomModal({ isOpen = false, room, onClose }) {
             <input
               value={form.name}
               onChange={update("name")}
-              className="mb-4 w-full rounded-md bg-slate-700/50 px-4 py-2
+              className="mb-4 w-full rounded-md bg-siva-300/50 px-4 py-2
                          focus:outline-none focus:ring-2 focus:ring-bordo-400"
             />
             <label className="mb-1 block text-sm">Set timer</label>
@@ -94,8 +94,8 @@ export default function CreateRoomModal({ isOpen = false, room, onClose }) {
               step="1"
               value={form.timer}
               onChange={update("timer")}
-              className="mb-4 w-full rounded-md bg-slate-700/50 px-4 py-2
-                         focus:outline-none focus:ring-2 focus:ring-bordo-400"
+              className="mb-4 w-full rounded-md bg-siva-300/50 px-4 py-2
+                         focus:outline-none focus:ring-2 focus:ring-bordo-400 accent-bordo hover:accent-bordo-light"
             />
             <div className="mb-6 grid grid-cols-2 gap-4">
               <div>
@@ -103,11 +103,11 @@ export default function CreateRoomModal({ isOpen = false, room, onClose }) {
                 <select
                   value={form.type}
                   onChange={update("type")}
-                  className="w-full rounded-md bg-slate-700/50 px-4 py-2
+                  className="w-full rounded-md bg-siva-300/50 px-4 py-2
                              focus:outline-none focus:ring-2 focus:ring-bordo-400"
                 >
-                  <option>Generate</option>
-                  <option>Random</option>
+                  <option className="text-siva-800">Generate</option>
+                  <option className="text-siva-800">Random</option>
                 </select>
               </div>
               <div>
@@ -115,11 +115,11 @@ export default function CreateRoomModal({ isOpen = false, room, onClose }) {
                 <select
                   value={form.limit}
                   onChange={update("limit")}
-                  className="w-full rounded-md bg-slate-700/50 px-4 py-2
+                  className="w-full rounded-md bg-siva-300/50 px-4 py-2
                              focus:outline-none focus:ring-2 focus:ring-bordo-400"
                 >
                   {[1, 2, 3, 4, 5].map((n) => (
-                    <option key={n} value={n}>
+                    <option key={n} value={n} className="text-siva-800">
                       {n}
                     </option>
                   ))}

@@ -10,7 +10,11 @@ export default {
         "bordo-500": "#7f1d1d",
         "bordo-400": "#991b1b",
       },
+      accentColor: {
+        bordo: "#b91c1c",
+        "bordo-light": "#dc2626",
+      },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };
