@@ -28,11 +28,23 @@ export default function WatchTogether() {
 
   const handleJoin = () => {
     try {
-      const parts = new URL(joinUrl.trim());
-      const id = parts.pathname.split("/").pop();
-      if (id) nav(`/watch-together/${id}`);
+      const input = joinUrl.trim();
+      let id;
+
+      if (input.startsWith("http")) {
+        const url = new URL(input);
+        id = url.pathname.split("/").pop();
+      } else {
+        id = input;
+      }
+
+      if (id && /^\d+$/.test(id)) {
+        nav(`/watch-together/${id}`);
+      } else {
+        alert("Invalid room link or ID.");
+      }
     } catch {
-      alert("Invalid URL");
+      alert("Invalid URL format.");
     }
   };
 
@@ -46,8 +58,8 @@ export default function WatchTogether() {
             type="url"
             value={joinUrl}
             onChange={(e) => setJoinUrl(e.target.value)}
-            placeholder="https://cineo.app/watch/xxxx"
-            className="w-64 rounded-l-lg bg-siva-300 px-4 py-2 placeholder:text-siva-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-bordo-400"
+            placeholder="Room URL or ID (e.g. 23 or https://cineo.app/watch-together/23)"
+            className="w-116 rounded-l-lg bg-siva-300 px-4 py-2 placeholder:text-siva-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-bordo-400"
           />
           <button
             onClick={handleJoin}
