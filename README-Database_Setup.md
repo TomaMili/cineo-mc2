@@ -6,75 +6,125 @@
 
 2. **Open the SQL Editor ▸ New Query** and run the schema below (feel free to tweak names or add indexes):
 
-   ```sql
-   -- Users & profiles
-   create table users (
-     id uuid primary key default uuid_generate_v4(),
-     email text unique not null,
-     username text unique not null,
-     favourite_genres jsonb,
-     favourite_actors jsonb,
-     platforms jsonb,
-     plan text default 'free',
-     avatar text,
-     created_at timestamptz default now()
-   );
+   -- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
 
-   -- Movies pulled from TMDB
-   create table movies (
-     id bigint generated always as identity primary key,
-     api_id integer unique not null,
-     title text not null,
-     overview text,
-     release_date date,
-     poster text,
-     backdrop text,
-     tagline text,
-     duration integer,
-     imdb_rating numeric,
-     genres jsonb,
-     actors jsonb,
-     directors jsonb
-   );
-
-   -- Watched & watch-later relations
-   create table watched (
-     id bigint generated always as identity primary key,
-     user_id uuid references users(id) on delete cascade,
-     movie_id bigint references movies(id) on delete cascade,
-     user_rating numeric,
-     created_at timestamptz default now()
-   );
-
-   create table watch_later (
-     id bigint generated always as identity primary key,
-     user_id uuid references users(id) on delete cascade,
-     movie_id bigint references movies(id) on delete cascade,
-     created_at timestamptz default now()
-   );
-
-   -- Collections (many-to-many)
-   create table collections (
-     id bigint generated always as identity primary key,
-     user_id uuid references users(id) on delete cascade,
-     name text not null,
-     created_at timestamptz default now()
-   );
-
-   create table movies_collections (
-     movie_id bigint references movies(id) on delete cascade,
-     collection_id bigint references collections(id) on delete cascade,
-     primary key (movie_id, collection_id)
-   );
-
-   -- Achievements / gamification
-   create table achievements (
-     id bigint generated always as identity primary key,
-     user_id uuid references users(id) on delete cascade,
-     achievement_name text not null,
-     date_achieved timestamptz default now()
-   );
-   ```
+CREATE TABLE public.achivements (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  date_achieved timestamp with time zone NOT NULL DEFAULT now(),
+  achivement_name character varying,
+  user_id bigint,
+  CONSTRAINT achivements_pkey PRIMARY KEY (id),
+  CONSTRAINT achivements_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
+);
+CREATE TABLE public.collections (
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  user_id bigint NOT NULL,
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+  name character varying,
+  CONSTRAINT collections_pkey PRIMARY KEY (id),
+  CONSTRAINT collections_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
+);
+CREATE TABLE public.movies (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  title text,
+  overview text,
+  release_date smallint,
+  genres json,
+  actors json,
+  directors json,
+  poster text,
+  backdrop text,
+  trailer text,
+  platforms json,
+  writers json,
+  imdb_rating real,
+  user_rating smallint,
+  duration bigint,
+  tagline text,
+  api_id bigint UNIQUE,
+  fetched_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT movies_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.movies_collections (
+  movies_id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  collections_id bigint NOT NULL,
+  CONSTRAINT movies_collections_pkey PRIMARY KEY (movies_id, collections_id),
+  CONSTRAINT movies_collections_collections_id_fkey FOREIGN KEY (collections_id) REFERENCES public.collections(id),
+  CONSTRAINT movies_collections_movies_id_fkey FOREIGN KEY (movies_id) REFERENCES public.movies(id)
+);
+CREATE TABLE public.users (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  username text,
+  platforms json,
+  plan text,
+  favourite_actors json,
+  favourite_genres json,
+  profile_id uuid NOT NULL DEFAULT gen_random_uuid() UNIQUE,
+  CONSTRAINT users_pkey PRIMARY KEY (id),
+  CONSTRAINT users_profile_id_fkey FOREIGN KEY (profile_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.watch_later (
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  user_id bigint NOT NULL,
+  movie_id bigint NOT NULL,
+  CONSTRAINT watch_later_pkey PRIMARY KEY (user_id, movie_id),
+  CONSTRAINT watch_later_movie_id_fkey FOREIGN KEY (movie_id) REFERENCES public.movies(id),
+  CONSTRAINT watchlist_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
+);
+CREATE TABLE public.watch_room_members (
+  room_id bigint NOT NULL,
+  user_id bigint NOT NULL,
+  is_ready boolean NOT NULL DEFAULT false,
+  joined_at timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT watch_room_members_pkey PRIMARY KEY (room_id, user_id),
+  CONSTRAINT watch_room_members_room_id_fkey FOREIGN KEY (room_id) REFERENCES public.watch_rooms(id),
+  CONSTRAINT watch_room_members_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
+);
+CREATE TABLE public.watch_room_movies (
+  room_id bigint NOT NULL,
+  user_id bigint NOT NULL,
+  movie_id bigint NOT NULL,
+  added_at timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT watch_room_movies_pkey PRIMARY KEY (room_id, user_id, movie_id),
+  CONSTRAINT watch_room_movies_movie_id_fkey FOREIGN KEY (movie_id) REFERENCES public.movies(id),
+  CONSTRAINT watch_room_movies_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id),
+  CONSTRAINT watch_room_movies_room_id_fkey FOREIGN KEY (room_id) REFERENCES public.watch_rooms(id)
+);
+CREATE TABLE public.watch_room_results (
+  room_id bigint NOT NULL,
+  result_type text NOT NULL CHECK (result_type = ANY (ARRAY['Random'::text, 'Generate'::text])),
+  picked_movie bigint,
+  picked_list ARRAY,
+  accepted_at timestamp with time zone,
+  CONSTRAINT watch_room_results_pkey PRIMARY KEY (room_id),
+  CONSTRAINT watch_room_results_picked_movie_fkey FOREIGN KEY (picked_movie) REFERENCES public.movies(id),
+  CONSTRAINT watch_room_results_room_id_fkey FOREIGN KEY (room_id) REFERENCES public.watch_rooms(id)
+);
+CREATE TABLE public.watch_rooms (
+  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  name text NOT NULL,
+  owner_id bigint NOT NULL,
+  room_type text NOT NULL CHECK (room_type = ANY (ARRAY['Random'::text, 'Generate'::text])),
+  movie_limit smallint NOT NULL DEFAULT 2 CHECK (movie_limit >= 1 AND movie_limit <= 5),
+  expires_at timestamp with time zone NOT NULL,
+  status text NOT NULL DEFAULT 'draft'::text CHECK (status = ANY (ARRAY['draft'::text, 'active'::text, 'awaiting_accept'::text, 'final'::text, 'cancelled'::text])),
+  CONSTRAINT watch_rooms_pkey PRIMARY KEY (id),
+  CONSTRAINT watch_rooms_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES public.users(id)
+);
+CREATE TABLE public.watched (
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  users_id bigint NOT NULL,
+  movie_id bigint NOT NULL,
+  user_rating smallint,
+  CONSTRAINT watched_pkey PRIMARY KEY (users_id, movie_id),
+  CONSTRAINT watched_users_id_fkey FOREIGN KEY (users_id) REFERENCES public.users(id),
+  CONSTRAINT watched_movie_id_fkey FOREIGN KEY (movie_id) REFERENCES public.movies(id)
+);
 
 3. **Enable Row Level Security** on each table (Settings ▸ Auth ▸ Enable RLS) and add policies, e.g.:
 
