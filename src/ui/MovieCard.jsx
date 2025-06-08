@@ -79,6 +79,7 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
             ${poster(movie.poster, 500)} 500w
           `}
           sizes="(max-width: 640px) 50vw, 20vw"
+          title={movie.title}
           alt={movie.title}
           onMouseEnter={prefetch}
           onClick={handlePosterClick}
@@ -117,6 +118,7 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
         <p
           onClick={handlePosterClick}
           className="lg:text-sm text-lg font-medium line-clamp-1 mr-1 hover:text-bordo-400 cursor-pointer"
+          title={movie.title}
         >
           <span className="hidden sm:inline text-sm">{movie.title}</span>
         </p>

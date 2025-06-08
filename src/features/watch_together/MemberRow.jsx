@@ -7,23 +7,30 @@ import MovieCard from "../../ui/MovieCard";
 
 export default function MemberRow({ member, movies, limit, isMe, roomId }) {
   const [open, setOpen] = useState(false);
-  const removeMovie = useRemoveMovieFromWatchRoom(roomId); // ✅ fix
+  const removeMovie = useRemoveMovieFromWatchRoom(roomId);
+
+  const backgroundClass = clsx(
+    isMe
+      ? member.is_ready
+        ? "bg-bordo-500"
+        : "bg-bordo-600/30"
+      : member.is_ready
+      ? "bg-bordo-500"
+      : "bg-bordo-600/30"
+  );
 
   return (
     <div
       className={clsx(
         "rounded-lg overflow-hidden transition-colors",
-        isMe
-          ? member.is_ready
-            ? "bg-bordo-700"
-            : "bg-siva-800"
-          : member.is_ready
-          ? "bg-bordo-600"
-          : "bg-siva-900"
+        backgroundClass
       )}
     >
       <button
-        className="flex justify-between w-full px-6 py-3"
+        className={clsx(
+          "flex justify-between w-full px-6 py-3",
+          backgroundClass
+        )}
         onClick={() => setOpen((o) => !o)}
       >
         <div className="flex items-center gap-4">
@@ -49,7 +56,7 @@ export default function MemberRow({ member, movies, limit, isMe, roomId }) {
       </button>
 
       {open && (
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 px-6 pb-6">
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 px-6 py-6">
           {movies.length === 0 ? (
             <p className="text-siva-300 col-span-full">No movies yet</p>
           ) : (
