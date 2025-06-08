@@ -7,6 +7,15 @@
 
 ---
 ---
+![homepage](https://github.com/user-attachments/assets/ecce5cec-bb62-4a31-98a1-ac9e0a7d67a5)
+
+---
+---
+
+![movie](https://github.com/user-attachments/assets/44f534e9-a08a-4c2f-b8e8-034078d6706c)
+
+---
+---
 Cineo is a **React** web application for tracking, rating, and organising movies. Under the hood it relies on **Supabase** (database + authentication), while movie data comes from the **TMDB API**. Development is powered by **Vite**, styling is done with **Tailwind CSS**, and component animations use **Framer Motion**.
 
 
