@@ -55,7 +55,7 @@ export default function MemberRow({ member, movies, limit, isMe, roomId }) {
           ) : (
             movies.map((m) => (
               <MovieCard
-                key={m.dbId || m.id}
+                key={m.dbId ?? m.id}
                 movie={m}
                 onRemove={isMe ? () => removeMovie.mutate(m.dbId) : undefined}
               />

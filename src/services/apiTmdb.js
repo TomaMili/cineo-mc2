@@ -134,7 +134,6 @@ export async function discoverMovies({
   if (castIDs) params.set("with_cast", castIDs);
   if (crewIDs) params.set("with_crew", crewIDs);
   if (genreIDs) params.set("with_genres", genreIDs);
-  console.log("DISCOVER params", { castIDs, crewIDs, genreIDs });
   const res = await fetch(
     `https://api.themoviedb.org/3/discover/movie?${params}`,
     { signal }

@@ -1,9 +1,5 @@
-// src/services/apiWatchTogether.js
 import supabase from "./supabase";
 
-/* ─────────────── ROOMS ────────────────────────────────────────────── */
-
-/** Get all rooms owned by this user, newest first */
 export async function getWatchRooms(ownerId) {
   const { data, error } = await supabase
     .from("watch_rooms")
@@ -15,11 +11,6 @@ export async function getWatchRooms(ownerId) {
   return data;
 }
 
-/**
- * Create a new room.
- * `roomType` must be "Random" or "Generate".
- * `expiresAt` must be an ISO timestamp string.
- */
 export async function createWatchRoom({
   ownerId,
   name,
@@ -45,7 +36,6 @@ export async function createWatchRoom({
   return data;
 }
 
-/** Delete one room you own */
 export async function deleteWatchRoom(ownerId, roomId) {
   const { error } = await supabase
     .from("watch_rooms")
@@ -56,15 +46,14 @@ export async function deleteWatchRoom(ownerId, roomId) {
   if (error) throw error;
 }
 
-/* ─────────── MOVIES INSIDE A ROOM ─────────────────────────────────── */
-
 export async function getWatchRoomMovies(roomId) {
   const { data, error } = await supabase
     .from("watch_room_movies")
     .select(
-      `
+      ` 
+        user_id,
         added_at,
-        movies (
+        movies!inner (
           id,
           api_id,
           title,
@@ -78,8 +67,8 @@ export async function getWatchRoomMovies(roomId) {
 
   if (error) throw error;
 
-  // flatten to simpler objects
-  return data.map(({ added_at, movies }) => ({
+  return data.map(({ user_id, added_at, movies }) => ({
+    user_id,
     id: movies.api_id,
     dbId: movies.id,
     title: movies.title,
@@ -89,12 +78,7 @@ export async function getWatchRoomMovies(roomId) {
   }));
 }
 
-/**
- * Upsert TMDB movie into `movies`, then add it to given room.
- * `tmdbMovie` is the raw TMDB response you already have.
- */
 export async function addMovieToWatchRoom(userId, roomId, tmdbMovie) {
-  // 1. Upsert into master table
   const { data: movieRow, error: upErr } = await supabase
     .from("movies")
     .upsert(
@@ -111,21 +95,18 @@ export async function addMovieToWatchRoom(userId, roomId, tmdbMovie) {
 
   if (upErr) throw upErr;
 
-  // 2. Join movie to room
-  const { error: joinErr } = await supabase.from("watch_room_movies").insert([
-    {
-      room_id: roomId,
-      movie_id: movieRow.id,
-      user_id: userId,
-    },
-  ]);
+  const { error: joinErr } = await supabase
+    .from("watch_room_movies")
+    .upsert(
+      { room_id: roomId, movie_id: movieRow.id, user_id: userId },
+      { onConflict: "room_id,user_id,movie_id" }
+    );
 
   if (joinErr) throw joinErr;
 
-  return movieRow; // { id: <movies.id> }
+  return movieRow;
 }
 
-/** Remove movie from room (who removes it doesn’t matter) */
 export async function removeMovieFromWatchRoom(roomId, movieId) {
   const { error } = await supabase
     .from("watch_room_movies")
