@@ -8,15 +8,15 @@
 ---
 ---
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/ecce5cec-bb62-4a31-98a1-ac9e0a7d67a5" alt="homepage" width="20%"/>
+  <img src="https://github.com/user-attachments/assets/ecce5cec-bb62-4a31-98a1-ac9e0a7d67a5" alt="homepage" width="18%"/>
   &nbsp;
-  <img src="https://github.com/user-attachments/assets/44f534e9-a08a-4c2f-b8e8-034078d6706c" alt="movie" width="20%"/>
-    <br>
-<img src="https://github.com/user-attachments/assets/cc155e4e-23cf-48b7-8646-99b49e8c974a" alt="watch_later" width="20%"/>
+  <img src="https://github.com/user-attachments/assets/44f534e9-a08a-4c2f-b8e8-034078d6706c" alt="movie" width="18%"/>
+   &nbsp;
+<img src="https://github.com/user-attachments/assets/cc155e4e-23cf-48b7-8646-99b49e8c974a" alt="watch_later" width="18%"/>
   &nbsp;
-  <img src="https://github.com/user-attachments/assets/241e0a7b-5b5b-4ab0-be70-0a79036bd9de" alt="watchlater-light" width="20%"/>
+  <img src="https://github.com/user-attachments/assets/241e0a7b-5b5b-4ab0-be70-0a79036bd9de" alt="watchlater-light" width="18%"/>
   &nbsp;
- <img src="https://github.com/user-attachments/assets/b7617d12-524e-459f-8fda-0646caa120c4" alt="watchroom" width="20%"/>
+ <img src="https://github.com/user-attachments/assets/b7617d12-524e-459f-8fda-0646caa120c4" alt="watchroom" width="18%"/>
 
 
 </p>
