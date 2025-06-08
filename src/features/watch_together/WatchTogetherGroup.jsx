@@ -20,7 +20,6 @@ import CreateRoomModal from "./CreateRoomModal";
 import AddMovieDialog from "./AddMovieDialog";
 
 import Spinner from "../../ui/Spinner";
-import BlobBackground from "../../ui/BlobBackground";
 import toast from "react-hot-toast";
 
 /* ───────────────────────── helpers ─────────────────────────── */
@@ -43,23 +42,16 @@ function Countdown({ target }) {
   );
 }
 
-/**
- * Reads the result row for this room or creates it exactly once (UPSERT).
- * Returns the row that should be displayed to the client.
- */
 async function getOrCreateRoomResult(roomId, allMovies) {
-  // 1️⃣  Pokušaj prvo pročitati – možda je netko već spremio rezultat
   let { data, error } = await supabase
     .from("watch_room_results")
     .select("*")
     .eq("room_id", roomId)
     .single();
 
-  //  PGRST116 = row not found → nastavljamo, inače propagiramo grešku
   if (error && error.code !== "PGRST116") throw error;
   if (data) return data;
 
-  // 2️⃣  Izračunaj nasumični film i pokušaj ga spremiti
   const rnd = allMovies[Math.floor(Math.random() * allMovies.length)];
   const insertPayload = {
     room_id: roomId,
@@ -71,10 +63,8 @@ async function getOrCreateRoomResult(roomId, allMovies) {
     .from("watch_room_results")
     .insert(insertPayload, { onConflict: "room_id" });
 
-  if (insErr && insErr.code !== "23505") throw insErr; // neočekivana greška
+  if (insErr && insErr.code !== "23505") throw insErr;
 
-  // 3️⃣  Bilo da je insert prošao ili je došlo do race‑conditiona,
-  //     pročitamo konačni red i vratimo ga klijentu
   const { data: final, error: readErr } = await supabase
     .from("watch_room_results")
     .select("*")
@@ -85,9 +75,7 @@ async function getOrCreateRoomResult(roomId, allMovies) {
   return final;
 }
 
-/* ─────────────────────── component ────────────────────────── */
 export default function WatchTogetherGroup() {
-  /* 1. route params & auth */
   const { roomId: idParam, id } = useParams();
   const roomId = Number(idParam ?? id);
   const nav = useNavigate();
@@ -95,7 +83,6 @@ export default function WatchTogetherGroup() {
   const { profile } = useCurrentUser();
   const currentUserId = profile?.id;
 
-  /* 2. make sure current user is in members list */
   useEffect(() => {
     if (!roomId || !currentUserId) return;
     (async () => {
@@ -113,17 +100,14 @@ export default function WatchTogetherGroup() {
     })();
   }, [roomId, currentUserId]);
 
-  /* 3. queries */
   const { data: room, isLoading: loadingRoom } = useRoom(roomId);
   const { data: members } = useMembers(roomId);
   const { data: movies = [] } = useWatchRoomMovies(roomId);
 
-  /* 4. mutations */
   const addMovie = useAddMovieToWatchRoom(roomId);
   const toggleReady = useToggleReady(roomId);
   const updateRoom = useUpdateRoom(roomId);
 
-  /* 5. derived state */
   const sortedMembers = useMemo(() => {
     if (!members) return [];
     return [
@@ -144,18 +128,15 @@ export default function WatchTogetherGroup() {
     }, {});
   }, [movies]);
 
-  /* 6. local UI state */
   const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
-  const [pick, setPick] = useState(null); // Movie objekt
+  const [pick, setPick] = useState(null);
   const [waitingPick, setWaitingPick] = useState(false);
 
-  /* close Add dialog after success */
   useEffect(() => {
     if (addMovie.isSuccess) setShowAdd(false);
   }, [addMovie.isSuccess]);
 
-  /* 7. when everyone is ready → read or create result row */
   useEffect(() => {
     if (!allReady || pick || waitingPick || movies.length === 0) return;
 
@@ -165,7 +146,6 @@ export default function WatchTogetherGroup() {
         const resRow = await getOrCreateRoomResult(roomId, movies);
         const chosen = movies.find((m) => m.dbId === resRow.picked_movie);
         setPick(chosen ?? null);
-        // Optionally flip room status once – potpuno klijentski:
         if (room?.status === "active") {
           updateRoom.mutate({ status: "awaiting_accept" });
         }
@@ -177,7 +157,6 @@ export default function WatchTogetherGroup() {
     fetchResult();
   }, [allReady, pick, waitingPick, movies, room?.status, roomId, updateRoom]);
 
-  /* 8. loading / 404 guards */
   if (loadingRoom) return <Spinner className="mt-20" />;
   if (!room?.id)
     return (
@@ -192,12 +171,8 @@ export default function WatchTogetherGroup() {
       </div>
     );
 
-  /* 9. render */
   return (
     <section className="relative mx-auto max-w-4xl px-4 pb-32 text-white">
-      <BlobBackground blobNum={2} />
-
-      {/* ───── header ───── */}
       <header className="mb-10 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="mb-1 text-4xl font-light">{room.name}</h1>
