@@ -1,7 +1,7 @@
 // src/features/watch_together/WatchTogetherGroup.jsx
 import { useState, useMemo, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Plus, Share2, Clock, Settings2 } from "lucide-react";
+import { Plus, Share2, Clock, Settings } from "lucide-react";
 import clsx from "clsx";
 import supabase from "../../services/supabase";
 
@@ -15,10 +15,11 @@ import {
 } from "../../hooks/useWatchTogetherMovies";
 import { useToggleReady } from "../../hooks/useToggleReady";
 import { useUpdateRoom } from "../../hooks/useUpdateRoom";
+import MemberRow from "./MemberRow";
 
 import CreateRoomModal from "./CreateRoomModal";
 import AddMovieDialog from "./AddMovieDialog";
-import MovieCard from "../../ui/MovieCard";
+
 import Spinner from "../../ui/Spinner";
 
 /* ------------------------------------------------------------------ */
@@ -104,6 +105,14 @@ export default function WatchTogetherGroup() {
     }
   }, [room?.status, roomId]);
 
+  const moviesByUser = useMemo(() => {
+    return (movies || []).reduce((acc, movie) => {
+      if (!acc[movie.user_id]) acc[movie.user_id] = [];
+      acc[movie.user_id].push(movie);
+      return acc;
+    }, {});
+  }, [movies]);
+
   if (loadingRoom) return <Spinner className="mt-20" />;
   if (!room?.id)
     return (
@@ -118,13 +127,16 @@ export default function WatchTogetherGroup() {
       </div>
     );
 
+  console.log("MOVIES", movies);
+  console.log("moviesByUser", moviesByUser);
+
   return (
     <section className="mx-auto max-w-4xl px-4 pb-32 text-white">
       <header className="mb-10 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="mb-1 text-4xl font-light">{room.name}</h1>
           <p className="text-sm text-slate-400">
-            <span className="capitalize">{room.room_type}</span> • Movie limit{" "}
+            <span className="capitalize ">{room.room_type}</span> • Movie limit{" "}
             {room.movie_limit}/user
           </p>
         </div>
@@ -132,9 +144,9 @@ export default function WatchTogetherGroup() {
           <Countdown target={room.expires_at} />
           <button
             onClick={() => navigator.clipboard.writeText(window.location.href)}
-            className="flex items-center gap-1 rounded-full bg-slate-700/30 px-3 py-1.5 text-xs hover:bg-slate-700/60"
+            className="flex items-center gap-1 rounded-full bg-slate-700/30 px-3 py-1.5 text-sm hover:bg-slate-700/60 cursor-pointer"
           >
-            <Share2 size={14} /> Invite
+            <Share2 size={18} /> Invite
           </button>
           <button
             onClick={() =>
@@ -144,10 +156,10 @@ export default function WatchTogetherGroup() {
               })
             }
             className={clsx(
-              "rounded-full px-4 py-1.5 text-sm font-semibold transition",
+              "rounded-full px-4 py-1.5 text-sm font-semibold transition cursor-pointer",
               sortedMembers.find((m) => m.id === currentUserId)?.is_ready
-                ? "bg-green-600/20 text-green-200 hover:bg-green-600/30"
-                : "bg-yellow-600/20 text-yellow-200 hover:bg-yellow-600/30"
+                ? "bg-emerald-500 text-green-200 hover:bg-emerald-500/50"
+                : "bg-bordo-500/40 border-bordo-400 border-1  text-white hover:bg-bordo-400/50"
             )}
           >
             {sortedMembers.find((m) => m.id === currentUserId)?.is_ready
@@ -156,34 +168,33 @@ export default function WatchTogetherGroup() {
           </button>
           <button
             onClick={() => setShowAdd(true)}
-            className="flex items-center gap-1 rounded bg-bordo-600 px-3 py-1.5 text-sm hover:bg-bordo-500"
+            className="flex items-center gap-1 rounded-full bg-bordo-600 px-3 py-1.5 text-sm hover:bg-bordo-500 cursor-pointer"
           >
             <Plus size={14} /> Add movie
           </button>
           {room.owner_id === currentUserId && (
             <button
               onClick={() => setShowEdit(true)}
-              className="hidden items-center gap-1 rounded bg-slate-700/30 px-3 py-1.5 text-xs hover:bg-slate-700/60 sm:flex"
+              className="hidden items-center gap-1 rounded-full bg-siva-300/50 px-2 py-1.5 text-xs hover:bg-slate-700/60 sm:flex"
               title="Edit room"
             >
-              <Settings2 size={14} />
+              <Settings size={18} className="cursor-pointer" />
             </button>
           )}
         </div>
       </header>
 
-      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {movies.length === 0 ? (
-          <p className="text-siva-300">No movies yet – add one!</p>
-        ) : (
-          movies.map((m) => (
-            <MovieCard
-              key={m.dbId || m.id}
-              movie={m}
-              onRemove={() => removeMovie.mutate(m.dbId)}
-            />
-          ))
-        )}
+      <div className="flex flex-col gap-4">
+        {sortedMembers.map((member) => (
+          <MemberRow
+            key={member.id}
+            member={member}
+            movies={moviesByUser[member.id] || []}
+            limit={room.movie_limit}
+            isMe={member.id === currentUserId}
+            roomId={roomId} // ✅ OBAVEZNO
+          />
+        ))}
       </div>
 
       {showAdd && (

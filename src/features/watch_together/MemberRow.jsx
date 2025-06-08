@@ -1,84 +1,66 @@
 import { useState } from "react";
 import clsx from "clsx";
-import {
-  ChevronDown,
-  ChevronUp,
-  CheckCircle2,
-  Clock,
-  Film,
-} from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { Icon } from "@iconify/react";
+import { useRemoveMovieFromWatchRoom } from "../../hooks/useWatchTogetherMovies";
+import MovieCard from "../../ui/MovieCard";
 
-export default function MemberRow({ member, movies, limit, isMe }) {
+export default function MemberRow({ member, movies, limit, isMe, roomId }) {
   const [open, setOpen] = useState(false);
+  const removeMovie = useRemoveMovieFromWatchRoom(roomId); // ✅ fix
 
   return (
     <div
       className={clsx(
-        "rounded-lg transition-colors",
+        "rounded-lg overflow-hidden transition-colors",
         isMe
           ? member.is_ready
-            ? "bg-bordo-700" // you ready
-            : "bg-siva-800" // you waiting
+            ? "bg-bordo-700"
+            : "bg-siva-800"
           : member.is_ready
-          ? "bg-bordo-600" // other ready
-          : "bg-siva-900" // other waiting
+          ? "bg-bordo-600"
+          : "bg-siva-900"
       )}
     >
-      {/* Header row */}
       <button
-        type="button"
+        className="flex justify-between w-full px-6 py-3"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between px-6 py-3"
       >
         <div className="flex items-center gap-4">
           <Icon
             icon="ix:user-profile"
-            width="50"
-            height="50"
-            className="rounded-full p-1 text-siva-200"
+            width={50}
+            height={50}
+            className="text-siva-200"
           />
-
           <div className="text-left">
             <p className="text-lg font-semibold">
               {isMe ? "You" : member.username}
             </p>
             <p className="text-xs text-slate-400">
-              {member.is_ready ? "Ready" : "Waiting…"}
+              {member.is_ready ? "Ready" : "Waiting..."}
             </p>
           </div>
         </div>
-
-        <div className="flex items-center gap-2 text-sm">
-          <p>
-            Movies ({movies.length}/{limit})
-          </p>
-          {open ? (
-            <ChevronUp size={18} className="transition-transform" />
-          ) : (
-            <ChevronDown size={18} className="transition-transform" />
-          )}
+        <div className="flex items-center gap-2">
+          Movies ({movies.length}/{limit})
+          {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
         </div>
       </button>
 
-      {/* Collapsible list of movies */}
-      {open && movies.length > 0 && (
-        <div className="flex gap-3 overflow-x-auto px-6 pb-4">
-          {movies.map((m) => (
-            <figure
-              key={`${m.user_id}-${m.movie_id}`}
-              className="w-[90px] shrink-0"
-            >
-              <img
-                src={m.movies?.poster || "/no-poster.jpg"}
-                alt={m.movies?.title}
-                className="aspect-[2/3] w-full rounded-md object-cover shadow-md"
+      {open && (
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 px-6 pb-6">
+          {movies.length === 0 ? (
+            <p className="text-siva-300 col-span-full">No movies yet</p>
+          ) : (
+            movies.map((m) => (
+              <MovieCard
+                key={m.dbId || m.id}
+                movie={m}
+                onRemove={isMe ? () => removeMovie.mutate(m.dbId) : undefined}
               />
-              <figcaption className="mt-1 truncate text-xs text-slate-300">
-                {m.movies?.title}
-              </figcaption>
-            </figure>
-          ))}
+            ))
+          )}
         </div>
       )}
     </div>

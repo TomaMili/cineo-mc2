@@ -43,7 +43,10 @@ export function useAddMovieToWatchRoom(roomId) {
   const userId = profile?.id;
 
   return useMutation({
-    mutationFn: (tmdbMovie) => addMovieToWatchRoom(userId, roomId, tmdbMovie),
+    mutationFn: (tmdbMovie) => {
+      if (!userId) throw new Error("User ID not available");
+      return addMovieToWatchRoom(userId, roomId, tmdbMovie);
+    },
     onSuccess: () => qc.invalidateQueries(roomMoviesKey(roomId)),
   });
 }
