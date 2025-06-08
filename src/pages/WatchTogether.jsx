@@ -8,6 +8,7 @@ import CreateRoomModal from "../features/watch_together/CreateRoomModal";
 
 import { useRooms } from "../hooks/useRooms";
 import { useCreateRoom } from "../hooks/useCreateRoom";
+import BlobBackground from "../ui/BlobBackground";
 
 export default function WatchTogether() {
   const nav = useNavigate();
@@ -50,27 +51,30 @@ export default function WatchTogether() {
 
   return (
     <section className="min-h-screen px-6 pb-24 pt-8 md:px-12 text-white">
+      <BlobBackground />
       <header className="mb-14 flex flex-wrap items-center justify-between gap-y-6">
-        <h1 className="text-5xl font-light">Watch-together</h1>
+        <h1 className="text-4xl font-medium uppercase">Watch-together</h1>
 
-        <div className="flex items-center ">
-          <input
-            type="url"
-            value={joinUrl}
-            onChange={(e) => setJoinUrl(e.target.value)}
-            placeholder="Room URL or ID (e.g. 23 or https://cineo.app/watch-together/23)"
-            className="w-116 rounded-l-lg bg-siva-300 px-4 py-2 placeholder:text-siva-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-bordo-400"
-          />
-          <button
-            onClick={handleJoin}
-            className="rounded-r-lg bg-bordo-500 px-6 py-2 hover:bg-bordo-400"
-          >
-            Join room
-          </button>
+        <div className="flex gap-2 w-full items-end sm:items-center sm:flex-row justify-end flex-col-reverse ">
+          <div>
+            <input
+              type="url"
+              value={joinUrl}
+              onChange={(e) => setJoinUrl(e.target.value)}
+              placeholder="Room URL or ID (e.g. 23 or https://cineo.app/watch-together/23)"
+              className="w-40 xs:w-80 lg:w-116 rounded-l bg-siva-300/50 px-3 sm:px-4 py-1 sm:py-2 placeholder:text-siva-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-bordo-400 transition-all duration-300 text-sm sm:text-md"
+            />
+            <button
+              onClick={handleJoin}
+              className="rounded-r bg-bordo-500 px-3 sm:px-4 py-1 sm:py-2 hover:bg-bordo-400 transition-colors duration-300 cursor-pointer text-sm sm:text-md"
+            >
+              Join room
+            </button>
+          </div>
 
           <button
             onClick={() => setShowModal(true)}
-            className="flex mx-2 items-center gap-2 rounded bg-bordo-500 px-5 py-2 hover:bg-bordo-400"
+            className="bg-bordo-500 hover:bg-bordo-400 px-3 sm:px-4 py-1 sm:py-2 rounded flex items-center gap-2 w-fit transition-colors duration-300 cursor-pointer text-sm sm:text-md sm:ml-4"
           >
             <Plus size={16} /> Create room
           </button>

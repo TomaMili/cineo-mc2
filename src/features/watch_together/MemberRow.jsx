@@ -73,22 +73,23 @@ export default function MemberRow({ member, movies, limit, isMe, roomId }) {
             transition={{ duration: 0.25, ease: "easeInOut" }}
             style={{ overflow: "hidden" }}
           >
-            <div
-              className="grid gap-4 px-6 py-6
-                         sm:grid-cols-2 md:grid-cols-3
-                         lg:grid-cols-4 xl:grid-cols-5 "
-            >
+            <div className="flex flex-nowrap gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory sm:grid sm:gap-4 sm:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] sm:overflow-x-visible sm:snap-none min-w-full p-4">
               {movies.length === 0 ? (
                 <p className="col-span-full text-siva-300">No movies yet</p>
               ) : (
                 movies.map((m) => (
-                  <MovieCard
-                    key={m.dbId ?? m.id}
-                    movie={m}
-                    onRemove={
-                      isMe ? () => removeMovie.mutate(m.dbId) : undefined
-                    }
-                  />
+                  <div
+                    className="flex-none snap-start w-36 sm:flex-auto sm:w-auto"
+                    key={m.dbId}
+                  >
+                    <MovieCard
+                      key={m.dbId ?? m.id}
+                      movie={m}
+                      onRemove={
+                        isMe ? () => removeMovie.mutate(m.dbId) : undefined
+                      }
+                    />
+                  </div>
                 ))
               )}
             </div>

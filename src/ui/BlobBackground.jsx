@@ -17,7 +17,7 @@ export default function BlobBackground({ blobNum }) {
   }, [blobNum]);
 
   return (
-    <div className="absolute inset-0 overflow-visible pointer-events-none z-0">
+    <div className="absolute overflow-visible pointer-events-none z-0">
       {blobs.map((b, i) => (
         <div
           key={i}
