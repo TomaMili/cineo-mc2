@@ -50,7 +50,7 @@ export default function SuperSuggestionPopup({ onClose }) {
         key="bg"
         onClick={onClose}
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.7 }}
+        animate={{ opacity: 0.6 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 bg-black z-40"
       />
@@ -62,60 +62,63 @@ export default function SuperSuggestionPopup({ onClose }) {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
-        className=" myModal fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
-  w-full max-w-3xl
-  max-h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain          
-  bg-siva-800 rounded-2xl p-8 z-50 shadow-2xl"
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-[calc(100vh-8rem)]   overscroll-contain bg-siva-800/60 backdrop-blur-2xl rounded-2xl p-8 z-50 shadow-2xl"
       >
-        <div className="flex mb-6 border-b border-siva-600">
-          {["Directors", "Actors", "Genres"].map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`flex-1 text-center py-2 font-medium transition cursor-pointer ${
-                t === tab
-                  ? "border-b-4  border-bordo-500 text-siva-100"
-                  : "text-siva-200 hover:text-siva-100"
-              }`}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
+        <div className="flex flex-col justify-between h-full">
+          <div>
+            <div className="flex mb-6 ">
+              {["Directors", "Actors", "Genres"].map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setTab(t)}
+                  className={`flex-1 text-center py-2 font-medium transition cursor-pointer ${
+                    t === tab
+                      ? "border-b-4  border-bordo-500 text-siva-100"
+                      : "text-siva-200 hover:text-siva-100 border-b border-siva-300"
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
 
-        <SearchPeopleInput
-          key={tab}
-          type={tab}
-          selected={selected}
-          onSelect={toggle}
-        />
-        <p className="w-full font-medium text-siva-100 mt-2">
-          Picked {tab.toLowerCase()}:
-        </p>
-
-        <div className="grid grid-cols-3 gap-2 mt-3 mb-4">
-          {selected.map((v) => (
-            <TagButton
-              key={v}
-              label={v}
-              active
-              onToggle={() => toggle(v)}
-              className="py-2 px-3"
+            <SearchPeopleInput
+              key={tab}
+              type={tab}
+              selected={selected}
+              onSelect={toggle}
             />
-          ))}
+          </div>
+          <p className="w-full font-medium text-siva-100 mt-2">
+            Picked {tab.toLowerCase()}:
+          </p>
+          <div className="h-full overflow-auto">
+            <div className="flex flex-col gap-2 mt-3 mb-4 h-full">
+              {selected.map((v) => (
+                <TagButton
+                  key={v}
+                  label={v}
+                  active
+                  onToggle={() => toggle(v)}
+                  className="py-2 px-3"
+                />
+              ))}
+            </div>
+          </div>
+
+          <hr className="w-full h-px border-siva-300 bg-siva-300" />
+          <button
+            disabled={!canGenerate}
+            onClick={generate}
+            className={`block w-1/2 py-3 rounded-full font-semibold transition mt-5  mx-auto  ${
+              canGenerate
+                ? "bg-bordo-500 hover:bg-bordo-400 text-white cursor-pointer"
+                : "bg-siva-300 text-siva-100 cursor-not-allowed"
+            }`}
+          >
+            Generate
+          </button>
         </div>
-        <hr className="w-full h-px bg-white/20" />
-        <button
-          disabled={!canGenerate}
-          onClick={generate}
-          className={`block w-1/2 py-3 rounded-full font-semibold transition mt-5  mx-auto  ${
-            canGenerate
-              ? "bg-bordo-500 hover:bg-bordo-400 text-white cursor-pointer"
-              : "bg-siva-300 text-siva-100 cursor-not-allowed"
-          }`}
-        >
-          Generate
-        </button>
       </motion.div>
     </AnimatePresence>,
     document.body

@@ -36,22 +36,21 @@ export default function Browse() {
     queryFn: ({ signal }) => fetchGenres(signal),
   });
 
-  const castIDs = useMemo(
-    () =>
-      actorQueries
-        .map((r) => r.data?.results?.[0]?.id)
-        .filter(Boolean)
-        .join(","),
-    [actorQueries]
-  );
-  const crewIDs = useMemo(
-    () =>
-      directorQueries
-        .map((r) => r.data?.results?.[0]?.id)
-        .filter(Boolean)
-        .join(","),
-    [directorQueries]
-  );
+  const castIDs = useMemo(() => {
+    if (actorQueries.some((q) => q.isLoading)) return "";
+    return actorQueries
+      .map((q) => q.data?.results?.[0]?.id)
+      .filter(Boolean)
+      .join(",");
+  }, [actorQueries]);
+
+  const crewIDs = useMemo(() => {
+    if (directorQueries.some((q) => q.isLoading)) return "";
+    return directorQueries
+      .map((q) => q.data?.results?.[0]?.id)
+      .filter(Boolean)
+      .join(",");
+  }, [directorQueries]);
   const genreIDs = useMemo(() => {
     const names = (params.get("genres") || "").split(",").filter(Boolean);
     return names
@@ -63,9 +62,10 @@ export default function Browse() {
       .join(",");
   }, [params, allGenres]);
 
-  const isDiscover = Boolean(castIDs || crewIDs || genreIDs);
+  const isDiscover = !!(castIDs || crewIDs || genreIDs);
 
   const searchResult = useSearchMovies(query);
+
   const discoverResult = useDiscoverMovies({
     cast: castIDs,
     crew: crewIDs,
@@ -146,8 +146,9 @@ export default function Browse() {
 
       {hasNextPage && (
         <InView
+          key={data?.pages?.length}
           as="div"
-          rootMargin="750px 0px"
+          rootMargin="600px 0px"
           onChange={(inView) => inView && loadMore()}
         >
           <div className="flex justify-center h-32 items-center">
