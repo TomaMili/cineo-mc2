@@ -116,18 +116,32 @@ export const discoverByGenre = (genreId, page = 1, signal) =>
     signal
   );
 
-export const discoverMovies = ({ cast, crew, genres, page = 1 }, signal) =>
-  fetchJson(
-    makeUrl("discover/movie", {
-      with_cast: cast || undefined,
-      with_crew: crew || undefined,
-      with_genres: genres || undefined,
-      include_adult: false,
-      page,
-      language: "en-US",
-    }),
-    signal
+export async function discoverMovies({
+  castIDs = "", // "287"
+  crewIDs = "", // "138"
+  genreIDs = "", // "28,12"
+  page = 1,
+  signal,
+}) {
+  const params = new URLSearchParams({
+    api_key: import.meta.env.VITE_TMDB_API_KEY,
+    language: "en-US",
+    include_adult: "false",
+    sort_by: "popularity.desc",
+    page,
+  });
+
+  if (castIDs) params.set("with_cast", castIDs);
+  if (crewIDs) params.set("with_crew", crewIDs);
+  if (genreIDs) params.set("with_genres", genreIDs);
+  console.log("DISCOVER params", { castIDs, crewIDs, genreIDs });
+  const res = await fetch(
+    `https://api.themoviedb.org/3/discover/movie?${params}`,
+    { signal }
   );
+  if (!res.ok) throw new Error("TMDb discover failed");
+  return res.json();
+}
 
 /* misc single-movie helpers --------------------------------------------- */
 
