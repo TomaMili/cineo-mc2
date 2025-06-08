@@ -6,28 +6,24 @@
 
 2. **Open the SQL Editor ▸ New Query** and run the schema below (feel free to tweak names or add indexes):
 
-   -- WARNING: This schema is for context only and is not meant to be run.
--- Table order and constraints may not be valid for execution.
+  ```sql
+-- USERS
+create table users (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  username text,
+  platforms json,
+  plan text,
+  favourite_actors json,
+  favourite_genres json,
+  profile_id uuid not null default gen_random_uuid() unique,
+  foreign key (profile_id) references auth.users(id)
+);
 
-CREATE TABLE public.achivements (
-  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-  date_achieved timestamp with time zone NOT NULL DEFAULT now(),
-  achivement_name character varying,
-  user_id bigint,
-  CONSTRAINT achivements_pkey PRIMARY KEY (id),
-  CONSTRAINT achivements_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
-);
-CREATE TABLE public.collections (
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  user_id bigint NOT NULL,
-  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
-  name character varying,
-  CONSTRAINT collections_pkey PRIMARY KEY (id),
-  CONSTRAINT collections_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
-);
-CREATE TABLE public.movies (
-  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
+-- MOVIES
+create table movies (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
   title text,
   overview text,
   release_date smallint,
@@ -43,88 +39,102 @@ CREATE TABLE public.movies (
   user_rating smallint,
   duration bigint,
   tagline text,
-  api_id bigint UNIQUE,
-  fetched_at timestamp with time zone DEFAULT now(),
-  CONSTRAINT movies_pkey PRIMARY KEY (id)
+  api_id bigint unique,
+  fetched_at timestamptz default now()
 );
-CREATE TABLE public.movies_collections (
-  movies_id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  collections_id bigint NOT NULL,
-  CONSTRAINT movies_collections_pkey PRIMARY KEY (movies_id, collections_id),
-  CONSTRAINT movies_collections_collections_id_fkey FOREIGN KEY (collections_id) REFERENCES public.collections(id),
-  CONSTRAINT movies_collections_movies_id_fkey FOREIGN KEY (movies_id) REFERENCES public.movies(id)
-);
-CREATE TABLE public.users (
-  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL UNIQUE,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  username text,
-  platforms json,
-  plan text,
-  favourite_actors json,
-  favourite_genres json,
-  profile_id uuid NOT NULL DEFAULT gen_random_uuid() UNIQUE,
-  CONSTRAINT users_pkey PRIMARY KEY (id),
-  CONSTRAINT users_profile_id_fkey FOREIGN KEY (profile_id) REFERENCES auth.users(id)
-);
-CREATE TABLE public.watch_later (
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  user_id bigint NOT NULL,
-  movie_id bigint NOT NULL,
-  CONSTRAINT watch_later_pkey PRIMARY KEY (user_id, movie_id),
-  CONSTRAINT watch_later_movie_id_fkey FOREIGN KEY (movie_id) REFERENCES public.movies(id),
-  CONSTRAINT watchlist_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
-);
-CREATE TABLE public.watch_room_members (
-  room_id bigint NOT NULL,
-  user_id bigint NOT NULL,
-  is_ready boolean NOT NULL DEFAULT false,
-  joined_at timestamp with time zone NOT NULL DEFAULT now(),
-  CONSTRAINT watch_room_members_pkey PRIMARY KEY (room_id, user_id),
-  CONSTRAINT watch_room_members_room_id_fkey FOREIGN KEY (room_id) REFERENCES public.watch_rooms(id),
-  CONSTRAINT watch_room_members_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
-);
-CREATE TABLE public.watch_room_movies (
-  room_id bigint NOT NULL,
-  user_id bigint NOT NULL,
-  movie_id bigint NOT NULL,
-  added_at timestamp with time zone NOT NULL DEFAULT now(),
-  CONSTRAINT watch_room_movies_pkey PRIMARY KEY (room_id, user_id, movie_id),
-  CONSTRAINT watch_room_movies_movie_id_fkey FOREIGN KEY (movie_id) REFERENCES public.movies(id),
-  CONSTRAINT watch_room_movies_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id),
-  CONSTRAINT watch_room_movies_room_id_fkey FOREIGN KEY (room_id) REFERENCES public.watch_rooms(id)
-);
-CREATE TABLE public.watch_room_results (
-  room_id bigint NOT NULL,
-  result_type text NOT NULL CHECK (result_type = ANY (ARRAY['Random'::text, 'Generate'::text])),
-  picked_movie bigint,
-  picked_list ARRAY,
-  accepted_at timestamp with time zone,
-  CONSTRAINT watch_room_results_pkey PRIMARY KEY (room_id),
-  CONSTRAINT watch_room_results_picked_movie_fkey FOREIGN KEY (picked_movie) REFERENCES public.movies(id),
-  CONSTRAINT watch_room_results_room_id_fkey FOREIGN KEY (room_id) REFERENCES public.watch_rooms(id)
-);
-CREATE TABLE public.watch_rooms (
-  id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  name text NOT NULL,
-  owner_id bigint NOT NULL,
-  room_type text NOT NULL CHECK (room_type = ANY (ARRAY['Random'::text, 'Generate'::text])),
-  movie_limit smallint NOT NULL DEFAULT 2 CHECK (movie_limit >= 1 AND movie_limit <= 5),
-  expires_at timestamp with time zone NOT NULL,
-  status text NOT NULL DEFAULT 'draft'::text CHECK (status = ANY (ARRAY['draft'::text, 'active'::text, 'awaiting_accept'::text, 'final'::text, 'cancelled'::text])),
-  CONSTRAINT watch_rooms_pkey PRIMARY KEY (id),
-  CONSTRAINT watch_rooms_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES public.users(id)
-);
-CREATE TABLE public.watched (
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  users_id bigint NOT NULL,
-  movie_id bigint NOT NULL,
+
+-- WATCHED / WATCH LATER
+create table watched (
+  created_at timestamptz not null default now(),
+  users_id bigint not null,
+  movie_id bigint not null,
   user_rating smallint,
-  CONSTRAINT watched_pkey PRIMARY KEY (users_id, movie_id),
-  CONSTRAINT watched_users_id_fkey FOREIGN KEY (users_id) REFERENCES public.users(id),
-  CONSTRAINT watched_movie_id_fkey FOREIGN KEY (movie_id) REFERENCES public.movies(id)
+  primary key (users_id, movie_id),
+  foreign key (users_id) references users(id),
+  foreign key (movie_id) references movies(id)
 );
+
+create table watch_later (
+  created_at timestamptz not null default now(),
+  user_id bigint not null,
+  movie_id bigint not null,
+  primary key (user_id, movie_id),
+  foreign key (user_id) references users(id),
+  foreign key (movie_id) references movies(id)
+);
+
+-- COLLECTIONS
+create table collections (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  user_id bigint not null,
+  name text,
+  foreign key (user_id) references users(id)
+);
+
+create table movies_collections (
+  movies_id bigint generated always as identity,
+  created_at timestamptz not null default now(),
+  collections_id bigint not null,
+  primary key (movies_id, collections_id),
+  foreign key (movies_id) references movies(id),
+  foreign key (collections_id) references collections(id)
+);
+
+-- ACHIEVEMENTS
+create table achivements (
+  id bigint generated always as identity primary key,
+  date_achieved timestamptz not null default now(),
+  achivement_name varchar,
+  user_id bigint,
+  foreign key (user_id) references users(id)
+);
+
+-- WATCH TOGETHER ROOMS
+create table watch_rooms (
+  id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  name text not null,
+  owner_id bigint not null,
+  room_type text not null check (room_type in ('Random', 'Generate')),
+  movie_limit smallint not null default 2 check (movie_limit between 1 and 5),
+  expires_at timestamptz not null,
+  status text not null default 'draft' check (status in ('draft', 'active', 'awaiting_accept', 'final', 'cancelled')),
+  foreign key (owner_id) references users(id)
+);
+
+create table watch_room_members (
+  room_id bigint not null,
+  user_id bigint not null,
+  is_ready boolean not null default false,
+  joined_at timestamptz not null default now(),
+  primary key (room_id, user_id),
+  foreign key (room_id) references watch_rooms(id),
+  foreign key (user_id) references users(id)
+);
+
+create table watch_room_movies (
+  room_id bigint not null,
+  user_id bigint not null,
+  movie_id bigint not null,
+  added_at timestamptz not null default now(),
+  primary key (room_id, user_id, movie_id),
+  foreign key (room_id) references watch_rooms(id),
+  foreign key (user_id) references users(id),
+  foreign key (movie_id) references movies(id)
+);
+
+create table watch_room_results (
+  room_id bigint primary key,
+  result_type text not null check (result_type in ('Random', 'Generate')),
+  picked_movie bigint,
+  picked_list json[],
+  accepted_at timestamptz,
+  foreign key (room_id) references watch_rooms(id),
+  foreign key (picked_movie) references movies(id)
+);
+
+```
 
 3. **Enable Row Level Security** on each table (Settings ▸ Auth ▸ Enable RLS) and add policies, e.g.:
 
