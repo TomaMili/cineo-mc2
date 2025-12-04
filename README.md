@@ -1,12 +1,17 @@
 # Cineo
+
 ![CINEO](https://github.com/user-attachments/assets/35a0be55-76c6-4935-b9ad-f742c3b147e0)
 
 ---
+
 ---
+
 ![GREEN_MILE](https://github.com/user-attachments/assets/072e97ab-d560-45f6-aa0f-984991ab5d1c)
 
 ---
+
 ---
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/ecce5cec-bb62-4a31-98a1-ac9e0a7d67a5" alt="homepage" width="18%"/>
   &nbsp;
@@ -18,13 +23,13 @@
   &nbsp;
  <img src="https://github.com/user-attachments/assets/b7617d12-524e-459f-8fda-0646caa120c4" alt="watchroom" width="18%"/>
 
-
 </p>
 
 ---
----
-Cineo is a **React** web application for tracking, rating, and organising movies. Under the hood it relies on **Supabase** (database + authentication), while movie data comes from the **TMDB API**. Development is powered by **Vite**, styling is done with **Tailwind CSS**, and component animations use **Framer Motion**.
 
+---
+
+Cineo is a **React** web application for tracking, rating, and organising movies. Under the hood it relies on **Supabase** (database + authentication), while movie data comes from the **TMDB API**. Development is powered by **Vite**, styling is done with **Tailwind CSS**, and component animations use **Framer Motion**.
 
 ---
 
@@ -32,10 +37,10 @@ Cineo is a **React** web application for tracking, rating, and organising movies
 
 | Level    | Key files / directories                                                                                                 | Purpose / What they do                                                                                                                                                                                                |
 | -------- | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Root** | `.env`, `package.json`, `tailwind.config.js`, `vite.config.js`, `README.md`, `.gitignore`,<br>`public/` (static assets) | Configuration & sensitive variables (e.g. `VITE_TMDB_API_KEY`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`,`VITE_YOUTUBE_KEY`)                                                                                                         |
+| **Root** | `.env`, `package.json`, `tailwind.config.js`, `vite.config.js`, `README.md`, `.gitignore`,<br>`public/` (static assets) | Configuration & sensitive variables (e.g. `VITE_TMDB_API_KEY`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`,`VITE_YOUTUBE_KEY`)                                                                                      |
 | **src/** | `main.jsx`, `App.jsx`                                                                                                   | React entry points                                                                                                                                                                                                    |
 |          | `assets/`                                                                                                               | Images, SVGs, icons                                                                                                                                                                                                   |
-|          | `context/`                                                                                                              | *React Contexts* (e.g. `MoviePopupContext`, `SuperSuggestContext`)                                                                                                                                                    |
+|          | `context/`                                                                                                              | _React Contexts_ (e.g. `MoviePopupContext`, `SuperSuggestContext`)                                                                                                                                                    |
 |          | `features/`                                                                                                             | Sub-folder per major feature (registration, collections, watch-together …) – each contains its own components, hooks, helpers                                                                                         |
 |          | `hooks/`                                                                                                                | Custom hooks: `useAuth`, `useReview`, `useProviders`, `usePopularMovies`, …                                                                                                                                           |
 |          | `pages/`                                                                                                                | Route components (`HomePage`, `Login`, `MovieDetail`, `Browse`, `Settings`, …)                                                                                                                                        |
@@ -51,13 +56,19 @@ Cineo is a **React** web application for tracking, rating, and organising movies
 # 1. install dependencies
 npm install          # or: yarn
 
-# 2. start dev server
+# 2. Copy environment template
+cp .env.example .env.local
+# Then fill in your actual API keys in .env.local
+
+# 3. start dev server
 npm run dev          # http://localhost:3000
 
-# 3. production build
+# 4. production build
 npm run build
 npm run preview      # static preview of the build
 ```
+
+⚠️ **IMPORTANT:** Never commit `.env.local` - it contains sensitive API keys!
 
 ---
 
@@ -87,18 +98,17 @@ npm run preview      # static preview of the build
 
 ### Key tables
 
-| Table                   | What it stores                                                                   |
-| ----------------------- | -------------------------------------------------------------------------------- |
-| **users**               | Profiles (username, avatar, favourite genres, platforms, actors, plan …)         |
-| **movies**              | Movie details (TMDB `api_id`, title, overview, genres, cast, runtime, ratings …) |
-| **watched**             | Movies a user has watched + their personal rating                                |
-| **watch\_later**        | Movies marked “watch later”                                                      |
-| **collections**         | Custom movie lists (e.g. “Favourite Sci-Fi”, “Halloween 2024”)                   |
-| **movies\_collections** | M\:N relation between movies and collections                                     |
-| **achievements**        | Gamification milestones (“First Movie”, “Cinephile” …)                           |
-| **watch_room_members**  | Users who joined real-time rooms                                                 |
-| **watch_room_results**  | Final results of watch-together room votes                                       |
-
+| Table                  | What it stores                                                                   |
+| ---------------------- | -------------------------------------------------------------------------------- |
+| **users**              | Profiles (username, avatar, favourite genres, platforms, actors, plan …)         |
+| **movies**             | Movie details (TMDB `api_id`, title, overview, genres, cast, runtime, ratings …) |
+| **watched**            | Movies a user has watched + their personal rating                                |
+| **watch_later**        | Movies marked “watch later”                                                      |
+| **collections**        | Custom movie lists (e.g. “Favourite Sci-Fi”, “Halloween 2024”)                   |
+| **movies_collections** | M\:N relation between movies and collections                                     |
+| **achievements**       | Gamification milestones (“First Movie”, “Cinephile” …)                           |
+| **watch_room_members** | Users who joined real-time rooms                                                 |
+| **watch_room_results** | Final results of watch-together room votes                                       |
 
 ### REST endpoints (auto-generated by Supabase)
 
@@ -117,19 +127,19 @@ npm run preview      # static preview of the build
 
 ## 5 · App features
 
-| Module                  | Quick description                                                                                          |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------- |
-| **Registration & Auth** | Multi-step (info → genres → platforms → actors → plan → finish). Supabase Auth + custom `useAuth` hook.    |
-| **Profile**             | Page with a hero block, stats overview, donut chart for achievements, latest activity feed, users movie DNA.|
-| **Achievements**        | Progress tracker: users unlock badges such as “First Movie,” “Casual Viewer,” “Cinephile,” etc.                 |
-| **Movie Page**          | Detailed view for each film: cinematic hero banner, synopsis, cast grid, stills & trailers, where-to-watch providers, community ratings, and a carousel of similar titles.|
-| **Settings**            | Central hub for personalisation & account management – change profile info, password,...                    |
-| **Supersuggestion**     | AI-driven recommendation panel that instantly proposes films based on your watch history, liked genres, current trends, and TMDB metadata; updates in real time as your tastes evolve.|
-| **Watched / Later**     | Mark movies as “watched” or “watch later” (API + React Query).                                             |
-| **Collections**         | Full CRUD on collections, modal for new collection, drag-and-drop inside the list.                         |
-| **Browse & Search**     | Infinite scrolling of trending movies, genre filtering, movie detail page (cast, reviews, similar titles). |
-| **Watch Together**      | Create / join real-time rooms for group watching (socket-based).                                           |
-| **Extra UI**            | Share links, rating overlay, toasts, animated pop-ups.                                                     |
+| Module                  | Quick description                                                                                                                                                                      |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Registration & Auth** | Multi-step (info → genres → platforms → actors → plan → finish). Supabase Auth + custom `useAuth` hook.                                                                                |
+| **Profile**             | Page with a hero block, stats overview, donut chart for achievements, latest activity feed, users movie DNA.                                                                           |
+| **Achievements**        | Progress tracker: users unlock badges such as “First Movie,” “Casual Viewer,” “Cinephile,” etc.                                                                                        |
+| **Movie Page**          | Detailed view for each film: cinematic hero banner, synopsis, cast grid, stills & trailers, where-to-watch providers, community ratings, and a carousel of similar titles.             |
+| **Settings**            | Central hub for personalisation & account management – change profile info, password,...                                                                                               |
+| **Supersuggestion**     | AI-driven recommendation panel that instantly proposes films based on your watch history, liked genres, current trends, and TMDB metadata; updates in real time as your tastes evolve. |
+| **Watched / Later**     | Mark movies as “watched” or “watch later” (API + React Query).                                                                                                                         |
+| **Collections**         | Full CRUD on collections, modal for new collection, drag-and-drop inside the list.                                                                                                     |
+| **Browse & Search**     | Infinite scrolling of trending movies, genre filtering, movie detail page (cast, reviews, similar titles).                                                                             |
+| **Watch Together**      | Create / join real-time rooms for group watching (socket-based).                                                                                                                       |
+| **Extra UI**            | Share links, rating overlay, toasts, animated pop-ups.                                                                                                                                 |
 
 ---
 
@@ -149,13 +159,10 @@ npm run preview      # static preview of the build
 | **7. Prod build**               | `npm run build`<br>`npm run preview`                                                                                                | Serves the static build for final checks. Deploy the contents of `/dist` to Netlify, Vercel, Cloudflare Pages, etc.                 |
 | **8. Lint / format (optional)** | `npm run lint` · `npm run format`                                                                                                   | ESLint + Prettier; Husky is **not** wired—run manually.                                                                             |
 
-
-
 ## 7 · Notes for developers
 
-* **React Query Devtools** are enabled in development – super handy for debugging queries.
-* Code follows the **ESLint + Prettier** style (standard Airbnb config).
-* Tailwind config includes a custom colour palette and *container queries* for extra-responsive design.
+- **React Query Devtools** are enabled in development – super handy for debugging queries.
+- Code follows the **ESLint + Prettier** style (standard Airbnb config).
+- Tailwind config includes a custom colour palette and _container queries_ for extra-responsive design.
 
 ---
-

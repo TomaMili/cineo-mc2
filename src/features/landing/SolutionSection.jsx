@@ -1,55 +1,55 @@
-/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import BlobBackground from "../../ui/BlobBackground";
+import CurvedLoop from "../../components/CurvedLoop";
 import Feature from "./Feature";
 import { Icon } from "@iconify-icon/react";
 
 const features = [
   {
-    title: "Discover new movies",
+    title: "AI finds your perfect movie",
     description:
-      "Browse hand-picked collections, trending titles, and hidden gems—curated just for your taste.",
-    image: "/article-1.png",
+      "No more endless scrolling. \nOur AI learns your unique taste from ratings and watch history, suggesting movies you'll actually love—in seconds, not hours.",
+    image: "/article-4.png",
   },
   {
-    title: "Add them to watchlists",
+    title: "Your Movie DNA & Complete Library",
     description:
-      "Save upcoming releases or classic favorites to your personal watchlists so you never lose track.",
+      "Build your personal taste profile. \nTrack watched movies, organize watchlists, rate films, and watch your Movie DNA evolve — feeding even better recommendations over time. \nEverything in one beautiful place.",
     image: "/article-2.png",
   },
   {
-    title: "Track your movie DNA",
+    title: "Complete Movie Information",
     description:
-      "Log what you’ve seen, rate each film, and see your unique taste profile evolve over time.",
-    image: "/article-3.png",
-  },
-  {
-    title: "AI recommendations",
-    description:
-      "Let our AI analyze your ratings and watch history to suggest the perfect next movie for you.",
-    image: "/article-4.png",
+      "Everything you need to know.\nDetailed cast info, runtime, director, ratings, streaming platforms, and where to watch—all in one beautifully organized view.",
+    image: "/article-5.png",
   },
 ];
 
-export default function FeatureTabsSection() {
+export default function SolutionSection() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
     <Feature>
-      <div className="mt-40 h-screen relative overflow-visible mb-40">
+      <section className="py-24 bg-siva-800 relative overflow-hidden">
         <BlobBackground />
-        <div className="relative block mb-6 lg:mb-12 w-full mx-auto z-10 text-center">
-          <h2 className="text-5xl md:text-7xl font-semibold text-white mb-4">
-            Your personal AI movie expert
-          </h2>
-          <p className="text-2xl text-siva-300 font-light">
-            Discover, track, and get recommendations tailored to you
-          </p>
-        </div>
 
-        <section className="text-gray-300 pt-10 lg:pt-10 z-10">
-          <div className="max-w-[1600px] mx-auto px-6 flex flex-col lg:flex-row gap-12 items-center">
+        <div className="max-w-full mx-auto px-6  relative z-10">
+          {/* CurvedLoop full width */}
+          <div className="mb-16 w-full">
+            <CurvedLoop
+              marqueeText="Take Control of Your Movie Experience ✦"
+              speed={1}
+              curveAmount={0}
+              interactive={true}
+              className="fill-white"
+              highlightText="Take Control"
+              highlightClassName="fill-bordo-400 font-bold"
+            />
+          </div>
+
+          {/* Feature Tabs */}
+          <div className="max-w-[1600px] mx-auto flex flex-col lg:flex-row gap-12 items-center">
             <div className="w-full lg:w-3/7">
               <div className="space-y-4">
                 {features.map((feat, idx) => {
@@ -92,7 +92,7 @@ export default function FeatureTabsSection() {
                               exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.3 }}
                             >
-                              <p className="text-siva-300 font-light text-xl lg:text-3xl pt-2">
+                              <p className="text-siva-300 font-light text-xl lg:text-3xl pt-2 whitespace-pre-line">
                                 {feat.description}
                               </p>
                             </motion.div>
@@ -105,16 +105,19 @@ export default function FeatureTabsSection() {
               </div>
             </div>
 
-            <div className="w-full lg:w-4/7 flex items-center justify-center overflow-hidden z-10">
+            <div className="w-full lg:w-4/7 flex items-center justify-center overflow-hidden relative z-10 hover:scale-[1.12] transition-transform duration-300">
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-[500px] h-[500px] bg-black/60 rounded-full blur-[120px] "></div>
+              </div>
               <img
                 src={features[openIndex].image}
                 alt={features[openIndex].title}
-                className="w-full rounded-xl"
+                className="w-full rounded-xl relative z-10"
               />
             </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </Feature>
   );
 }
