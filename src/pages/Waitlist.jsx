@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Icon } from "@iconify-icon/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import RotatingText from "../ui/RotatingText";
 import SplitTextReveal from "../ui/SplitTextReveal";
@@ -43,6 +43,25 @@ const Waitlist = () => {
   const [heroCopied, setHeroCopied] = useState(false);
   const [heroReferralCode, setHeroReferralCode] = useState(null);
 
+  // Fetch referral code if success but no code yet
+  useEffect(() => {
+    const fetchReferralCode = async () => {
+      if (showHeroShare && !heroReferralCode && heroEmail) {
+        const { data } = await supabase
+          .from("waitlist_signups")
+          .select("referral_code")
+          .eq("email", heroEmail)
+          .single();
+
+        if (data?.referral_code) {
+          setHeroReferralCode(data.referral_code);
+        }
+      }
+    };
+
+    fetchReferralCode();
+  }, [showHeroShare, heroReferralCode, heroEmail]);
+
   const handleHeroSubmit = async (e) => {
     trackPixelEvent("Lead");
     e.preventDefault();
@@ -75,11 +94,11 @@ const Waitlist = () => {
               .eq("email", heroEmail);
 
             if (!updateError) {
-              toast.success("Your name has been updated! ❤️");
+              toast.success("Your name has been updated! ");
               trackWaitlistSignup("hero_form");
             }
           } else {
-            toast.success("You're already on the waitlist! ❤️");
+            toast.success("You're already on the waitlist! ");
           }
 
           // Dohvati postojeći referral code
@@ -96,7 +115,7 @@ const Waitlist = () => {
           throw error;
         }
       } else {
-        toast.success("You've been added to the waitlist! 🎉");
+        toast.success("You've been added to the waitlist! ");
         trackWaitlistSignup("hero_form");
         trackPixelEvent("CompleteRegistration");
 
@@ -122,7 +141,7 @@ const Waitlist = () => {
     ? `https://cineo-mc2.vercel.app/?ref=${heroReferralCode}`
     : `https://cineo-mc2.vercel.app/?ref=invite`;
   const shareText =
-    "Check out Cineo - AI-powered movie discovery that actually understands your taste! 🎬✨";
+    "Check out Cineo - AI-powered movie discovery that actually understands your taste! Join the waitlist now and get 50% off at launch!";
 
   const handleHeroCopyLink = async () => {
     trackPixelEvent("Share");
@@ -160,6 +179,22 @@ const Waitlist = () => {
     );
   };
 
+  const shareToFacebook = () => {
+    trackPixelEvent("Share");
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        shareUrl
+      )}`,
+      "_blank"
+    );
+  };
+
+  const shareToInstagram = () => {
+    trackPixelEvent("Share");
+    navigator.clipboard.writeText(shareUrl);
+    toast.success("Link copied! Share it in your Instagram story or bio 📸");
+  };
+
   return (
     <>
       <Helmet>
@@ -191,7 +226,7 @@ const Waitlist = () => {
           variants={container}
           initial="hidden"
           animate="show"
-          className="relative w-full h-screen bg-cover bg-center flex flex-col justify-center items-center py-8 md:py-0"
+          className="relative w-full min-h-screen bg-cover bg-center flex flex-col justify-center items-center py-12 md:py-16"
           style={{ backgroundImage: "url('/bg-image.jpg')" }}
         >
           <motion.div variants={fadeInUp} className="text-center z-10">
@@ -204,14 +239,14 @@ const Waitlist = () => {
           {/* Eyebrow tagline */}
           <motion.p
             variants={fadeInUp}
-            className="mt-6 md:mt-8 text-xs md:text-md uppercase tracking-[0.25em] text-bordo-400 text-center px-4 mb-3 md:mb-5"
+            className="mt-4 md:mt-6 text-xs md:text-md uppercase tracking-[0.25em] text-bordo-400 text-center px-4 mb-2 md:mb-3"
           >
             <SplitTextReveal text="Smart Film Collection" />
           </motion.p>
 
           <motion.h1
             variants={fadeInUp}
-            className="text-3xl md:text-6xl font-bold mb-4 md:mb-5 leading-tight tracking-tight text-center justify-center px-4 text-siva-100 min-h-[80px] md:min-h-[140px] flex items-center"
+            className="text-3xl md:text-6xl font-bold mb-3 md:mb-4 leading-tight tracking-tight text-center justify-center px-4 text-siva-100 min-h-[80px] md:min-h-[140px] flex items-center"
           >
             <RotatingText
               texts={[
@@ -227,7 +262,7 @@ const Waitlist = () => {
 
           <motion.p
             variants={fadeInUp}
-            className="text-base md:text-xl text-slate-300 max-w-xl md:max-w-2xl mx-auto font-light px-6 md:px-4 text-center leading-relaxed"
+            className="text-base md:text-xl text-slate-300 max-w-xl md:max-w-2xl mx-auto font-light px-6 md:px-4 text-center leading-relaxed mb-0"
           >
             Searching for the right movie doesn't have to be tiring.
             <br />
@@ -238,7 +273,7 @@ const Waitlist = () => {
 
           <motion.div
             variants={fadeInUp}
-            className="mt-5 md:mt-6 w-full max-w-xl mx-auto px-6 md:px-4"
+            className="mt-4 md:mt-5 w-full max-w-xl mx-auto px-6 md:px-4"
           >
             {!showHeroShare ? (
               <form onSubmit={handleHeroSubmit} className="w-full">
@@ -275,67 +310,71 @@ const Waitlist = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full"
               >
-                <div className="bg-gradient-to-r from-bordo-500/20 to-purple-500/20 border border-bordo-500/40 rounded-2xl p-4 mb-4">
-                  <p className="text-white text-center font-bold text-lg mb-1">
+                <div className="bg-gradient-to-r from-bordo-500/20 to-purple-500/20 border border-bordo-500/40 rounded-xl p-3 mb-3">
+                  <p className="text-white text-center font-bold text-base mb-0.5">
                     You're on the list! 🎉
                   </p>
-                  <p className="text-siva-300 text-center text-sm mb-2">
+                  <p className="text-siva-300 text-center text-xs">
                     Share Cineo and both get{" "}
-                    <span className="text-bordo-400 font-bold">50% OFF</span> at
+                    <span className="text-siva-100 font-bold">50% OFF</span> at
                     launch!
                   </p>
                 </div>
 
                 {heroReferralCode && (
-                  <div className="flex flex-col gap-3">
+                  <div className="flex gap-2 justify-center flex-wrap">
                     {/* Copy link button */}
                     <button
                       onClick={handleHeroCopyLink}
-                      className="w-full bg-siva-800/80 hover:bg-siva-700/80 border border-siva-600 text-white px-4 py-3 rounded-xl font-medium flex items-center justify-center gap-2 transition-all hover:scale-105"
+                      className="bg-siva-800/80 hover:bg-siva-700/80 border border-siva-600 text-white px-4 py-2 rounded-lg transition-all hover:scale-105 flex items-center justify-center cursor-pointer gap-1.5"
                     >
                       {heroCopied ? (
-                        <>
-                          <Icon icon="mdi:check" width="20" height="20" />
-                          <span className="text-base">Link copied!</span>
-                        </>
+                        <Icon icon="mdi:check" width="18" height="18" />
                       ) : (
-                        <>
-                          <Icon
-                            icon="mdi:link-variant"
-                            width="20"
-                            height="20"
-                          />
-                          <span className="text-base">Copy invite link</span>
-                        </>
+                        <Icon icon="mdi:link-variant" width="18" height="18" />
                       )}
                     </button>
 
                     {/* Social share buttons */}
-                    <div className="flex gap-3 justify-center">
-                      <button
-                        onClick={shareToTwitter}
-                        className="bg-[#1DA1F2] hover:bg-[#1a8cd8] text-white px-6 py-3 rounded-xl transition-all hover:scale-105 flex items-center justify-center"
-                        aria-label="Share on Twitter"
-                      >
-                        <Icon icon="prime:twitter" width="20" height="20" />
-                      </button>
+                    <button
+                      onClick={shareToTwitter}
+                      className="bg-[#1DA1F2] hover:bg-[#1a8cd8] text-white px-4 py-2 rounded-lg transition-all hover:scale-105 flex items-center justify-center cursor-pointer"
+                      aria-label="Share on Twitter"
+                    >
+                      <Icon icon="prime:twitter" width="18" height="18" />
+                    </button>
 
-                      <button
-                        onClick={shareToLinkedIn}
-                        className="bg-[#0A66C2] hover:bg-[#004182] text-white px-6 py-3 rounded-xl transition-all hover:scale-105 flex items-center justify-center"
-                        aria-label="Share on LinkedIn"
-                      >
-                        <Icon icon="mdi:linkedin" width="20" height="20" />
-                      </button>
+                    <button
+                      onClick={shareToFacebook}
+                      className="bg-[#1877F2] hover:bg-[#145dbf] text-white px-4 py-2 rounded-lg transition-all hover:scale-105 flex items-center justify-center cursor-pointer"
+                      aria-label="Share on Facebook"
+                    >
+                      <Icon icon="mdi:facebook" width="18" height="18" />
+                    </button>
 
-                      <button
-                        onClick={shareToWhatsApp}
-                        className="bg-[#25D366] hover:bg-[#20BA5A] text-white px-6 py-3 rounded-xl transition-all hover:scale-105 flex items-center justify-center"
-                        aria-label="Share on WhatsApp"
-                      >
-                        <Icon icon="mdi:whatsapp" width="20" height="20" />
-                      </button>
-                    </div>
+                    <button
+                      onClick={shareToInstagram}
+                      className="bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#FD1D1D] hover:opacity-90 text-white px-4 py-2 rounded-lg transition-all hover:scale-105 flex items-center justify-center cursor-pointer"
+                      aria-label="Share on Instagram"
+                    >
+                      <Icon icon="mdi:instagram" width="18" height="18" />
+                    </button>
+
+                    <button
+                      onClick={shareToLinkedIn}
+                      className="bg-[#0A66C2] hover:bg-[#004182] text-white px-4 py-2 rounded-lg transition-all hover:scale-105 flex items-center justify-center cursor-pointer"
+                      aria-label="Share on LinkedIn"
+                    >
+                      <Icon icon="mdi:linkedin" width="18" height="18" />
+                    </button>
+
+                    <button
+                      onClick={shareToWhatsApp}
+                      className="bg-[#25D366] hover:bg-[#20BA5A] text-white px-4 py-2 rounded-lg transition-all hover:scale-105 flex items-center justify-center cursor-pointer"
+                      aria-label="Share on WhatsApp"
+                    >
+                      <Icon icon="mdi:whatsapp" width="18" height="18" />
+                    </button>
                   </div>
                 )}
               </motion.div>

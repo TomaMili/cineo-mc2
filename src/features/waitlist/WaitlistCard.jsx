@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Check, Mail, Gift, Link2 } from "lucide-react";
 import { Icon } from "@iconify-icon/react";
@@ -26,6 +26,25 @@ const WaitlistCard = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [copied, setCopied] = useState(false);
   const [referralCode, setReferralCode] = useState(null);
+
+  // Fetch referral code if success but no code yet
+  useEffect(() => {
+    const fetchReferralCode = async () => {
+      if (isSuccess && !referralCode && email) {
+        const { data } = await supabase
+          .from("waitlist_signups")
+          .select("referral_code")
+          .eq("email", email)
+          .single();
+
+        if (data?.referral_code) {
+          setReferralCode(data.referral_code);
+        }
+      }
+    };
+
+    fetchReferralCode();
+  }, [isSuccess, referralCode, email]);
 
   const handleEmailSubmit = async (e) => {
     trackPixelEvent("Lead");
@@ -72,9 +91,9 @@ const WaitlistCard = () => {
               setIsSubmitting(false);
               return;
             }
-            toast.success("Your name has been updated! ❤️");
+            toast.success("Your name has been updated! ");
           } else {
-            toast.success("You're already on the waitlist! ❤️");
+            toast.success("You're already on the waitlist! ");
           }
 
           // Dohvati postojeći referral code
@@ -123,7 +142,7 @@ const WaitlistCard = () => {
     ? `https://cineo-mc2.vercel.app/?ref=${referralCode}`
     : `https://cineo-mc2.vercel.app/?ref=invite`;
   const shareText =
-    "Check out Cineo - AI-powered movie discovery that actually understands your taste! 🎬✨";
+    "Check out Cineo - AI-powered movie discovery that actually understands your taste! Join the waitlist and get 50% off your first month when we launch.";
 
   const handleCopyLink = async () => {
     trackPixelEvent("Share");
@@ -159,6 +178,23 @@ const WaitlistCard = () => {
       `https://wa.me/?text=${encodeURIComponent(shareText + " " + shareUrl)}`,
       "_blank"
     );
+  };
+
+  const shareToFacebook = () => {
+    trackPixelEvent("Share");
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        shareUrl
+      )}`,
+      "_blank"
+    );
+  };
+
+  const shareToInstagram = () => {
+    trackPixelEvent("Share");
+    // Instagram doesn't have direct URL sharing, copy link and show message
+    navigator.clipboard.writeText(shareUrl);
+    toast.success("Link copied! Share it in your Instagram story or bio 📸");
   };
 
   return (
@@ -235,7 +271,7 @@ const WaitlistCard = () => {
               </motion.div>
 
               <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-slate-50 tracking-tight">
-                You're on the list! 🎉
+                You're on the list!
               </h2>
 
               <p className="text-slate-300 text-base md:text-lg font-light mb-4 leading-relaxed">
@@ -254,10 +290,6 @@ const WaitlistCard = () => {
                   <h3 className="text-lg font-semibold text-white">
                     Unlock your reward
                   </h3>
-                </div>
-
-                <div className="bg-gradient-to-r from-bordo-500 to-siva-800 text-white font-black text-2xl py-2 px-5 rounded-xl inline-block mb-3 shadow-lg shadow-bordo-500/50">
-                  50% OFF
                 </div>
 
                 <p className="text-sm text-siva-200 mb-1 font-medium">
@@ -294,18 +326,34 @@ const WaitlistCard = () => {
                   </button>
 
                   {/* Social share buttons */}
-                  <div className="flex gap-3 justify-center">
+                  <div className="flex gap-2 justify-center flex-wrap">
                     <button
                       onClick={shareToTwitter}
-                      className="bg-[#1DA1F2] hover:bg-[#1a8cd8] text-white px-6 py-3 rounded-xl transition-all hover:scale-105 flex items-center justify-center"
+                      className="bg-[#1DA1F2] hover:bg-[#1a8cd8] text-white px-6 py-3 rounded-xl transition-all hover:scale-105 flex items-center justify-center cursor-pointer"
                       aria-label="Share on Twitter"
                     >
                       <Icon icon="prime:twitter" width="20" height="20" />
                     </button>
 
                     <button
+                      onClick={shareToFacebook}
+                      className="bg-[#1877F2] hover:bg-[#145dbf] text-white px-6 py-3 rounded-xl transition-all hover:scale-105 flex items-center justify-center cursor-pointer"
+                      aria-label="Share on Facebook"
+                    >
+                      <Icon icon="mdi:facebook" width="20" height="20" />
+                    </button>
+
+                    <button
+                      onClick={shareToInstagram}
+                      className="bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#FD1D1D] hover:opacity-90 text-white px-6 py-3 rounded-xl transition-all hover:scale-105 flex items-center justify-center cursor-pointer"
+                      aria-label="Share on Instagram"
+                    >
+                      <Icon icon="mdi:instagram" width="20" height="20" />
+                    </button>
+
+                    <button
                       onClick={shareToLinkedIn}
-                      className="bg-[#0A66C2] hover:bg-[#004182] text-white px-6 py-3 rounded-xl transition-all hover:scale-105 flex items-center justify-center"
+                      className="bg-[#0A66C2] hover:bg-[#004182] text-white px-6 py-3 rounded-xl transition-all hover:scale-105 flex items-center justify-center cursor-pointer"
                       aria-label="Share on LinkedIn"
                     >
                       <Icon icon="mdi:linkedin" width="20" height="20" />
@@ -313,7 +361,7 @@ const WaitlistCard = () => {
 
                     <button
                       onClick={shareToWhatsApp}
-                      className="bg-[#25D366] hover:bg-[#20BA5A] text-white px-6 py-3 rounded-xl transition-all hover:scale-105 flex items-center justify-center"
+                      className="bg-[#25D366] hover:bg-[#20BA5A] text-white px-6 py-3 rounded-xl transition-all hover:scale-105 flex items-center justify-center cursor-pointer"
                       aria-label="Share on WhatsApp"
                     >
                       <Icon icon="mdi:whatsapp" width="20" height="20" />
