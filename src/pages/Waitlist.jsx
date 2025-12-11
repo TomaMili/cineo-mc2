@@ -221,12 +221,12 @@ const Waitlist = () => {
           content="https://cineo-mc2.vercel.app/waitlist"
         />
       </Helmet>
-      <main className="w-full overflow-x-hidden">
+      <main className="w-full">
         <motion.section
           variants={container}
           initial="hidden"
           animate="show"
-          className="relative w-full h-auto min-h-[100vh] bg-cover bg-center flex flex-col justify-center items-center py-16 md:py-20"
+          className="relative w-full min-h-[90vh] md:min-h-screen bg-cover bg-center flex flex-col justify-center items-center py-12 md:py-20"
           style={{ backgroundImage: "url('/bg-image.jpg')" }}
         >
           <motion.div variants={fadeInUp} className="text-center z-10">
@@ -264,7 +264,7 @@ const Waitlist = () => {
             variants={fadeInUp}
             className="text-base md:text-xl text-slate-300 max-w-xl md:max-w-2xl mx-auto font-light px-6 md:px-4 text-center leading-relaxed mb-0"
           >
-            Searching for the right movie doesn't have to be tiring.
+            Because choosing a movie shouldn 't take longer than watching one
             <br />
             Follow all your movies, ones you've already watched or want to
             watch, mark favourites and get personalised suggestions across all
