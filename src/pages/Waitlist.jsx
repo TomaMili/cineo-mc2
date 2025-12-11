@@ -226,7 +226,7 @@ const Waitlist = () => {
           variants={container}
           initial="hidden"
           animate="show"
-          className="relative w-full min-h-screen bg-cover bg-center flex flex-col justify-center items-center py-12 md:py-16"
+          className="relative w-full h-auto min-h-[100vh] bg-cover bg-center flex flex-col justify-center items-center py-16 md:py-20"
           style={{ backgroundImage: "url('/bg-image.jpg')" }}
         >
           <motion.div variants={fadeInUp} className="text-center z-10">
