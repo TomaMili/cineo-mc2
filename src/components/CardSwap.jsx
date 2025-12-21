@@ -105,9 +105,8 @@ const CardSwap = ({
       const tl = gsap.timeline();
       tlRef.current = tl;
 
-      const currentY = gsap.getProperty(elFront, "y");
       tl.to(elFront, {
-        y: currentY + 200,
+        y: "+=200",
         duration: config.durDrop,
         ease: config.ease,
         force3D: true,
