@@ -206,10 +206,7 @@ export default function IntegrationsSection() {
                       },
                       { icon: "mdi:devices", text: "Multi-device sync" },
                     ].map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center gap-2"
-                      >
+                      <div key={idx} className="flex items-center gap-2">
                         <Icon
                           icon={item.icon}
                           className="w-4 h-4 text-bordo-400 flex-shrink-0"

@@ -226,7 +226,7 @@ const Waitlist = () => {
           variants={container}
           initial="hidden"
           animate="show"
-          className="relative w-full min-h-[90vh] md:min-h-screen bg-cover bg-center flex flex-col justify-center items-center py-12 md:py-20"
+          className="relative w-full min-h-[100vh] bg-cover bg-center flex flex-col justify-center items-center"
           style={{ backgroundImage: "url('/bg-image.jpg')" }}
         >
           <motion.div variants={fadeInUp} className="text-center z-10">
@@ -384,10 +384,11 @@ const Waitlist = () => {
           <div className="mt-5 md:mt-6 flex flex-col items-center ">
             <button
               onClick={() => {
-                const problemSection = document.querySelector("section.py-12");
+                const problemSection =
+                  document.getElementById("problem-section");
                 problemSection?.scrollIntoView({
                   behavior: "smooth",
-                  block: "center",
+                  block: "start",
                 });
               }}
               className="text-siva-400 hover:text-white font-medium text-sm tracking-wide cursor-pointer transition-colors duration-200"

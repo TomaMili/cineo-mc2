@@ -58,10 +58,7 @@ export default function WatchTogetherSection() {
           <div className="mb-16">
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
               {benefits.map((benefit, idx) => (
-                <div
-                  key={idx}
-                  className="relative group flex"
-                >
+                <div key={idx} className="relative group flex">
                   <StarBorder
                     speed={idx === 0 ? "4s" : idx === 1 ? "5s" : "6s"}
                   >
