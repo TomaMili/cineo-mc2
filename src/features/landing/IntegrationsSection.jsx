@@ -60,7 +60,8 @@ export default function IntegrationsSection() {
 
   return (
     <Feature>
-      <section className="py-24 bg-siva-800 relative overflow-hidden">
+      <section className="py-24 bg-siva-800 relative">
+        {/* iOS FIX: Removed overflow-hidden */}
         <BlobBackground />
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">

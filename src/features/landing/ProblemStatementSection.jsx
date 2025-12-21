@@ -5,11 +5,12 @@ import CardSwap, { Card } from "../../components/CardSwap";
 export default function ProblemStatementSection() {
   return (
     <Feature>
-      <section className="py-12 md:py-16 lg:py-20 bg-gradient-to-b from-siva-800 via-siva-900/50 to-siva-800 overflow-hidden relative">
+      <section className="py-12 md:py-16 lg:py-20 bg-gradient-to-b from-siva-800 via-siva-900/50 to-siva-800 relative">
+        {/* iOS FIX: Removed overflow-hidden, reduced blur values */}
         {/* Red blurred circles ambient lighting */}
-        <div className="absolute top-1/2 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-bordo-500/30 rounded-full blur-[100px] md:blur-[150px] translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-        <div className="absolute top-1/4 left-0 w-[250px] md:w-[400px] h-[250px] md:h-[400px] bg-bordo-500/20 rounded-full blur-[80px] md:blur-[120px] -translate-x-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-[200px] md:w-[350px] h-[200px] md:h-[350px] bg-bordo-500/15 rounded-full blur-[60px] md:blur-[100px] translate-y-1/2 pointer-events-none" />
+        <div className="absolute top-1/2 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-bordo-500/30 rounded-full blur-[60px] md:blur-[80px] translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="absolute top-1/4 left-0 w-[250px] md:w-[400px] h-[250px] md:h-[400px] bg-bordo-500/20 rounded-full blur-[50px] md:blur-[70px] -translate-x-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-[200px] md:w-[350px] h-[200px] md:h-[350px] bg-bordo-500/15 rounded-full blur-[40px] md:blur-[60px] translate-y-1/2 pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-12">
@@ -35,7 +36,7 @@ export default function ProblemStatementSection() {
                     height={320}
                     cardDistance={60}
                     verticalDistance={70}
-                    delay={5000}
+                    delay={3000}
                     pauseOnHover={false}
                     easing="elastic"
                   >

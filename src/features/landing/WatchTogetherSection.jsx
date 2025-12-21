@@ -27,10 +27,11 @@ export default function WatchTogetherSection() {
 
   return (
     <Feature>
-      <section className="py-16 md:py-24 bg-gradient-to-b from-siva-800 via-black to-siva-800 relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-gradient-to-b from-siva-800 via-black to-siva-800 relative">
+        {/* iOS FIX: Removed overflow-hidden, reduced blur values */}
         {/* Ambient lighting */}
-        <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-bordo-500/10 rounded-full blur-[150px] pointer-events-none" />
-        <div className="absolute bottom-1/3 right-0 w-[600px] h-[600px] bg-bordo-500/8 rounded-full blur-[150px] pointer-events-none" />
+        <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-bordo-500/10 rounded-full blur-[80px] pointer-events-none" />
+        <div className="absolute bottom-1/3 right-0 w-[600px] h-[600px] bg-bordo-500/8 rounded-full blur-[80px] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
           {/* Header */}
@@ -61,7 +62,9 @@ export default function WatchTogetherSection() {
               src="/couch-party.png"
               alt="Group watching movies together"
               className="w-3/4 max-w-2xl mx-auto rounded-2xl border border-bordo-500/20 shadow-[0_0_50px_rgba(185,28,28,0.15)]"
+              loading="lazy"
             />
+            {/* iOS FIX: Added lazy loading */}
           </motion.div>
 
           {/* 3 Benefits - Animated Cards */}

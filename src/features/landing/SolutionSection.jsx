@@ -31,7 +31,8 @@ export default function SolutionSection() {
 
   return (
     <Feature>
-      <section className="py-24 bg-siva-800 relative overflow-hidden">
+      <section className="py-24 bg-siva-800 relative">
+        {/* iOS FIX: Removed overflow-hidden */}
         <BlobBackground />
 
         <div className="max-w-full mx-auto px-6  relative z-10">
@@ -105,15 +106,23 @@ export default function SolutionSection() {
               </div>
             </div>
 
-            <div className="w-full lg:w-4/7 flex items-center justify-center overflow-hidden relative z-10 hover:scale-[1.12] transition-transform duration-300">
+            <div className="w-full lg:w-4/7 flex items-center justify-center relative z-10">
+              {/* iOS FIX: Removed overflow-hidden and simplified hover effect */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-[500px] h-[500px] bg-black/60 rounded-full blur-[120px] "></div>
+                <div className="w-[500px] h-[500px] bg-black/60 rounded-full blur-[80px]"></div>
+                {/* iOS FIX: Reduced blur from 120px to 80px */}
               </div>
-              <img
+              <motion.img
+                key={openIndex}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
                 src={features[openIndex].image}
                 alt={features[openIndex].title}
-                className="w-full rounded-xl relative z-10"
+                className="w-full rounded-xl relative z-10 transition-transform duration-300 hover:scale-105"
+                loading="lazy"
               />
+              {/* iOS FIX: Added motion.img with key, reduced hover scale to 1.05, added lazy loading */}
             </div>
           </div>
         </div>

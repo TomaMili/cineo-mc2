@@ -3,7 +3,13 @@ import Spinner from "../../ui/Spinner";
 import Section from "./Section";
 
 export default function LazySection({ title, fetchHook, emptyMessage }) {
-  const { ref, inView } = useInView({ triggerOnce: true, rootMargin: "200px" });
+  // iOS Safari fix: fallbackInView ensures content loads even if IntersectionObserver fails
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0,
+    rootMargin: "400px",
+    fallbackInView: true,
+  });
 
   const query = fetchHook({ enabled: inView });
 

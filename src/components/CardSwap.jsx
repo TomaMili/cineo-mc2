@@ -56,9 +56,9 @@ const CardSwap = ({
     easing === "elastic"
       ? {
           ease: "elastic.out(0.6,0.9)",
-          durDrop: 2,
-          durMove: 2,
-          durReturn: 2,
+          durDrop: 1.4,
+          durMove: 1.4,
+          durReturn: 1.4,
           promoteOverlap: 0.9,
           returnDelay: 0.05,
         }
@@ -103,7 +103,7 @@ const CardSwap = ({
       tlRef.current = tl;
 
       tl.to(elFront, {
-        y: "+=500",
+        y: "+=200",
         duration: config.durDrop,
         ease: config.ease,
       });
@@ -199,7 +199,7 @@ const CardSwap = ({
   return (
     <div
       ref={container}
-      className="relative transform origin-center perspective-[900px] overflow-visible scale-90 sm:scale-100 md:scale-110 lg:scale-100"
+      className="relative transform origin-center perspective-[900px] overflow-visible scale-100"
       style={{ width, height }}
     >
       {rendered}

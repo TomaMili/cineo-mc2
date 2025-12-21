@@ -31,7 +31,7 @@ const trackPixelEvent = (eventName) => {
 // Match LandingPage hero animation variants
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.35 } },
+  show: { transition: { staggerChildren: 0.12 } },
 };
 const fadeInUp = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
 
@@ -264,7 +264,7 @@ const Waitlist = () => {
             variants={fadeInUp}
             className="text-base md:text-xl text-slate-300 max-w-xl md:max-w-2xl mx-auto font-light px-6 md:px-4 text-center leading-relaxed mb-0"
           >
-            Because choosing a movie shouldn 't take longer than watching one
+            Because choosing a movie shouldn't take longer than watching one
             <br />
             Follow all your movies, ones you've already watched or want to
             watch, mark favourites and get personalised suggestions across all
