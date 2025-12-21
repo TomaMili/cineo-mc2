@@ -108,7 +108,7 @@ export default function SolutionSection() {
             <div className="w-full lg:w-4/7 flex items-center justify-center relative z-10">
               {/* iOS FIX: Removed overflow-hidden and simplified hover effect */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-[500px] h-[500px] bg-black/40 rounded-full blur-[40px] will-change-transform"></div>
+                <div className="hidden md:block w-[500px] h-[500px] bg-black/30 rounded-full blur-[30px]"></div>
                 {/* iOS FIX: Reduced blur from 120px to 80px */}
               </div>
               <img

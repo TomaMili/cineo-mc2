@@ -9,10 +9,10 @@ export default function ProblemStatementSection() {
         id="problem-section"
         className="py-12 md:py-16 lg:py-20 bg-gradient-to-b from-siva-800 via-siva-900/50 to-siva-800 overflow-hidden relative"
       >
-        {/* Red blurred circles ambient lighting - iOS optimized */}
-        <div className="absolute top-1/2 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-bordo-500/20 rounded-full blur-[30px] md:blur-[50px] translate-x-1/2 -translate-y-1/2 pointer-events-none will-change-transform" />
-        <div className="absolute top-1/4 left-0 w-[250px] md:w-[400px] h-[250px] md:h-[400px] bg-bordo-500/15 rounded-full blur-[25px] md:blur-[45px] -translate-x-1/2 pointer-events-none will-change-transform" />
-        <div className="absolute bottom-0 right-1/4 w-[200px] md:w-[350px] h-[200px] md:h-[350px] bg-bordo-500/10 rounded-full blur-[20px] md:blur-[40px] translate-y-1/2 pointer-events-none will-change-transform" />
+        {/* Red blurred circles ambient lighting - hidden on mobile for iOS performance */}
+        <div className="hidden md:block absolute top-1/2 right-0 w-[500px] h-[500px] bg-bordo-500/20 rounded-full blur-[30px] translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="hidden md:block absolute top-1/4 left-0 w-[400px] h-[400px] bg-bordo-500/15 rounded-full blur-[25px] -translate-x-1/2 pointer-events-none" />
+        <div className="hidden md:block absolute bottom-0 right-1/4 w-[350px] h-[350px] bg-bordo-500/10 rounded-full blur-[20px] translate-y-1/2 pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-12">

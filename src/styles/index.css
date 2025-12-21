@@ -86,14 +86,41 @@ button {
    iOS PERFORMANCE OPTIMIZATIONS
    ============================================ */
 
+/* Respect user's motion preferences - disable animations if requested */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mobile iOS: Reduce animation complexity */
+@media (max-width: 768px) {
+  @supports (-webkit-touch-callout: none) {
+    /* Disable 3D transforms on mobile iOS */
+    [class*="perspective"],
+    [class*="transform-3d"] {
+      perspective: none !important;
+      transform-style: flat !important;
+    }
+    
+    /* Remove expensive filters on mobile */
+    [class*="blur-"],
+    [class*="backdrop-blur"] {
+      display: none !important;
+    }
+  }
+}
+
 /* Optimize blur effects for iOS Safari */
 @supports (-webkit-touch-callout: none) {
   /* Reduce blur intensity on iOS for better performance */
   [class*="blur-["] {
-    will-change: transform;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    transform: translateZ(0);
+    contain: layout style paint;
+    content-visibility: auto;
   }
   
   /* Remove backdrop-blur on older iOS devices */
@@ -105,15 +132,35 @@ button {
   }
 }
 
-/* GPU acceleration for animations */
-[class*="transition"],
-[class*="animate"],
-[class*="motion"] {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -webkit-perspective: 1000;
-  perspective: 1000;
-  transform: translateZ(0);
+/* CSS Containment for better performance */
+section {
+  contain: layout style;
+}
+
+/* Reduce GPU layers - only animate what's necessary */
+@media (max-width: 768px) {
+  [class*="transition"],
+  [class*="animate"],
+  [class*="motion"] {
+    -webkit-backface-visibility: visible;
+    backface-visibility: visible;
+    -webkit-perspective: none;
+    perspective: none;
+    transform: none;
+  }
+}
+
+/* Desktop: Keep GPU acceleration */
+@media (min-width: 769px) {
+  [class*="transition"],
+  [class*="animate"],
+  [class*="motion"] {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    perspective: 1000;
+    transform: translateZ(0);
+  }
 }
 
 /* Optimize gradient performance */

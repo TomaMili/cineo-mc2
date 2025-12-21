@@ -20,28 +20,31 @@ export const Card = forwardRef(({ customClass, ...rest }, ref) => (
 ));
 Card.displayName = "Card";
 
-const makeSlot = (i, distX, distY, total) => ({
-  x: i * distX,
-  y: -i * distY,
-  z: -i * distX * 1.5,
-  zIndex: total - i,
-});
+const makeSlot = (i, distX, distY, total) => {
+  // iOS optimization: Use 2D transforms only
+  const isMobile = window.innerWidth < 768;
+  return {
+    x: i * distX,
+    y: -i * distY,
+    z: isMobile ? 0 : -i * distX * 1.5,
+    zIndex: total - i,
+  };
+};
 
-const placeNow = (el, slot, skew) =>
+const placeNow = (el, slot, skew) => {
+  const isMobile = window.innerWidth < 768;
   gsap.set(el, {
     x: slot.x,
     y: slot.y,
     z: slot.z,
     xPercent: -50,
     yPercent: -50,
-    skewY: skew,
+    skewY: isMobile ? 0 : skew,
     transformOrigin: "center center",
     zIndex: slot.zIndex,
-    force3D: true,
-    willChange: "transform",
-    backfaceVisibility: "hidden",
-    perspective: 1000,
+    force3D: !isMobile,
   });
+};
 
 const CardSwap = ({
   width = 500,
@@ -205,7 +208,7 @@ const CardSwap = ({
   return (
     <div
       ref={container}
-      className="relative transform origin-center perspective-[900px] overflow-visible scale-100"
+      className="relative transform origin-center md:perspective-[900px] overflow-visible scale-100"
       style={{ width, height }}
     >
       {rendered}

@@ -29,8 +29,8 @@ export default function WatchTogetherSection() {
     <Feature>
       <section className="py-16 md:py-24 bg-gradient-to-b from-siva-800 via-black to-siva-800 relative overflow-hidden">
         {/* Ambient lighting */}
-        <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-bordo-500/8 rounded-full blur-[40px] pointer-events-none will-change-transform" />
-        <div className="absolute bottom-1/3 right-0 w-[600px] h-[600px] bg-bordo-500/6 rounded-full blur-[40px] pointer-events-none will-change-transform" />
+        <div className="hidden md:block absolute top-1/3 left-0 w-[500px] h-[500px] bg-bordo-500/8 rounded-full blur-[30px] pointer-events-none" />
+        <div className="hidden md:block absolute bottom-1/3 right-0 w-[600px] h-[600px] bg-bordo-500/6 rounded-full blur-[30px] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
           {/* Header */}
