@@ -65,13 +65,7 @@ export default function IntegrationsSection() {
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
           {/* Header with status badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12 md:mb-16"
-          >
+          <div className="text-center mb-12 md:mb-16">
             <div className="flex flex-col md:flex-row items-center justify-center gap-3 mb-6">
               <h2 className="text-3xl md:text-5xl lg:text-7xl font-semibold text-white">
                 Integrations
@@ -87,15 +81,10 @@ export default function IntegrationsSection() {
               Cineo integrations are currently in development. Join the waitlist
               to be part of early testing.
             </p>
-          </motion.div>
+          </div>
 
           {/* GlowingCards container */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
+          <div>
             <GlowingCards
               enableGlow={true}
               glowRadius={20}
@@ -128,13 +117,9 @@ export default function IntegrationsSection() {
                   {/* Streaming Logos */}
                   <div className="flex flex-wrap items-center gap-3 mb-6">
                     {streamingProviders.map((provider, idx) => (
-                      <motion.div
+                      <div
                         key={provider.id}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        whileHover={{ scale: 1.1 }}
-                        className="w-10 h-10 md:w-12 md:h-12 rounded-lg overflow-hidden bg-white/5 hover:bg-white/10 transition-all "
+                        className="w-10 h-10 md:w-12 md:h-12 rounded-lg overflow-hidden bg-white/5 hover:bg-white/10 transition-all"
                         title={provider.name}
                       >
                         <img
@@ -142,7 +127,7 @@ export default function IntegrationsSection() {
                           alt={provider.name}
                           className="w-full h-full object-cover"
                         />
-                      </motion.div>
+                      </div>
                     ))}
                     <span className="text-siva-400 text-sm font-light">
                       + more
@@ -221,12 +206,8 @@ export default function IntegrationsSection() {
                       },
                       { icon: "mdi:devices", text: "Multi-device sync" },
                     ].map((item, idx) => (
-                      <motion.div
+                      <div
                         key={idx}
-                        initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: idx * 0.1 }}
                         className="flex items-center gap-2"
                       >
                         <Icon
@@ -234,7 +215,7 @@ export default function IntegrationsSection() {
                           className="w-4 h-4 text-bordo-400 flex-shrink-0"
                         />
                         <span>{item.text}</span>
-                      </motion.div>
+                      </div>
                     ))}
                   </div>
 
@@ -247,16 +228,10 @@ export default function IntegrationsSection() {
                 </GlowingCard>
               </motion.div>
             </GlowingCards>
-          </motion.div>
+          </div>
 
           {/* Bottom CTA with animation */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-center"
-          >
+          <div className="text-center">
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -279,7 +254,7 @@ export default function IntegrationsSection() {
                 className="w-5 h-5 text-bordo-400"
               />
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </section>
     </Feature>

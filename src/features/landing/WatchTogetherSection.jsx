@@ -34,29 +34,17 @@ export default function WatchTogetherSection() {
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12 md:mb-16"
-          >
+          <div className="text-center mb-12 md:mb-16">
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-semibold text-white mb-4">
               Watch Together
             </h2>
             <p className="text-lg md:text-2xl lg:text-3xl text-siva-300 font-light max-w-3xl mx-auto px-4">
               End group indecision. Let AI find movies everyone will enjoy.
             </p>
-          </motion.div>
+          </div>
 
           {/* Hero Image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-16"
-          >
+          <div className="mb-16">
             <img
               src="/couch-party.png"
               alt="Group watching movies together"
@@ -64,19 +52,14 @@ export default function WatchTogetherSection() {
               loading="lazy"
             />
             {/* iOS FIX: Added lazy loading */}
-          </motion.div>
+          </div>
 
           {/* 3 Benefits - Animated Cards */}
           <div className="mb-16">
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
               {benefits.map((benefit, idx) => (
-                <motion.div
+                <div
                   key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.15, duration: 0.5 }}
-                  whileHover={{ y: -8, transition: { duration: 0.2 } }}
                   className="relative group flex"
                 >
                   <StarBorder
@@ -116,18 +99,12 @@ export default function WatchTogetherSection() {
                       </div>
                     </div>
                   </StarBorder>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="max-w-2xl mx-auto mb-12"
-          >
+          <div className="max-w-2xl mx-auto mb-12">
             <div className="relative group">
               <StarBorder speed="7s">
                 <div className="relative bg-gradient-to-br from-siva-900/80 to-siva-900/40 border border-bordo-500/20 rounded-2xl p-6 md:p-8 group-hover:border-bordo-500/40 transition-all duration-300">
@@ -149,15 +126,9 @@ export default function WatchTogetherSection() {
                 </div>
               </StarBorder>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-center"
-          >
+          <div className="text-center">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
@@ -171,7 +142,7 @@ export default function WatchTogetherSection() {
               <span>Get early access to Watch Together</span>
               <Icon icon="raphael:arrowdown" className="mt-1 w-5 h-5" />
             </motion.button>
-          </motion.div>
+          </div>
         </div>
       </section>
     </Feature>

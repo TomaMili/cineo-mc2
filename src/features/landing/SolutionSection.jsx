@@ -111,17 +111,13 @@ export default function SolutionSection() {
                 <div className="w-[500px] h-[500px] bg-black/60 rounded-full blur-[80px]"></div>
                 {/* iOS FIX: Reduced blur from 120px to 80px */}
               </div>
-              <motion.img
+              <img
                 key={openIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
                 src={features[openIndex].image}
                 alt={features[openIndex].title}
                 className="w-full rounded-xl relative z-10 transition-transform duration-300 hover:scale-105"
                 loading="lazy"
               />
-              {/* iOS FIX: Added motion.img with key, reduced hover scale to 1.05, added lazy loading */}
             </div>
           </div>
         </div>
