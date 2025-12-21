@@ -31,8 +31,7 @@ export default function SolutionSection() {
 
   return (
     <Feature>
-      <section className="py-24 bg-siva-800 relative">
-        {/* iOS FIX: Removed overflow-hidden */}
+      <section className="py-24 bg-siva-800 relative overflow-hidden">
         <BlobBackground />
 
         <div className="max-w-full mx-auto px-6  relative z-10">

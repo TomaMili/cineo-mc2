@@ -5,8 +5,7 @@ import CardSwap, { Card } from "../../components/CardSwap";
 export default function ProblemStatementSection() {
   return (
     <Feature>
-      <section className="py-12 md:py-16 lg:py-20 bg-gradient-to-b from-siva-800 via-siva-900/50 to-siva-800 relative">
-        {/* iOS FIX: Removed overflow-hidden, reduced blur values */}
+      <section className="py-12 md:py-16 lg:py-20 bg-gradient-to-b from-siva-800 via-siva-900/50 to-siva-800 overflow-hidden relative">
         {/* Red blurred circles ambient lighting */}
         <div className="absolute top-1/2 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-bordo-500/30 rounded-full blur-[60px] md:blur-[80px] translate-x-1/2 -translate-y-1/2 pointer-events-none" />
         <div className="absolute top-1/4 left-0 w-[250px] md:w-[400px] h-[250px] md:h-[400px] bg-bordo-500/20 rounded-full blur-[50px] md:blur-[70px] -translate-x-1/2 pointer-events-none" />

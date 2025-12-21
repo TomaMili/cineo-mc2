@@ -27,8 +27,7 @@ export default function WatchTogetherSection() {
 
   return (
     <Feature>
-      <section className="py-16 md:py-24 bg-gradient-to-b from-siva-800 via-black to-siva-800 relative">
-        {/* iOS FIX: Removed overflow-hidden, reduced blur values */}
+      <section className="py-16 md:py-24 bg-gradient-to-b from-siva-800 via-black to-siva-800 relative overflow-hidden">
         {/* Ambient lighting */}
         <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-bordo-500/10 rounded-full blur-[80px] pointer-events-none" />
         <div className="absolute bottom-1/3 right-0 w-[600px] h-[600px] bg-bordo-500/8 rounded-full blur-[80px] pointer-events-none" />

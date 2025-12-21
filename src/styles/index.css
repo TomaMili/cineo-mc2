@@ -48,8 +48,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* iOS FIX: Use overflow-x clip instead of hidden */
-  overflow-x: clip;
+  overflow-x: hidden;
   overflow-y: auto;
 
   /* iOS FIX: Ensure body can scroll */
