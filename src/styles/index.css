@@ -106,10 +106,17 @@ button {
       perspective: none !important;
       transform-style: flat !important;
     }
-    
-    /* Remove expensive filters on mobile */
-    [class*="blur-"],
-    [class*="backdrop-blur"] {
+
+    /* Remove backdrop-blur from form inputs - keep solid background */
+    input[class*="backdrop-blur"],
+    textarea[class*="backdrop-blur"],
+    select[class*="backdrop-blur"] {
+      backdrop-filter: none !important;
+      background-color: rgba(10, 10, 10, 0.85) !important;
+    }
+
+    /* Hide only decorative blur elements (absolute positioned backgrounds) */
+    div.absolute[class*="blur-"] {
       display: none !important;
     }
   }
@@ -122,7 +129,7 @@ button {
     contain: layout style paint;
     content-visibility: auto;
   }
-  
+
   /* Remove backdrop-blur on older iOS devices */
   @supports not (backdrop-filter: blur(10px)) {
     [class*="backdrop-blur"] {
