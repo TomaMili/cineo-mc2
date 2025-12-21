@@ -82,12 +82,57 @@ button {
   transform: translateZ(0);
 }
 
+/* ============================================
+   iOS PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Optimize blur effects for iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  /* Reduce blur intensity on iOS for better performance */
+  [class*="blur-["] {
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+  
+  /* Remove backdrop-blur on older iOS devices */
+  @supports not (backdrop-filter: blur(10px)) {
+    [class*="backdrop-blur"] {
+      backdrop-filter: none;
+      background-color: rgba(18, 18, 18, 0.9);
+    }
+  }
+}
+
+/* GPU acceleration for animations */
+[class*="transition"],
+[class*="animate"],
+[class*="motion"] {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
+  transform: translateZ(0);
+}
+
+/* Optimize gradient performance */
+[class*="gradient"] {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
 /* Ensure images don't break layout */
 img {
   max-width: 100%;
   height: auto;
   -webkit-user-drag: none;
   user-select: none;
+  /* iOS optimization */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
 }
 
 /* ============================================

@@ -29,8 +29,8 @@ export default function WatchTogetherSection() {
     <Feature>
       <section className="py-16 md:py-24 bg-gradient-to-b from-siva-800 via-black to-siva-800 relative overflow-hidden">
         {/* Ambient lighting */}
-        <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-bordo-500/10 rounded-full blur-[80px] pointer-events-none" />
-        <div className="absolute bottom-1/3 right-0 w-[600px] h-[600px] bg-bordo-500/8 rounded-full blur-[80px] pointer-events-none" />
+        <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-bordo-500/8 rounded-full blur-[40px] pointer-events-none will-change-transform" />
+        <div className="absolute bottom-1/3 right-0 w-[600px] h-[600px] bg-bordo-500/6 rounded-full blur-[40px] pointer-events-none will-change-transform" />
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
           {/* Header */}
@@ -62,7 +62,7 @@ export default function WatchTogetherSection() {
                   <StarBorder
                     speed={idx === 0 ? "4s" : idx === 1 ? "5s" : "6s"}
                   >
-                    <div className="relative w-full bg-gradient-to-br from-siva-800/90 to-bordo-800/40 backdrop-blur-sm border border-bordo-700 rounded-xl p-8 overflow-hidden transition-all duration-300 group-hover:border-bordo-500/40 group-hover:shadow-[0_0_30px_rgba(185,28,28,0.15)] flex flex-col min-h-[320px]">
+                    <div className="relative w-full bg-gradient-to-br from-siva-800/95 to-bordo-800/50 border border-bordo-700 rounded-xl p-8 overflow-hidden transition-all duration-300 group-hover:border-bordo-500/40 group-hover:shadow-[0_0_30px_rgba(185,28,28,0.15)] flex flex-col min-h-[320px] will-change-transform">
                       {/* Shine effect on hover */}
                       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                         <div className="absolute inset-0 bg-gradient-to-br from-bordo-500/5 via-transparent to-transparent" />

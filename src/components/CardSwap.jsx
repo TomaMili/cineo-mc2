@@ -38,6 +38,9 @@ const placeNow = (el, slot, skew) =>
     transformOrigin: "center center",
     zIndex: slot.zIndex,
     force3D: true,
+    willChange: "transform",
+    backfaceVisibility: "hidden",
+    perspective: 1000,
   });
 
 const CardSwap = ({
@@ -55,11 +58,11 @@ const CardSwap = ({
   const config =
     easing === "elastic"
       ? {
-          ease: "elastic.out(0.6,0.9)",
-          durDrop: 1.4,
-          durMove: 1.4,
-          durReturn: 1.4,
-          promoteOverlap: 0.9,
+          ease: "power2.out",
+          durDrop: 0.6,
+          durMove: 0.6,
+          durReturn: 0.6,
+          promoteOverlap: 0.7,
           returnDelay: 0.05,
         }
       : {
@@ -102,10 +105,12 @@ const CardSwap = ({
       const tl = gsap.timeline();
       tlRef.current = tl;
 
+      const currentY = gsap.getProperty(elFront, "y");
       tl.to(elFront, {
-        y: "+=200",
+        y: currentY + 200,
         duration: config.durDrop,
         ease: config.ease,
+        force3D: true,
       });
 
       tl.addLabel("promote", `-=${config.durDrop * config.promoteOverlap}`);
@@ -121,6 +126,7 @@ const CardSwap = ({
             z: slot.z,
             duration: config.durMove,
             ease: config.ease,
+            force3D: true,
           },
           `promote+=${i * 0.15}`
         );
@@ -148,6 +154,7 @@ const CardSwap = ({
           z: backSlot.z,
           duration: config.durReturn,
           ease: config.ease,
+          force3D: true,
         },
         "return"
       );
