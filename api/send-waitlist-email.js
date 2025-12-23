@@ -1,14 +1,26 @@
-import { Resend } from "resend";
+const { Resend } = require("resend");
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
+  // Set CORS headers
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   // Only allow POST
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   const { email, name, referralCode } = req.body;
+
+  console.log("📧 Email request received:", { email, name, referralCode });
+  console.log("🔑 RESEND_API_KEY exists:", !!process.env.RESEND_API_KEY);
 
   if (!email) {
     return res.status(400).json({ error: "Email is required" });
@@ -132,12 +144,17 @@ export default async function handler(req, res) {
     });
 
     if (error) {
+      console.error("❌ Resend error:", error);
       throw new Error(error.message || "Failed to send email");
     }
 
+    console.log("✅ Email sent successfully:", data);
     return res.status(200).json({ success: true, data });
   } catch (error) {
-    console.error("Email error:", error);
-    return res.status(500).json({ error: error.message });
+    console.error("❌ Email error:", error);
+    return res.status(500).json({
+      error: error.message,
+      stack: error.stack,
+    });
   }
-}
+};
