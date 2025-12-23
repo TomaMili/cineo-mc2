@@ -1,7 +1,4 @@
-const { Resend } = require("resend");
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
+// Direct Resend API call - no SDK dependency
 module.exports = async function handler(req, res) {
   // Set CORS headers
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -12,22 +9,23 @@ module.exports = async function handler(req, res) {
     return res.status(200).end();
   }
 
-  // Only allow POST
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  console.log("=== EMAIL API STARTED ===");
+  console.log("API Key exists:", !!process.env.RESEND_API_KEY);
+
   // CHECK API KEY FIRST
   if (!process.env.RESEND_API_KEY) {
-    console.error("❌ RESEND_API_KEY is not set!");
+    console.error("ERROR: RESEND_API_KEY is not set!");
     return res.status(500).json({
       error: "Server configuration error: RESEND_API_KEY not found",
     });
   }
 
   const { email, name, referralCode } = req.body;
-
-  console.log("📧 Email request received:", { email, name, referralCode });
+  console.log("Request body:", { email, name, referralCode });
 
   if (!email) {
     return res.status(400).json({ error: "Email is required" });
@@ -142,23 +140,42 @@ module.exports = async function handler(req, res) {
       </html>
     `;
 
-    // Send email via Resend SDK
-    const { data, error } = await resend.emails.send({
-      from: "Cineo <info@cineoai.com>",
-      to: [email],
-      subject: "You're on the Cineo Waitlist! 🎬",
-      html: emailHtml,
+    console.log("Calling Resend API...");
+
+    // Direct Resend API call (no SDK)
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      },
+      body: JSON.stringify({
+        from: "Cineo <info@cineoai.com>",
+        to: [email],
+        subject: "You're on the Cineo Waitlist! 🎬",
+        html: emailHtml,
+      }),
     });
 
-    if (error) {
-      console.error("❌ Resend error:", error);
-      throw new Error(error.message || "Failed to send email");
+    console.log("Resend API response status:", response.status);
+
+    const data = await response.json();
+    console.log("Resend API response data:", data);
+
+    if (!response.ok) {
+      console.error("Resend API error:", data);
+      return res.status(500).json({
+        error: "Failed to send email",
+        details: data,
+      });
     }
 
-    console.log("✅ Email sent successfully:", data);
+    console.log("✅ SUCCESS! Email sent:", data.id);
     return res.status(200).json({ success: true, data });
   } catch (error) {
-    console.error("❌ Email error:", error);
+    console.error("❌ CATCH ERROR:", error.message);
+    console.error("Stack:", error.stack);
+
     return res.status(500).json({
       error: error.message,
       stack: error.stack,
