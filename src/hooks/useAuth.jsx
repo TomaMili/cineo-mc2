@@ -115,7 +115,7 @@ export function useLogout() {
       // runs on success OR error
       qc.clear(); // blow away every cache entry
       toast.success("Signed out");
-      navigate("/landing-page", { replace: true });
+      navigate("/", { replace: true });
     },
   });
   return { logout: mutation.mutate, isLoading: mutation.isLoading };

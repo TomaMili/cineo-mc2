@@ -172,7 +172,6 @@ function Navigation({ isNavActive, setIsNavActive }) {
           <button
             onClick={logout}
             disabled={isLoading}
-            onMouseEnter={() => handlePrefetch("/landing-page")}
             className="flex items-center gap-3 text-left ml-0 hover:text-siva-100 cursor-pointer h-10 mb-2"
           >
             <IconWithSkeleton

@@ -17,10 +17,17 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  // CHECK API KEY FIRST
+  if (!process.env.RESEND_API_KEY) {
+    console.error("❌ RESEND_API_KEY is not set!");
+    return res.status(500).json({
+      error: "Server configuration error: RESEND_API_KEY not found",
+    });
+  }
+
   const { email, name, referralCode } = req.body;
 
   console.log("📧 Email request received:", { email, name, referralCode });
-  console.log("🔑 RESEND_API_KEY exists:", !!process.env.RESEND_API_KEY);
 
   if (!email) {
     return res.status(400).json({ error: "Email is required" });
