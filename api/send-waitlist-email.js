@@ -125,7 +125,7 @@ export default async function handler(req, res) {
 
     // Send email via Resend SDK
     const { data, error } = await resend.emails.send({
-      from: "Cineo <onboarding@cineoai.com>",
+      from: "Cineo <info@cineoai.com>",
       to: [email],
       subject: "You're on the Cineo Waitlist! 🎬",
       html: emailHtml,
