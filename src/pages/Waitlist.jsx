@@ -111,6 +111,8 @@ const Waitlist = () => {
           if (existingData?.referral_code) {
             setHeroReferralCode(existingData.referral_code);
           }
+
+          setShowHeroShare(true);
         } else {
           throw error;
         }
@@ -122,6 +124,24 @@ const Waitlist = () => {
         // IMPORTANT: Set referral code FIRST
         if (data?.referral_code) {
           setHeroReferralCode(data.referral_code);
+        }
+
+        // Send confirmation email
+        try {
+          await fetch("/api/send-waitlist-email", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: heroEmail,
+              name: heroName || null,
+              referralCode: data?.referral_code,
+            }),
+          });
+        } catch (emailError) {
+          console.error("Email sending failed:", emailError);
+          // Don't show error to user - email is nice-to-have
         }
 
         setShowHeroShare(true);
@@ -138,8 +158,8 @@ const Waitlist = () => {
   console.log("🔍 Hero referralCode:", heroReferralCode);
 
   const shareUrl = heroReferralCode
-    ? `https://cineo-mc2.vercel.app/?ref=${heroReferralCode}`
-    : `https://cineo-mc2.vercel.app/?ref=invite`;
+    ? `https://cineoai.com/?ref=${heroReferralCode}`
+    : `https://cineoai.com/?ref=invite`;
   const shareText =
     "Check out Cineo - AI-powered movie discovery that actually understands your taste! Join the waitlist now and get 50% off at launch!";
 
@@ -192,7 +212,8 @@ const Waitlist = () => {
   const shareToInstagram = () => {
     trackPixelEvent("Share");
     navigator.clipboard.writeText(shareUrl);
-    toast.success("Link copied! Share it in your Instagram story or bio 📸");
+    window.open("https://www.instagram.com/cineo_app/", "_blank");
+    toast.success("Link copied! Paste it in your Instagram story or bio 📸");
   };
 
   return (

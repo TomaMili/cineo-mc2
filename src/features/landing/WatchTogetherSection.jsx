@@ -1,27 +1,26 @@
 import { motion } from "framer-motion";
 import Feature from "./Feature";
 import { Icon } from "@iconify-icon/react";
-import StarBorder from "../../components/StarBorder";
 
 export default function WatchTogetherSection() {
-  const benefits = [
+  const steps = [
     {
-      icon: "material-symbols:sync-problem-outline-rounded",
-      title: "No More Group Debates",
-      description:
-        "AI analyzes everyone's taste and finds movies the whole group will love.",
+      number: "1",
+      title: "Create a Room",
+      description: "Set up your movie night in seconds.",
+      image: "2.png",
     },
     {
-      icon: "fa:group",
-      title: "Smart Group Matching",
-      description:
-        "Our AI combines preferences and suggests the perfect movie for your crew.",
+      number: "2",
+      title: "Invite Friends",
+      description: "Share a link or QR code — no app needed.",
+      image: "3.png",
     },
     {
-      icon: "mingcute:link-fill",
-      title: "Share with One Link",
-      description:
-        "Create a session and invite friends instantly. No apps, no hassle.",
+      number: "3",
+      title: "Get Your Pick",
+      description: "AI finds the perfect movie for everyone.",
+      image: "4.png",
     },
   ];
 
@@ -29,102 +28,71 @@ export default function WatchTogetherSection() {
     <Feature>
       <section className="py-16 md:py-24 bg-gradient-to-b from-siva-800 via-black to-siva-800 relative overflow-hidden">
         {/* Ambient lighting */}
-        <div className="hidden md:block absolute top-1/3 left-0 w-[500px] h-[500px] bg-bordo-500/8 rounded-full blur-[30px] pointer-events-none" />
-        <div className="hidden md:block absolute bottom-1/3 right-0 w-[600px] h-[600px] bg-bordo-500/6 rounded-full blur-[30px] pointer-events-none" />
+        <div className="hidden md:block absolute top-1/4 left-0 w-[400px] h-[400px] bg-bordo-500/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="hidden md:block absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-bordo-500/8 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
           {/* Header */}
-          <div className="text-center mb-12 md:mb-16">
+          <div className="text-center mb-12 md:mb-20">
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-semibold text-white mb-4">
               Watch Together
             </h2>
-            <p className="text-lg md:text-2xl lg:text-3xl text-siva-300 font-light max-w-3xl mx-auto px-4">
-              End group indecision. Let AI find movies everyone will enjoy.
+            <p className="text-lg md:text-xl text-siva-300 font-light max-w-xl mx-auto">
+              End the "what should we watch?" debate forever.
             </p>
           </div>
 
-          {/* Hero Image */}
-          <div className="mb-16">
-            <img
-              src="/couch-party.png"
-              alt="Group watching movies together"
-              className="w-3/4 max-w-2xl mx-auto rounded-2xl border border-bordo-500/20 shadow-[0_0_50px_rgba(185,28,28,0.15)]"
-              loading="lazy"
-            />
-            {/* iOS FIX: Added lazy loading */}
-          </div>
+          {/* 3 Steps - Zigzag Layout */}
+          <div className="space-y-12 md:space-y-20 mb-16">
+            {steps.map((step, idx) => (
+              <div
+                key={idx}
+                className={`flex flex-col ${
+                  idx % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+                } items-center gap-6 md:gap-10 lg:gap-14`}
+              >
+                {/* Image */}
+                <div className="w-full md:w-2/5">
+                  <div className="relative group">
+                    {/* Subtle glow on hover */}
+                    <div className="absolute -inset-2 bg-bordo-500/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-          {/* 3 Benefits - Animated Cards */}
-          <div className="mb-16">
-            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
-              {benefits.map((benefit, idx) => (
-                <div key={idx} className="relative group flex">
-                  <StarBorder
-                    speed={idx === 0 ? "4s" : idx === 1 ? "5s" : "6s"}
-                  >
-                    <div className="relative w-full bg-gradient-to-br from-siva-800/95 to-bordo-800/50 border border-bordo-700 rounded-xl p-8 overflow-hidden transition-all duration-300 group-hover:border-bordo-500/40 group-hover:shadow-[0_0_30px_rgba(185,28,28,0.15)] flex flex-col min-h-[320px] will-change-transform">
-                      {/* Shine effect on hover */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="absolute inset-0 bg-gradient-to-br from-bordo-500/5 via-transparent to-transparent" />
-                      </div>
-
-                      {/* Content */}
-                      <div className="relative z-10 text-center flex flex-col">
-                        {/* Icon */}
-                        <motion.div
-                          whileHover={{ scale: 1.1, rotate: 5 }}
-                          transition={{ type: "spring", stiffness: 300 }}
-                          className="w-24 h-24 bg-bordo-500/10 rounded-xl flex items-center justify-center mx-auto mb-6 group-hover:bg-bordo-500/20 transition-colors duration-300"
-                        >
-                          <Icon
-                            icon={benefit.icon}
-                            width="64"
-                            height="64"
-                            className="text-bordo-400 group-hover:text-bordo-300 transition-colors duration-300"
-                          />
-                        </motion.div>
-
-                        {/* Title */}
-                        <h4 className="text-xl md:text-2xl font-semibold text-white mb-3 group-hover:text-bordo-100 transition-colors duration-300">
-                          {benefit.title}
-                        </h4>
-
-                        {/* Description */}
-                        <p className="text-base md:text-lg text-siva-300 font-light leading-relaxed">
-                          {benefit.description}
-                        </p>
-                      </div>
-                    </div>
-                  </StarBorder>
+                    <img
+                      src={step.image}
+                      alt={step.title}
+                      className="relative w-full rounded-xl shadow-2xl shadow-black/40"
+                      loading="lazy"
+                    />
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
 
-          <div className="max-w-2xl mx-auto mb-12">
-            <div className="relative group">
-              <StarBorder speed="7s">
-                <div className="relative bg-gradient-to-br from-siva-900/80 to-siva-900/40 border border-bordo-500/20 rounded-2xl p-6 md:p-8 group-hover:border-bordo-500/40 transition-all duration-300">
-                  <h3 className="text-xl md:text-2xl font-semibold text-white mb-4 text-center">
-                    How it works
-                  </h3>
-                  <p className="text-base md:text-lg text-siva-200 font-light text-center leading-relaxed">
-                    Create a room, invite friends with a link, and let Cineo's
-                    AI analyze everyone's preferences to suggest movies the
-                    entire group will love.
-                  </p>
+                {/* Text Content */}
+                <div className="w-full md:w-2/5 text-center md:text-left">
+                  <div className="bg-gradient-to-br from-siva-800/95 to-bordo-800/50 border border-bordo-700 rounded-xl p-6 md:p-8 hover:border-bordo-500/40 hover:shadow-[0_0_30px_rgba(185,28,28,0.15)] transition-all duration-300">
+                    {/* Step indicator */}
+                    <div className="flex items-center gap-3 mb-3 justify-center md:justify-start">
+                      <span className="flex items-center justify-center w-10 h-10 rounded-full bg-bordo-500 text-white text-lg font-bold shadow-lg shadow-bordo-500/30">
+                        {step.number}
+                      </span>
+                      <div className="h-px w-8 bg-gradient-to-r from-bordo-500 to-transparent hidden md:block" />
+                    </div>
 
-                  {/* Mystery element */}
-                  <div className="mt-6 pt-6 border-t border-siva-700/30 text-center">
-                    <p className="text-sm text-siva-300 ">
-                      Join the waitlist to be the first to try Watch Together
+                    {/* Title */}
+                    <h3 className="text-2xl md:text-3xl font-semibold text-white mb-2">
+                      {step.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-base md:text-lg text-siva-300 font-light">
+                      {step.description}
                     </p>
                   </div>
                 </div>
-              </StarBorder>
-            </div>
+              </div>
+            ))}
           </div>
 
+          {/* CTA Button */}
           <div className="text-center">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -136,7 +104,7 @@ export default function WatchTogetherSection() {
               }
               className="inline-flex items-center gap-3 bg-bordo-500 hover:bg-bordo-400 text-white font-semibold px-8 py-4 rounded-full shadow-lg shadow-bordo-500/30 transition-all cursor-pointer"
             >
-              <span>Get early access to Watch Together</span>
+              <span>Get early access</span>
               <Icon icon="raphael:arrowdown" className="mt-1 w-5 h-5" />
             </motion.button>
           </div>

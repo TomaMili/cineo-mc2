@@ -106,6 +106,8 @@ const WaitlistCard = () => {
           if (existingData?.referral_code) {
             setReferralCode(existingData.referral_code);
           }
+
+          setIsSuccess(true);
         } else {
           console.error(error);
           toast.error("Something went wrong, please try again.");
@@ -119,6 +121,24 @@ const WaitlistCard = () => {
         // IMPORTANT: Set referral code FIRST, then success
         if (data?.referral_code) {
           setReferralCode(data.referral_code);
+        }
+
+        // Send confirmation email
+        try {
+          await fetch("/api/send-waitlist-email", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email,
+              name: name || null,
+              referralCode: data?.referral_code,
+            }),
+          });
+        } catch (emailError) {
+          console.error("Email sending failed:", emailError);
+          // Don't show error to user - email is nice-to-have
         }
       }
 
@@ -139,8 +159,8 @@ const WaitlistCard = () => {
   console.log("🔍 WaitlistCard referralCode:", referralCode);
 
   const shareUrl = referralCode
-    ? `https://cineo-mc2.vercel.app/?ref=${referralCode}`
-    : `https://cineo-mc2.vercel.app/?ref=invite`;
+    ? `https://cineoai.com/?ref=${referralCode}`
+    : `https://cineoai.com/?ref=invite`;
   const shareText =
     "Check out Cineo - AI-powered movie discovery that actually understands your taste! Join the waitlist and get 50% off your first month when we launch.";
 
@@ -194,7 +214,8 @@ const WaitlistCard = () => {
     trackPixelEvent("Share");
     // Instagram doesn't have direct URL sharing, copy link and show message
     navigator.clipboard.writeText(shareUrl);
-    toast.success("Link copied! Share it in your Instagram story or bio 📸");
+    window.open("https://www.instagram.com/cineo_app/", "_blank");
+    toast.success("Link copied! Paste it in your Instagram story or bio 📸");
   };
 
   return (
