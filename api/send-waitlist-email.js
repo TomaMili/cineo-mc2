@@ -1,16 +1,29 @@
-// Direct Resend API call - ES Module syntax for Vercel
-export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+// Vercel Edge Function for email sending
+export const config = {
+  runtime: "edge",
+};
 
+export default async function handler(req) {
+  // Handle CORS
   if (req.method === "OPTIONS") {
-    return res.status(200).end();
+    return new Response(null, {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+    });
   }
 
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   }
 
   console.log("=== EMAIL API STARTED ===");
@@ -19,16 +32,31 @@ export default async function handler(req, res) {
   // CHECK API KEY FIRST
   if (!process.env.RESEND_API_KEY) {
     console.error("ERROR: RESEND_API_KEY is not set!");
-    return res.status(500).json({
-      error: "Server configuration error: RESEND_API_KEY not found",
-    });
+    return new Response(
+      JSON.stringify({
+        error: "Server configuration error: RESEND_API_KEY not found",
+      }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    );
   }
 
-  const { email, name, referralCode } = req.body;
+  const { email, name, referralCode } = await req.json();
   console.log("Request body:", { email, name, referralCode });
 
   if (!email) {
-    return res.status(400).json({ error: "Email is required" });
+    return new Response(JSON.stringify({ error: "Email is required" }), {
+      status: 400,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   }
 
   try {
@@ -164,21 +192,45 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       console.error("Resend API error:", data);
-      return res.status(500).json({
-        error: "Failed to send email",
-        details: data,
-      });
+      return new Response(
+        JSON.stringify({
+          error: "Failed to send email",
+          details: data,
+        }),
+        {
+          status: 500,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      );
     }
 
     console.log("✅ SUCCESS! Email sent:", data.id);
-    return res.status(200).json({ success: true, data });
+    return new Response(JSON.stringify({ success: true, data }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
   } catch (error) {
     console.error("❌ CATCH ERROR:", error.message);
     console.error("Stack:", error.stack);
 
-    return res.status(500).json({
-      error: error.message,
-      stack: error.stack,
-    });
+    return new Response(
+      JSON.stringify({
+        error: error.message,
+        stack: error.stack,
+      }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    );
   }
 }
