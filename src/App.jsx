@@ -1,5 +1,7 @@
-import React, { Suspense, lazy } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { Suspense, lazy, useEffect } from "react";
+import { HelmetProvider } from "react-helmet-async";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { initAnalytics } from "./lib/analytics";
 import Spinner from "./ui/Spinner";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
@@ -30,6 +32,7 @@ const WatchTogetherGroup = lazy(() =>
 );
 
 const LandingPage = lazy(() => import("./pages/LandingPage"));
+const Waitlist = lazy(() => import("./pages/Waitlist"));
 const Login = lazy(() => import("./pages/Login"));
 const RegisterLayout = lazy(() => import("./features/register/RegisterLayout"));
 const RegisterInfo = lazy(() => import("./features/register/RegisterInfo"));
@@ -45,89 +48,127 @@ const RegisterFinish = lazy(() => import("./features/register/RegisterFinish"));
 const PageNotFound = lazy(() => import("./pages/PageNotFound"));
 
 export default function App() {
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    const isDemoPath =
+      currentPath.startsWith("/demo") ||
+      currentPath.startsWith("/landing-page") ||
+      currentPath.startsWith("/app") ||
+      currentPath.startsWith("/homepage") ||
+      currentPath.startsWith("/profile") ||
+      currentPath.startsWith("/watchlater") ||
+      currentPath.startsWith("/watched") ||
+      currentPath.startsWith("/collections") ||
+      currentPath.startsWith("/watch-together") ||
+      currentPath.startsWith("/movie") ||
+      currentPath.startsWith("/browse") ||
+      currentPath.startsWith("/settings") ||
+      currentPath.startsWith("/login") ||
+      currentPath.startsWith("/info") ||
+      currentPath.startsWith("/genres") ||
+      currentPath.startsWith("/platforms") ||
+      currentPath.startsWith("/actors") ||
+      currentPath.startsWith("/payment-plan") ||
+      currentPath.startsWith("/finish");
+
+    if (!isDemoPath) {
+      initAnalytics();
+      console.log("✅ Analytics initialized");
+    } else {
+      console.log("🎬 Demo mode - Analytics disabled");
+    }
+  }, []);
+
   return (
-    <BrowserRouter>
-      <MoviePopupProvider>
-        <SuperSuggestProvider>
-          <Suspense
-            fallback={<Spinner size={48} className="fixed inset-0 m-auto" />}
-          >
-            <Routes>
-              <Route element={<ProtectedRoute />}>
-                <Route element={<AppLayout />}>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="homepage" element={<HomePage />} />
-                  <Route path="profile" element={<Profile />} />
+    <HelmetProvider>
+      <BrowserRouter>
+        <MoviePopupProvider>
+          <SuperSuggestProvider>
+            <Suspense
+              fallback={<Spinner size={48} className="fixed inset-0 m-auto" />}
+            >
+              <Routes>
+                <Route element={<ProtectedRoute />}>
+                  <Route element={<AppLayout />}>
+                    {/* Moved authenticated home to /app to free public / for waitlist */}
+                    <Route path="/app" element={<HomePage />} />
+                    <Route path="homepage" element={<HomePage />} />
+                    <Route path="profile" element={<Profile />} />
+                    <Route
+                      path="profile/achievements"
+                      element={<Achievements />}
+                    />
+                    <Route path="watchlater" element={<WatchLater />} />
+                    <Route path="watched" element={<Watched />} />
+                    <Route path="collections" element={<Collections />} />
+                    <Route path="watch-together" element={<WatchTogether />} />
+                    <Route
+                      path="watch-together/:roomId"
+                      element={<WatchTogetherGroup />}
+                    />
+                    <Route path="movie/:movieId" element={<MovieDetail />} />
+                    <Route path="browse" element={<Browse />} />
+                    <Route path="settings" element={<Settings />}>
+                      <Route index element={<SettingsInfo />} />
+                      <Route path="info" element={<SettingsInfo />} />
+                      <Route path="platforms" element={<SettingsPlatforms />} />
+                      <Route path="plan" element={<SettingsPlan />} />
+                    </Route>
+                    <Route path="*" element={<PageNotFound />} />
+                  </Route>
+                </Route>
+
+                <Route element={<PublicRoute />}>
+                  {/* Public homepage now points to Waitlist */}
+                  <Route path="/" element={<Waitlist />} />
+                  <Route path="waitlist" element={<Waitlist />} />
+                  <Route path="landing-page" element={<LandingPage />} />
+                  <Route path="demo" element={<LandingPage />} />
+                  <Route path="login" element={<Login />} />
                   <Route
-                    path="profile/achievements"
-                    element={<Achievements />}
-                  />
-                  <Route path="watchlater" element={<WatchLater />} />
-                  <Route path="watched" element={<Watched />} />
-                  <Route path="collections" element={<Collections />} />
-                  <Route path="watch-together" element={<WatchTogether />} />
-                  <Route
-                    path="watch-together/:roomId"
-                    element={<WatchTogetherGroup />}
-                  />
-                  <Route path="movie/:movieId" element={<MovieDetail />} />
-                  <Route path="browse" element={<Browse />} />
-                  <Route path="settings" element={<Settings />}>
-                    <Route index element={<SettingsInfo />} />
-                    <Route path="info" element={<SettingsInfo />} />
-                    <Route path="platforms" element={<SettingsPlatforms />} />
-                    <Route path="plan" element={<SettingsPlan />} />
+                    element={
+                      <RegistrationProvider>
+                        <RegisterLayout />
+                      </RegistrationProvider>
+                    }
+                  >
+                    <Route path="info" element={<RegisterInfo />} />
+                    <Route path="genres" element={<RegisterGenres />} />
+                    <Route path="platforms" element={<RegisterPlatforms />} />
+                    <Route path="actors" element={<RegisterActors />} />
+                    <Route
+                      path="payment-plan"
+                      element={<RegisterPaymentPlan />}
+                    />
+                    <Route path="finish" element={<RegisterFinish />} />
                   </Route>
                   <Route path="*" element={<PageNotFound />} />
                 </Route>
-              </Route>
+              </Routes>
+            </Suspense>
+          </SuperSuggestProvider>
+        </MoviePopupProvider>
 
-              <Route element={<PublicRoute />}>
-                <Route path="landing-page" element={<LandingPage />} />
-                <Route path="login" element={<Login />} />
-                <Route
-                  element={
-                    <RegistrationProvider>
-                      <RegisterLayout />
-                    </RegistrationProvider>
-                  }
-                >
-                  <Route path="info" element={<RegisterInfo />} />
-                  <Route path="genres" element={<RegisterGenres />} />
-                  <Route path="platforms" element={<RegisterPlatforms />} />
-                  <Route path="actors" element={<RegisterActors />} />
-                  <Route
-                    path="payment-plan"
-                    element={<RegisterPaymentPlan />}
-                  />
-                  <Route path="finish" element={<RegisterFinish />} />
-                </Route>
-                <Route path="*" element={<PageNotFound />} />
-              </Route>
-            </Routes>
-          </Suspense>
-        </SuperSuggestProvider>
-      </MoviePopupProvider>
-
-      <Toaster
-        position="bottom-right"
-        gutter={12}
-        containerStyle={{ margin: "8px" }}
-        toastOptions={{
-          style: {
-            background: "#121212",
-            color: "white",
-            border: "none",
-            boxShadow: "0 2px 12px rgba(0, 0, 0, 0.4)",
-          },
-          success: {
-            duration: 3000,
-          },
-          error: {
-            duration: 5000,
-          },
-        }}
-      />
-    </BrowserRouter>
+        <Toaster
+          position="bottom-right"
+          gutter={12}
+          containerStyle={{ margin: "8px" }}
+          toastOptions={{
+            style: {
+              background: "#121212",
+              color: "white",
+              border: "none",
+              boxShadow: "0 2px 12px rgba(0, 0, 0, 0.4)",
+            },
+            success: {
+              duration: 3000,
+            },
+            error: {
+              duration: 5000,
+            },
+          }}
+        />
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }

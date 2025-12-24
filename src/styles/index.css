@@ -9,6 +9,7 @@
   --color-siva-200: #d9d9d9;
   --color-siva-300: #919491;
   --color-siva-800: #121212;
+  --color-siva-900: #0a0a0a;
   --color-bordo-400: #b91c1c;
   --color-bordo-500: #7c1212;
   --color-bordo-600: #671817;
@@ -18,9 +19,179 @@
   --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
 }
 
+/* ============================================
+   iOS SAFARI SPECIFIC FIXES
+   ============================================ */
+
+/* Fix viewport height issues on iOS */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari only */
+  html {
+    height: -webkit-fill-available;
+  }
+
+  body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* Prevent text size adjustment on iOS */
+html {
+  -webkit-text-size-adjust: 100%;
+  /* iOS FIX: Removed -webkit-overflow-scrolling: touch - can interfere with IntersectionObserver */
+}
+
+/* Better font rendering on iOS */
 body {
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  /* iOS FIX: Ensure body can scroll */
+  position: relative;
+  width: 100%;
+
+  /* iOS FIX: Force GPU acceleration for smoother scrolling */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
+
+/* Fix for input zoom on iOS Safari */
+input,
+textarea,
+select,
+button {
+  font-size: 16px; /* Prevents iOS zoom on focus */
+}
+
+/* Better tap highlight on iOS */
+* {
+  -webkit-tap-highlight-color: rgba(185, 28, 28, 0.2);
+}
+
+/* Fix for sticky/fixed positioning on iOS */
+.sticky,
+.fixed {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* ============================================
+   iOS PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Respect user's motion preferences - disable animations if requested */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mobile iOS: Reduce animation complexity */
+@media (max-width: 768px) {
+  @supports (-webkit-touch-callout: none) {
+    /* Disable 3D transforms on mobile iOS */
+    [class*="perspective"],
+    [class*="transform-3d"] {
+      perspective: none !important;
+      transform-style: flat !important;
+    }
+
+    /* Remove backdrop-blur from form inputs - keep solid background */
+    input[class*="backdrop-blur"],
+    textarea[class*="backdrop-blur"],
+    select[class*="backdrop-blur"] {
+      backdrop-filter: none !important;
+      background-color: rgba(10, 10, 10, 0.85) !important;
+    }
+
+    /* Hide only decorative blur elements (absolute positioned backgrounds) */
+    div.absolute[class*="blur-"] {
+      display: none !important;
+    }
+  }
+}
+
+/* Optimize blur effects for iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  /* Reduce blur intensity on iOS for better performance */
+  [class*="blur-["] {
+    contain: layout style paint;
+    content-visibility: auto;
+  }
+
+  /* Remove backdrop-blur on older iOS devices */
+  @supports not (backdrop-filter: blur(10px)) {
+    [class*="backdrop-blur"] {
+      backdrop-filter: none;
+      background-color: rgba(18, 18, 18, 0.9);
+    }
+  }
+}
+
+/* CSS Containment for better performance */
+section {
+  contain: layout style;
+}
+
+/* Reduce GPU layers - only animate what's necessary */
+@media (max-width: 768px) {
+  [class*="transition"],
+  [class*="animate"],
+  [class*="motion"] {
+    -webkit-backface-visibility: visible;
+    backface-visibility: visible;
+    -webkit-perspective: none;
+    perspective: none;
+    transform: none;
+  }
+}
+
+/* Desktop: Keep GPU acceleration */
+@media (min-width: 769px) {
+  [class*="transition"],
+  [class*="animate"],
+  [class*="motion"] {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    perspective: 1000;
+    transform: translateZ(0);
+  }
+}
+
+/* Optimize gradient performance */
+[class*="gradient"] {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Ensure images don't break layout */
+img {
+  max-width: 100%;
+  height: auto;
+  -webkit-user-drag: none;
+  user-select: none;
+  /* iOS optimization */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* ============================================
+   COLORS & THEME
+   ============================================ */
+
 :root {
   color: rgba(255, 255, 255, 0.87);
   background-color: #121212;
@@ -28,15 +199,12 @@ body {
   --color-siva-200: #d9d9d9;
   --color-siva-300: #919491;
   --color-siva-800: #121212;
+  --color-siva-900: #0a0a0a;
 
   --color-bordo-400: #b91c1c;
   --color-bordo-500: #7c1212;
   --color-bordo-600: #671817;
   --color-bordo-700: #24130e;
-}
-
-body {
-  font-family: var(--font-sans);
 }
 
 .light {
@@ -47,6 +215,7 @@ body {
   --color-siva-200: #4b5563;
   --color-siva-300: #6b7280;
   --color-siva-800: #d9d9d9;
+  --color-siva-900: #f3f4f6;
 
   --color-bordo-400: #d32f2f;
   --color-bordo-500: #b71c1c;
@@ -63,25 +232,70 @@ body {
   color: white;
 }
 
+/* ============================================
+   SCROLLBAR STYLES
+   ============================================ */
+
+/* Modal scrollbar */
 .myModal {
-  scrollbar-width: inherit; /* Firefox */
-  scrollbar-color: #b71c1c #6b7280; /* thumb track */
+  scrollbar-width: thin;
+  scrollbar-color: #b71c1c #6b7280;
 }
-/* Chrome / Edge */
+
 .myModal::-webkit-scrollbar {
   width: 6px;
 }
+
 .myModal::-webkit-scrollbar-track {
   background: #6b7280;
   border-radius: 9999px;
 }
+
 .myModal::-webkit-scrollbar-thumb {
   background: #b71c1c;
   border-radius: 9999px;
 }
+
 .myModal::-webkit-scrollbar-thumb:hover {
   background: #b71c1c;
 }
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Dark scrollbar - subtle but visible */
+.scrollbar-dark {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.scrollbar-dark::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-dark::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-dark::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.scrollbar-dark::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
 
 @keyframes fadeIn {
   from {
@@ -96,4 +310,122 @@ body {
 .animate-fadeIn {
   animation-name: fadeIn;
   animation-fill-mode: both;
+}
+
+@keyframes star-movement-bottom {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-100%, 0%);
+    opacity: 0;
+  }
+}
+
+@keyframes star-movement-top {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(100%, 0%);
+    opacity: 0;
+  }
+}
+
+.animate-star-movement-bottom {
+  animation: star-movement-bottom linear infinite alternate;
+}
+
+.animate-star-movement-top {
+  animation: star-movement-top linear infinite alternate;
+}
+
+/* ============================================
+   SCROLL BEHAVIOR
+   ============================================ */
+
+/* Scroll container with passthrough at bottom */
+.scroll-container-passthrough {
+  overscroll-behavior: contain;
+}
+
+/* iOS safe area support */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+}
+
+/* ============================================
+   iOS PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Hardware acceleration for animations */
+@media (prefers-reduced-motion: no-preference) {
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .will-change-opacity {
+    will-change: opacity;
+  }
+}
+
+/* Disable animations if user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Fix for blurred elements on iOS */
+.blur-fix {
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Optimize large blur values for iOS */
+@supports (-webkit-backdrop-filter: blur(1px)) {
+  .backdrop-blur-heavy {
+    -webkit-backdrop-filter: blur(40px);
+    backdrop-filter: blur(40px);
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* iOS-safe viewport units */
+.min-h-screen-safe {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}
+
+.h-screen-safe {
+  height: 100vh;
+  height: -webkit-fill-available;
+}
+
+/* Prevent layout shift on iOS */
+.prevent-shift {
+  contain: layout style paint;
+}
+
+/* GPU acceleration helper */
+.gpu-accelerated {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
 }

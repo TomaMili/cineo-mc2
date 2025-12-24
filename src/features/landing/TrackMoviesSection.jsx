@@ -38,7 +38,7 @@ export default function TrackMoviesSection() {
             Keep a record of all the films you’ve watched, rate them, and let AI
             learn your preferences.
           </p>
-          <ul className="space-y-3 text-xl lg:text-3xl">
+          <ul className="space-y-6 text-xl lg:text-3xl">
             <li className="flex flex-col lg:flex-row text-center lg:text-left items-center space-x-3 text-gray-300">
               <Icon
                 icon={"mdi:bookmark-outline"}

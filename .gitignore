@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 .env
 .env.*
+
+# Setup documentation (internal only)
+REFERRAL_SETUP_GUIDE.md

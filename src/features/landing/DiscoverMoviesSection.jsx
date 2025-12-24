@@ -4,7 +4,7 @@ import Feature from "./Feature";
 export default function DiscoverMoviesSection() {
   return (
     <Feature>
-      <div className="mt-10 lg:h-screen relative overflow-visible mb-80 lg:mb-100">
+      <div className="mt-5 lg:h-screen relative overflow-visible mb-80 lg:mb-100">
         <BlobBackground />
         <div className="relative block w-fit mx-auto z-10">
           <h2 className="text-4xl lg:text-7xl font-regular text-white text-center mx-auto">
@@ -12,7 +12,7 @@ export default function DiscoverMoviesSection() {
           </h2>
         </div>
 
-        <section className="text-gray-300 pt-18 lg:pt-28 z-10">
+        <section className="text-gray-300 pt-10 lg:pt-15 z-10">
           <div className="max-w-[1600px] mx-auto px-6 flex flex-col gap-12 items-center">
             <div className="w-full lg:w-3/5 flex items-center justify-center overflow-hidden z-10">
               <img src={"/article-5.png"} className="w-full rounded-xl" />
