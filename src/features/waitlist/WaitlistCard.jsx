@@ -86,14 +86,14 @@ const WaitlistCard = () => {
               .eq("email", email);
 
             if (updateError) {
-              console.error(updateError);
+              console.error("Update error:", updateError);
               toast.error("Something went wrong, please try again.");
               setIsSubmitting(false);
               return;
             }
-            toast.success("Your name has been updated! ");
+            toast.success("Your name has been updated! 🎉");
           } else {
-            toast.success("You're already on the waitlist! ");
+            toast.success("You're already on the waitlist! 🎉");
           }
 
           // Dohvati postojeći referral code
@@ -103,11 +103,19 @@ const WaitlistCard = () => {
             .eq("email", email)
             .single();
 
+          console.log(
+            "Fetched existing referral code:",
+            existingData?.referral_code
+          );
+
           if (existingData?.referral_code) {
             setReferralCode(existingData.referral_code);
           }
 
+          // Show success state
           setIsSuccess(true);
+          setIsSubmitting(false);
+          return; // Important: exit early to prevent further processing
         } else {
           console.error(error);
           toast.error("Something went wrong, please try again.");
@@ -155,14 +163,11 @@ const WaitlistCard = () => {
     }
   };
 
-  // Debug: Check referral code state
-  console.log("🔍 WaitlistCard referralCode:", referralCode);
-
   const shareUrl = referralCode
     ? `https://cineoai.com/?ref=${referralCode}`
     : `https://cineoai.com/?ref=invite`;
   const shareText =
-    "Check out Cineo - AI-powered movie discovery that actually understands your taste! Join the waitlist and get 50% off your first month when we launch.";
+    "Check out Cineo - AI-powered movie discovery that actually understands your taste! Join the waitlist and get TWO MONTHS FREE when we launch.";
 
   const handleCopyLink = async () => {
     trackPixelEvent("Share");
@@ -317,7 +322,7 @@ const WaitlistCard = () => {
                   Share Cineo with friends and <strong> BOTH </strong> get
                 </p>
                 <p className="text-base text-white font-bold mb-3">
-                  50% off your first month
+                  TWO MONTHS FREE
                 </p>
 
                 <p className="text-xs font-light text-siva-400">

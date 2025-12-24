@@ -94,11 +94,14 @@ const Waitlist = () => {
               .eq("email", heroEmail);
 
             if (!updateError) {
-              toast.success("Your name has been updated! ");
+              toast.success("Your name has been updated! 🎉");
               trackWaitlistSignup("hero_form");
+            } else {
+              console.error("Update error:", updateError);
+              toast.error("Something went wrong, please try again.");
             }
           } else {
-            toast.success("You're already on the waitlist! ");
+            toast.success("You're already on the waitlist! 🎉");
           }
 
           // Dohvati postojeći referral code
@@ -108,11 +111,18 @@ const Waitlist = () => {
             .eq("email", heroEmail)
             .single();
 
+          console.log(
+            "Fetched existing hero referral code:",
+            existingData?.referral_code
+          );
+
           if (existingData?.referral_code) {
             setHeroReferralCode(existingData.referral_code);
           }
 
           setShowHeroShare(true);
+          setIsHeroSubmitting(false);
+          return; // Important: exit early to prevent further processing
         } else {
           throw error;
         }
@@ -154,14 +164,11 @@ const Waitlist = () => {
     }
   };
 
-  // Debug: Check referral code state
-  console.log("🔍 Hero referralCode:", heroReferralCode);
-
   const shareUrl = heroReferralCode
     ? `https://cineoai.com/?ref=${heroReferralCode}`
     : `https://cineoai.com/?ref=invite`;
   const shareText =
-    "Check out Cineo - AI-powered movie discovery that actually understands your taste! Join the waitlist now and get 50% off at launch!";
+    "Check out Cineo - AI-powered movie discovery that actually understands your taste! Join the waitlist now and get TWO MONTHS FREE at launch!";
 
   const handleHeroCopyLink = async () => {
     trackPixelEvent("Share");
@@ -342,8 +349,10 @@ const Waitlist = () => {
                   </p>
                   <p className="text-siva-300 text-center text-xs">
                     Share Cineo and both get{" "}
-                    <span className="text-siva-100 font-bold">50% OFF</span> at
-                    launch!
+                    <span className="text-siva-100 font-bold">
+                      TWO MONTHS FREE
+                    </span>{" "}
+                    at launch!
                   </p>
                 </div>
 
