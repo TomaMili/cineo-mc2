@@ -125,7 +125,7 @@ const WaitlistCard = () => {
 
         // Send confirmation email
         try {
-          await fetch("/api/send-waitlist-email.cjs", {
+          await fetch("/api/send-waitlist-email", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
