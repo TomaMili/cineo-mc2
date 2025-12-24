@@ -316,7 +316,7 @@ const Waitlist = () => {
 
           <motion.div
             variants={fadeInUp}
-            className="mt-4 md:mt-5 w-full max-w-xl mx-auto px-6 md:px-4 bottom-10 absolute"
+            className="mt-4 md:mt-5 w-full max-w-xl mx-auto px-6 md:px-4 bottom-20 absolute"
           >
             {!showHeroShare ? (
               <form onSubmit={handleHeroSubmit} className="w-full">
