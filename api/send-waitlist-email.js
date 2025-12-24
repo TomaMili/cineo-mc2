@@ -1,5 +1,5 @@
-// Direct Resend API call - no SDK dependency
-module.exports = async function handler(req, res) {
+// Direct Resend API call - ES Module syntax for Vercel
+export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -181,4 +181,4 @@ module.exports = async function handler(req, res) {
       stack: error.stack,
     });
   }
-};
+}
