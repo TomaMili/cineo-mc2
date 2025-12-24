@@ -23,7 +23,11 @@ export default function MovieCard({ movie, hideActions = false, onClick }) {
     });
 
   const { open } = useMoviePopup();
-  const handlePosterClick = onClick ?? (() => open(movie));
+  const handlePosterClick =
+    onClick ??
+    (() => {
+      open(movie);
+    });
 
   const { profile } = useCurrentUser();
   const userId = profile?.id;

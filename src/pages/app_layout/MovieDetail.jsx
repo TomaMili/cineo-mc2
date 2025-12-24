@@ -65,7 +65,7 @@ export default function MovieDetail() {
         <ErrorNotice title="Movie not found" />
       </div>
     );
-
+  console.log(details);
   return (
     <article className="flex flex-col ">
       <MovieHero details={details} director={director} providers={providers} />
