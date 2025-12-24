@@ -1,14 +1,5 @@
 {
-  "functions": {
-    "api/send-waitlist-email.cjs": {
-      "runtime": "nodejs20.x"
-    }
-  },
   "rewrites": [
-    {
-      "source": "/api/send-waitlist-email",
-      "destination": "/api/send-waitlist-email.cjs"
-    },
     {
       "source": "/(.*)",
       "destination": "/"
