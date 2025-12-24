@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Icon } from "@iconify-icon/react";
@@ -15,6 +16,7 @@ import FAQSection from "../features/landing/FAQSection";
 import FooterLanding from "../features/landing/FooterLanding";
 import supabase from "../services/supabase";
 import { trackWaitlistSignup } from "../lib/analytics";
+import { LiquidChrome } from "../components/LiquidChrome";
 
 // Meta Pixel & TikTok Pixel event tracking helper
 const trackPixelEvent = (eventName) => {
@@ -254,14 +256,22 @@ const Waitlist = () => {
           variants={container}
           initial="hidden"
           animate="show"
-          className="relative w-full min-h-[100vh] bg-cover bg-center flex flex-col justify-center items-center will-change-transform"
+          className="relative w-full min-h-[100vh] bg-cover bg-center flex flex-col pt-30 items-center will-change-transform"
           style={{
-            backgroundImage: "url('/bg-image.jpg')",
+            // backgroundImage: "url('/bg-image.jpg')",
             WebkitBackfaceVisibility: "hidden",
             backfaceVisibility: "hidden",
             transform: "translateZ(0)",
           }}
         >
+          <div className="absolute inset-0 bg-bordo-700 pointer-events-none h-full">
+            <LiquidChrome
+              baseColor={[0.1, 0, 0]}
+              speed={0.05}
+              amplitude={0.4}
+              interactive={false}
+            />
+          </div>
           <motion.div variants={fadeInUp} className="text-center z-10">
             <img
               src="/logo-cineo.svg"
@@ -295,7 +305,7 @@ const Waitlist = () => {
 
           <motion.p
             variants={fadeInUp}
-            className="text-base md:text-xl text-slate-300 max-w-xl md:max-w-2xl mx-auto font-light px-6 md:px-4 text-center leading-relaxed mb-0"
+            className="text-base md:text-xl text-slate-200 max-w-xl md:max-w-2xl mx-auto font-light px-6 md:px-4 text-center leading-relaxed mb-0 md:inline-block hidden z-100"
           >
             Because choosing a movie shouldn't take longer than watching one
             <br />
@@ -306,7 +316,7 @@ const Waitlist = () => {
 
           <motion.div
             variants={fadeInUp}
-            className="mt-4 md:mt-5 w-full max-w-xl mx-auto px-6 md:px-4"
+            className="mt-4 md:mt-5 w-full max-w-xl mx-auto px-6 md:px-4 bottom-10 absolute"
           >
             {!showHeroShare ? (
               <form onSubmit={handleHeroSubmit} className="w-full">
@@ -414,24 +424,26 @@ const Waitlist = () => {
                 )}
               </motion.div>
             ) : null}
+            <div className="mt-5 md:mt-6 flex flex-col items-center ">
+              <button
+                onClick={() => {
+                  const problemSection =
+                    document.getElementById("problem-section");
+                  problemSection?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }}
+                className="text-siva-400 hover:text-white font-medium text-sm tracking-wide cursor-pointer transition-colors duration-200"
+              >
+                Learn more
+              </button>
+              <Icon
+                icon="mdi:chevron-down"
+                className="w-5 h-5 text-siva-400  "
+              />
+            </div>
           </motion.div>
-
-          <div className="mt-5 md:mt-6 flex flex-col items-center ">
-            <button
-              onClick={() => {
-                const problemSection =
-                  document.getElementById("problem-section");
-                problemSection?.scrollIntoView({
-                  behavior: "smooth",
-                  block: "start",
-                });
-              }}
-              className="text-siva-400 hover:text-white font-medium text-sm tracking-wide cursor-pointer transition-colors duration-200"
-            >
-              Learn more
-            </button>
-            <Icon icon="mdi:chevron-down" className="w-5 h-5 text-siva-400  " />
-          </div>
         </motion.section>
 
         {/* Landing sections - conversion optimized flow */}
