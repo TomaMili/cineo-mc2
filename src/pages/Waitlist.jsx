@@ -258,15 +258,15 @@ const Waitlist = () => {
           animate="show"
           className="relative w-full min-h-[100vh] bg-cover bg-center flex flex-col justify-center items-center will-change-transform"
           style={{
-            // backgroundImage: "url('/bg-image.jpg')",
+            backgroundImage: "url('/bg-image.avif')",
             WebkitBackfaceVisibility: "hidden",
             backfaceVisibility: "hidden",
             transform: "translateZ(0)",
           }}
         >
-          <div className="absolute inset-0 bg-bordo-700 pointer-events-none h-full">
+          <div className="absolute inset-0 bg-bordo-700 pointer-events-none h-full opacity-60">
             <LiquidChrome
-              baseColor={[0.1, 0, 0]}
+              baseColor={[0.03, 0, 0]}
               speed={0.05}
               amplitude={0.4}
               interactive={false}
@@ -282,7 +282,7 @@ const Waitlist = () => {
           {/* Eyebrow tagline */}
           <motion.p
             variants={fadeInUp}
-            className="mt-4 md:mt-6 text-xs md:text-md uppercase tracking-[0.25em] text-bordo-400 text-center px-4 mb-2 md:mb-3"
+            className="mt-2 md:mt-3 text-xs md:text-md uppercase tracking-[0.25em] text-siva-200 text-center px-4 mb-6 md:mb-8 z-99 relative font-semibold"
           >
             <SplitTextReveal text="Smart Film Collection" />
           </motion.p>

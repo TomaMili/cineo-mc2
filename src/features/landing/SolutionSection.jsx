@@ -39,7 +39,7 @@ export default function SolutionSection() {
           <div className="mb-16 w-full">
             <CurvedLoop
               marqueeText="Take Control of Your Movie Experience ✦"
-              speed={1}
+              speed={2}
               curveAmount={0}
               interactive={true}
               className="fill-white"
@@ -106,10 +106,8 @@ export default function SolutionSection() {
             </div>
 
             <div className="w-full lg:w-4/7 flex items-center justify-center relative z-10">
-              {/* iOS FIX: Removed overflow-hidden and simplified hover effect */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="hidden md:block w-[500px] h-[500px] bg-black/30 rounded-full blur-[30px]"></div>
-                {/* iOS FIX: Reduced blur from 120px to 80px */}
               </div>
               <img
                 key={openIndex}
