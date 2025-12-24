@@ -256,7 +256,7 @@ const Waitlist = () => {
           variants={container}
           initial="hidden"
           animate="show"
-          className="relative w-full min-h-[100vh] bg-cover bg-center flex flex-col pt-30 items-center will-change-transform"
+          className="relative w-full min-h-[100vh] bg-cover bg-center flex flex-col justify-center items-center will-change-transform"
           style={{
             // backgroundImage: "url('/bg-image.jpg')",
             WebkitBackfaceVisibility: "hidden",
@@ -305,18 +305,20 @@ const Waitlist = () => {
 
           <motion.p
             variants={fadeInUp}
-            className="text-base md:text-xl text-slate-200 max-w-xl md:max-w-2xl mx-auto font-light px-6 md:px-4 text-center leading-relaxed mb-0 md:inline-block hidden z-100"
+            className="text-base md:text-xl text-slate-200 max-w-xl md:max-w-2xl mx-auto font-light px-6 md:px-4 text-center leading-relaxed mb-4 z-10 relative"
           >
             Because choosing a movie shouldn't take longer than watching one
-            <br />
-            Follow all your movies, ones you've already watched or want to
-            watch, mark favourites and get personalised suggestions across all
-            platforms.
+            <span className="hidden md:inline">
+              <br />
+              Follow all your movies, ones you've already watched or want to
+              watch, mark favourites and get personalised suggestions across all
+              platforms.
+            </span>
           </motion.p>
 
           <motion.div
             variants={fadeInUp}
-            className="mt-4 md:mt-5 w-full max-w-xl mx-auto px-6 md:px-4 bottom-20 absolute"
+            className="mt-2 md:mt-3 w-full max-w-xl mx-auto px-6 md:px-4 z-10 relative"
           >
             {!showHeroShare ? (
               <form onSubmit={handleHeroSubmit} className="w-full">
@@ -424,7 +426,11 @@ const Waitlist = () => {
                 )}
               </motion.div>
             ) : null}
-            <div className="mt-5 md:mt-6 flex flex-col items-center ">
+
+            <motion.div
+              variants={fadeInUp}
+              className="mt-5 md:mt-6 flex flex-col items-center"
+            >
               <button
                 onClick={() => {
                   const problemSection =
@@ -434,15 +440,15 @@ const Waitlist = () => {
                     block: "start",
                   });
                 }}
-                className="text-siva-400 hover:text-white font-medium text-sm tracking-wide cursor-pointer transition-colors duration-200"
+                className="text-siva-100 hover:text-white font-medium text-sm tracking-wide cursor-pointer transition-colors duration-200"
               >
                 Learn more
               </button>
               <Icon
                 icon="mdi:chevron-down"
-                className="w-5 h-5 text-siva-400  "
+                className="w-5 h-5 text-siva-100 hover:text-white transition-colors duration-200"
               />
-            </div>
+            </motion.div>
           </motion.div>
         </motion.section>
 
