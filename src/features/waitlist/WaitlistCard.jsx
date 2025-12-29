@@ -103,11 +103,6 @@ const WaitlistCard = () => {
             .eq("email", email)
             .single();
 
-          console.log(
-            "Fetched existing referral code:",
-            existingData?.referral_code
-          );
-
           if (existingData?.referral_code) {
             setReferralCode(existingData.referral_code);
           }
@@ -167,7 +162,7 @@ const WaitlistCard = () => {
     ? `https://cineoai.com/?ref=${referralCode}`
     : `https://cineoai.com/?ref=invite`;
   const shareText =
-    "Check out Cineo - AI-powered movie discovery that actually understands your taste! Join the waitlist and get TWO MONTHS FREE when we launch.";
+    "Check out Cineo - AI-powered movie discovery that actually understands your taste! Join the waitlist and get 1 MONTH FREE + earn 50% OFF for up to 6 more months!";
 
   const handleCopyLink = async () => {
     trackPixelEvent("Share");
@@ -297,7 +292,7 @@ const WaitlistCard = () => {
               </motion.div>
 
               <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-slate-50 tracking-tight">
-                You're on the list!
+                You're on the list! 🎉
               </h2>
 
               <p className="text-slate-300 text-base md:text-lg font-light mb-4 leading-relaxed">
@@ -309,24 +304,30 @@ const WaitlistCard = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="bg-gradient-to-br from-bordo-900/40 to-purple-900/20 border border-bordo-500/40 rounded-2xl p-5 mb-6 max-w-md mx-auto"
+                className="bg-gradient-to-br from-bordo-900/40 to-siva-300/20 border border-bordo-500/40 rounded-2xl p-5 mb-6 max-w-md mx-auto"
               >
-                <div className="flex items-center justify-center gap-2 mb-2">
+                <div className="flex items-center justify-center gap-2 mb-3">
                   <Gift className="w-5 h-5 text-bordo-400" />
                   <h3 className="text-lg font-semibold text-white">
-                    Unlock your reward
+                    1 MONTH FREE Premium at Launch
                   </h3>
                 </div>
 
-                <p className="text-sm text-siva-200 mb-1 font-medium">
-                  Share Cineo with friends and <strong> BOTH </strong> get
-                </p>
-                <p className="text-base text-white font-bold mb-3">
-                  TWO MONTHS FREE
-                </p>
+                <div className="bg-black/30 rounded-lg p-3 mb-3">
+                  <p className="text-sm text-siva-200 mb-2 font-semibold">
+                    🚀 Unlock 50% OFF for 6 months:
+                  </p>
+                  <p className="text-sm text-white mb-2">
+                    Each friend gets{" "}
+                    <span className="font-bold">1 month FREE</span> and you get{" "}
+                    <span className="text-siva-100 font-bold">
+                      1 EXTRA month at 50% OFF!
+                    </span>
+                  </p>
+                </div>
 
-                <p className="text-xs font-light text-siva-400">
-                  No limit • Share as much as you want
+                <p className="text-sm font-light text-siva-400">
+                  Max 6 referrals = 7 months of premium (1 free + 6 at 50% OFF)
                 </p>
               </motion.div>
 

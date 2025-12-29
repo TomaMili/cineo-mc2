@@ -73,9 +73,6 @@ export default function App() {
 
     if (!isDemoPath) {
       initAnalytics();
-      console.log("✅ Analytics initialized");
-    } else {
-      console.log("🎬 Demo mode - Analytics disabled");
     }
   }, []);
 

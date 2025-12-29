@@ -28,7 +28,6 @@ const isDemoPath = () => {
 export const initAnalytics = () => {
   // Ne inicijaliziraj ako je demo path
   if (isDemoPath()) {
-    console.log("🎬 Demo path detected - Analytics disabled");
     return;
   }
 
@@ -128,8 +127,6 @@ export const initAnalytics = () => {
       ttq.page();
     })(window, document, "ttq");
   }
-
-  console.log("✅ Analytics initialized");
 };
 
 // Unified event tracking
@@ -151,8 +148,6 @@ export const trackEvent = (eventName, params = {}) => {
   if (window.ttq) {
     window.ttq.track(eventName, params);
   }
-
-  console.log("📊 Event tracked:", eventName, params);
 };
 
 // Specific events

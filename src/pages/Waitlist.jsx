@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Icon } from "@iconify-icon/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import RotatingText from "../ui/RotatingText";
 import SplitTextReveal from "../ui/SplitTextReveal";
@@ -113,11 +113,6 @@ const Waitlist = () => {
             .eq("email", heroEmail)
             .single();
 
-          console.log(
-            "Fetched existing hero referral code:",
-            existingData?.referral_code
-          );
-
           if (existingData?.referral_code) {
             setHeroReferralCode(existingData.referral_code);
           }
@@ -170,7 +165,25 @@ const Waitlist = () => {
     ? `https://cineoai.com/?ref=${heroReferralCode}`
     : `https://cineoai.com/?ref=invite`;
   const shareText =
-    "Check out Cineo - AI-powered movie discovery that actually understands your taste! Join the waitlist now and get TWO MONTHS FREE at launch!";
+    "Check out Cineo - AI-powered movie discovery that actually understands your taste! Join the waitlist and get 1 MONTH FREE + earn 50% OFF for up to 6 more months!";
+
+  // Memoize LiquidChrome to prevent re-renders on input changes
+  const liquidChromeBackground = useMemo(
+    () => (
+      <div
+        className="absolute inset-0 bg-bordo-700 pointer-events-none h-full opacity-60"
+        style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
+      >
+        <LiquidChrome
+          baseColor={[0.03, 0, 0]}
+          speed={0.05}
+          amplitude={0.4}
+          interactive={false}
+        />
+      </div>
+    ),
+    [] // Empty dependencies - never re-render
+  );
 
   const handleHeroCopyLink = async () => {
     trackPixelEvent("Share");
@@ -264,14 +277,7 @@ const Waitlist = () => {
             transform: "translateZ(0)",
           }}
         >
-          <div className="absolute inset-0 bg-bordo-700 pointer-events-none h-full opacity-60">
-            <LiquidChrome
-              baseColor={[0.03, 0, 0]}
-              speed={0.05}
-              amplitude={0.4}
-              interactive={false}
-            />
-          </div>
+          {liquidChromeBackground}
           <motion.div variants={fadeInUp} className="text-center z-10">
             <img
               src="/logo-cineo.svg"
@@ -279,49 +285,58 @@ const Waitlist = () => {
               alt="Cineo Logo"
             />
           </motion.div>
-          {/* Eyebrow tagline */}
-          <motion.p
-            variants={fadeInUp}
-            className="mt-2 md:mt-3 text-xs md:text-md uppercase tracking-[0.25em] text-siva-200 text-center px-4 mb-6 md:mb-8 z-99 relative font-semibold"
-          >
-            <SplitTextReveal text="Smart Film Collection" />
-          </motion.p>
 
-          <motion.h1
-            variants={fadeInUp}
-            className="text-3xl md:text-6xl font-bold mb-3 md:mb-4 leading-tight tracking-tight text-center justify-center px-4 text-siva-100 min-h-[80px] md:min-h-[140px] flex items-center"
-          >
-            <RotatingText
-              texts={[
-                "Stop scrolling. Start watching.",
-                "Enjoy movie nights again.",
-              ]}
-              rotationInterval={5000}
-              staggerDuration={0.02}
-              splitBy="words"
-              mainClassName="justify-center items-center text-center"
-            />
-          </motion.h1>
+          {!showHeroShare && (
+            <>
+              {/* Eyebrow tagline */}
+              <motion.p
+                variants={fadeInUp}
+                className="mt-2 md:mt-3 text-xs md:text-md uppercase tracking-[0.25em] text-siva-200 text-center px-4 mb-6 md:mb-8 z-99 relative font-semibold"
+              >
+                <SplitTextReveal text="Smart Film Collection" />
+              </motion.p>
 
-          <motion.p
-            variants={fadeInUp}
-            className="text-base md:text-xl text-slate-200 max-w-xl md:max-w-2xl mx-auto font-light px-6 md:px-4 text-center leading-relaxed mb-4 z-10 relative"
-          >
-            Because choosing a movie shouldn't take longer than watching one
-            <span className="hidden md:inline">
-              <br />
-              Follow all your movies, ones you've already watched or want to
-              watch, mark favourites and get personalised suggestions across all
-              platforms.
-            </span>
-          </motion.p>
+              <motion.h1
+                variants={fadeInUp}
+                className="text-3xl md:text-6xl font-bold mb-3 md:mb-4 leading-tight tracking-tight text-center justify-center px-4 text-siva-100 min-h-[80px] md:min-h-[140px] flex items-center"
+              >
+                <RotatingText
+                  texts={[
+                    "Stop scrolling. Start watching.",
+                    "Enjoy movie nights again.",
+                  ]}
+                  rotationInterval={5000}
+                  staggerDuration={0.02}
+                  splitBy="words"
+                  mainClassName="justify-center items-center text-center"
+                />
+              </motion.h1>
+
+              <motion.p
+                variants={fadeInUp}
+                className="text-base md:text-xl text-slate-200 max-w-xl md:max-w-2xl mx-auto font-light px-6 md:px-4 text-center leading-relaxed mb-4 z-10 relative"
+              >
+                Because choosing a movie shouldn't take longer than watching one
+                <span className="hidden md:inline">
+                  <br />
+                  Follow all your movies, ones you've already watched or want to
+                  watch, mark favourites and get personalised suggestions across
+                  all platforms.
+                </span>
+              </motion.p>
+            </>
+          )}
 
           <motion.div
             variants={fadeInUp}
             className="mt-2 md:mt-3 w-full max-w-xl mx-auto px-6 md:px-4 z-10 relative"
           >
             {!showHeroShare ? (
-              <form onSubmit={handleHeroSubmit} className="w-full">
+              <form
+                onSubmit={handleHeroSubmit}
+                className="w-full"
+                key="hero-signup-form"
+              >
                 <div className="flex flex-col md:flex-row gap-2.5 md:gap-3 items-stretch">
                   <input
                     type="text"
@@ -355,16 +370,27 @@ const Waitlist = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full"
               >
-                <div className="bg-gradient-to-r from-bordo-500/20 to-purple-500/20 border border-bordo-500/40 rounded-xl p-3 mb-3">
-                  <p className="text-white text-center font-bold text-base mb-0.5">
+                <div className="bg-gradient-to-r from-bordo-500/30 to-black/20 border border-bordo-500/50 rounded-xl p-4 mb-3">
+                  <p className="text-white text-center font-bold text-lg mb-3">
                     You're on the list! 🎉
                   </p>
-                  <p className="text-siva-300 text-center text-xs">
-                    Share Cineo and both get{" "}
-                    <span className="text-siva-100 font-bold">
-                      TWO MONTHS FREE
-                    </span>{" "}
-                    at launch!
+                  <div className="bg-black/30 rounded-lg p-3 mb-3">
+                    <p className="text-white text-center font-bold text-base mb-2">
+                      1 MONTH FREE Premium at Launch
+                    </p>
+                    <p className="text-siva-200 text-center text-sm font-semibold">
+                      🚀 Unlock 50% OFF for 6 Months:
+                    </p>
+                  </div>
+                  <p className="text-siva-200 text-center text-sm mb-2">
+                    Each friend ={" "}
+                    <span className="text-siva-100 font-bold underline">
+                      +1 EXTRA month at 50% OFF
+                    </span>
+                  </p>
+                  <p className="text-siva-400 text-center text-sm">
+                    Max 6 referrals = 7 months of premium (1 free + 6 at 50%
+                    OFF)
                   </p>
                 </div>
 
