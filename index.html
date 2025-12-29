@@ -2,39 +2,131 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/Cineo-icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Cineo</title>
 
-    <!-- osnovni SEO meta -->
+    <!-- Canonical URL - CRITICAL for SEO -->
+    <link rel="canonical" href="https://cineoai.com/" />
+
+    <!-- Optimized Title - "Cineo" at the beginning -->
+    <title>
+      Cineo - Your Personal AI Movie Library | Smart Recommendations
+    </title>
+
+    <!-- Optimized Meta Description -->
     <meta
       name="description"
-      content="Cineo je tvoja aplikacija za otkrivanje, spremanje i praćenje omiljenih filmova i serija."
+      content="Cineo is your AI-powered movie discovery platform. No more endless scrolling - get personalized recommendations in seconds, not hours. Join the waitlist!"
     />
+
+    <!-- Keywords with "Cineo" variations -->
     <meta
       name="keywords"
-      content="cineo, filmovi, movies, cinema, imdb, serije, watch later, praćenje filmova, movie tracker"
+      content="Cineo, Cineo app, Cineo AI, movie recommendations, AI movie discovery, personalized movies, watch together, movie tracker, film recommendations"
     />
     <meta name="robots" content="index, follow" />
+    <meta name="author" content="Cineo" />
 
-    <!-- theme color za Chrome na Androidu -->
+    <!-- Theme color -->
     <meta name="theme-color" content="#1A202C" />
 
-    <!-- Open Graph za dijeljenje na društvenim mrežama -->
+    <!-- Favicons - for logo in search results -->
+    <link rel="icon" type="image/svg+xml" href="/Cineo-icon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Open Graph - CORRECTED URLs -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Cineo" />
     <meta
       property="og:title"
-      content="Cineo – Your personal AI movie library"
+      content="Cineo - Your Personal AI Movie Library"
     />
     <meta
       property="og:description"
-      content="Follow all your movies—ones that you already watched or some that you
-        want to watch—mark your favourites and get personalised suggestions"
+      content="No more endless scrolling. Our AI learns your unique taste from ratings and watch history, suggesting movies you'll actually love - in seconds, not hours."
     />
-    <meta property="og:url" content="https://cineo.app/" />
-    <meta property="og:image" content="https://cineo.app/og-image.jpg" />
+    <meta property="og:url" content="https://cineoai.com/" />
+    <meta property="og:image" content="https://cineoai.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Cineo - AI Movie Discovery Platform"
+    />
+    <meta property="og:locale" content="en_US" />
 
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@cineoapp" />
+    <meta
+      name="twitter:title"
+      content="Cineo - Your Personal AI Movie Library"
+    />
+    <meta
+      name="twitter:description"
+      content="No more endless scrolling. AI-powered movie recommendations in seconds."
+    />
+    <meta name="twitter:image" content="https://cineoai.com/og-image.jpg" />
+
+    <!-- Schema.org Organization Markup - FOR LOGO IN SEARCH RESULTS -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Cineo",
+        "alternateName": ["CineoAI", "Cineo App"],
+        "url": "https://cineoai.com",
+        "logo": "https://cineoai.com/logo-cineo.svg",
+        "image": "https://cineoai.com/og-image.jpg",
+        "description": "AI-powered movie discovery and recommendation platform",
+        "foundingDate": "2025",
+        "sameAs": [
+          "https://www.facebook.com/cineoapp",
+          "https://www.instagram.com/cineo_app",
+          "https://www.linkedin.com/company/cineo-app"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "info@cineoai.com",
+          "contactType": "customer service"
+        }
+      }
+    </script>
+
+    <!-- Schema.org WebSite Markup - for sitelinks -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Cineo",
+        "alternateName": "CineoAI",
+        "url": "https://cineoai.com",
+        "description": "AI-powered movie discovery platform"
+      }
+    </script>
+
+    <!-- Schema.org SoftwareApplication - additional context -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Cineo",
+        "alternateName": "Cineo AI Movie Discovery",
+        "applicationCategory": "EntertainmentApplication",
+        "operatingSystem": "Web, iOS, Android",
+        "description": "AI-powered movie discovery and recommendation app that learns your unique taste",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/PreOrder"
+        }
+      }
+    </script>
+
+    <!-- Preload critical resources -->
     <link rel="preload" href="/bg-image.jpg" as="image" fetchpriority="high" />
     <link
       rel="preload"

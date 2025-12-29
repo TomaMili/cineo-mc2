@@ -9,19 +9,19 @@ const features = [
   {
     title: "AI finds your perfect movie",
     description:
-      "No more endless scrolling. \nOur AI learns your unique taste from ratings and watch history, suggesting movies you'll actually love—in seconds, not hours.",
+      "No more endless scrolling. \nOur AI learns your unique taste from ratings and watch history, suggesting movies you'll actually love-in seconds, not hours.",
     image: "/article-4.png",
   },
   {
     title: "Your Movie DNA & Complete Library",
     description:
-      "Build your personal taste profile. \nTrack watched movies, organize watchlists, rate films, and watch your Movie DNA evolve — feeding even better recommendations over time. \nEverything in one beautiful place.",
+      "Build your personal taste profile. \nTrack watched movies, organize watchlists, rate films, and watch your Movie DNA evolve - feeding even better recommendations over time. \nEverything in one beautiful place.",
     image: "/article-2.png",
   },
   {
     title: "Complete Movie Information",
     description:
-      "Everything you need to know.\nDetailed cast info, runtime, director, ratings, streaming platforms, and where to watch—all in one beautifully organized view.",
+      "Everything you need to know.\nDetailed cast info, runtime, director, ratings, streaming platforms, and where to watch-all in one beautifully organized view.",
     image: "/article-5.png",
   },
 ];

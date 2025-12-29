@@ -241,10 +241,10 @@ const Waitlist = () => {
   return (
     <>
       <Helmet>
-        <title>Cineo – your personal AI movie library</title>
+        <title>Cineo - your personal AI movie library</title>
         <meta
           name="description"
-          content="Cineo is your personal AI movie library. Stop scrolling and start watching – track what you’ve watched, save what you want to watch and get personalised AI movie recommendations across all platforms."
+          content="Cineo is your personal AI movie library. Stop scrolling and start watching - track what you’ve watched, save what you want to watch and get personalised AI movie recommendations across all platforms."
         />
         <meta
           name="keywords"
@@ -252,7 +252,7 @@ const Waitlist = () => {
         />
         <meta
           property="og:title"
-          content="Cineo – your personal AI movie library"
+          content="Cineo - your personal AI movie library"
         />
         <meta
           property="og:description"

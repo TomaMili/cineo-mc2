@@ -92,12 +92,8 @@ export default async function handler(req) {
                       }
                     </h1>
                     
-                    <p style="color: #d1d1d1; font-size: 16px; line-height: 1.8; margin: 0 0 20px 0;">
-                      Thanks for joining the Cineo waitlist! You're now part of an exclusive group of movie lovers who will be <strong style="color: #ffffff;">first in line</strong> when we launch.
-                    </p>
-                    
-                    <p style="color: #d1d1d1; font-size: 16px; line-height: 1.8; margin: 0 0 30px 0;">
-                      We're building something special: an AI-powered movie companion that actually understands your taste. No more endless scrolling – just movies you'll love.
+                    <p style="color: #d1d1d1; font-size: 16px; line-height: 1.8; margin: 0 0 30px 0; text-align: center;">
+                      You're on the waitlist! We're building an AI-powered movie companion that actually understands your taste. You'll be <strong style="color: #ffffff;">first in line</strong> when we launch in early 2026.
                     </p>
                     
                     <!-- Launch Reward -->
@@ -109,51 +105,32 @@ export default async function handler(req) {
                         1 MONTH FREE Premium
                       </p>
                     </div>
-                    
-                    <!-- What's Next Box -->
-                    <div style="background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%); border: 1px solid #3a3a3a; border-radius: 12px; padding: 25px; margin: 30px 0;">
-                      <h2 style="color: #ffffff; font-size: 20px; margin: 0 0 12px 0; font-weight: 600;">
-                        🚀 Unlock 50% OFF for 6 Months:
-                      </h2>
-                      
-                      <p style="color: #d1d1d1; font-size: 15px; margin: 0 0 16px 0;">
-                        Share your invite link with friends and earn:
-                      </p>
-                      
-                      <div style="background: #2a2a2a; padding: 16px; border-radius: 8px; border-left: 4px solid #b91c1c; margin: 0 0 16px 0;">
-                        <p style="color: #ffffff; font-size: 18px; font-weight: bold; margin: 0;">
-                          Each signup = +1 EXTRA month at 50% OFF
-                        </p>
-                        <p style="color: #999999; font-size: 14px; margin: 4px 0 0 0;">
-                          (Max 6 referrals = 6 months at half price!)
-                        </p>
-                      </div>
-                      
-                      <table width="100%" cellpadding="0" cellspacing="0" style="margin: 16px 0;">
-                        <tr>
-                          <td style="text-align: center; padding: 12px; background: #2a2a2a; border-radius: 8px;">
-                            <p style="color: #b91c1c; font-weight: bold; margin: 0 0 8px 0; font-size: 16px;">Invite 6 friends</p>
-                            <p style="color: #ffffff; font-size: 20px; margin: 0; font-weight: 600;">7 months of premium! 💰</p>
-                            <p style="color: #888888; font-size: 13px; margin: 8px 0 0 0;">1 free + 6 at 50% OFF</p>
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
 
                     ${
                       referralCode
                         ? `
                     <!-- Referral Box -->
                     <div style="background: linear-gradient(135deg, #b91c1c 0%, #7c1212 100%); border-radius: 12px; padding: 30px; margin: 30px 0; text-align: center;">
-                      <p style="color: #ffffff; font-size: 20px; margin: 0 0 10px 0; font-weight: 600;">
-                        💰 Start Earning 50% OFF!
+                      <p style="color: #ffffff; font-size: 22px; margin: 0 0 12px 0; font-weight: 700;">
+                        🚀 Unlock 50% OFF for 6 Months
                       </p>
-                      <p style="color: #ffffff; font-size: 15px; margin: 0 0 20px 0; opacity: 0.95;">
-                        Each friend who joins gets <strong>1 month FREE</strong> and you get <strong>1 EXTRA month at 50% OFF!</strong>
-                      </p>
+                      <div style="background: rgba(0,0,0,0.25); padding: 16px; border-radius: 8px; margin: 0 0 20px 0;">
+  <p style="color: #ffffff; font-size: 15px; margin: 0 0 8px 0; font-weight: 600;">
+    How it works:
+  </p>
+  <p style="color: #ffffff; font-size: 14px; margin: 0 0 6px 0;">
+    ✓ Your friend joins → Gets 1 month FREE
+  </p>
+  <p style="color: #ffffff; font-size: 14px; margin: 0;">
+    ✓ You unlock → +1 EXTRA month at 50% OFF
+  </p>
+  <p style="color: rgba(255,255,255,0.8); font-size: 13px; margin: 10px 0 0 0;">
+    Invite 6 friends = 6 months for the price of 3! 💰
+  </p>
+</div>
                       <a href="https://cineoai.com/?ref=${referralCode}" 
-                         style="display: inline-block; background-color: #ffffff; color: #b91c1c; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; margin-top: 10px;">
-                        Share Your Link →
+                         style="display: inline-block; background-color: #ffffff; color: #b91c1c; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; margin-top: 10px;">
+                        Share Your Link & Start Earning →
                       </a>
                     </div>
                     `
@@ -185,17 +162,6 @@ export default async function handler(req) {
                       </tr>
                     </table>
                     
-                  </td>
-                </tr>
-                
-                <!-- P.S. Section -->
-                <tr>
-                  <td style="padding: 20px 30px; background-color: #1a1a1a;">
-                    <p style="color: #d1d1d1; font-size: 14px; line-height: 1.6; margin: 0; font-style: italic;">
-                      <strong style="color: #b91c1c;">P.S.</strong> We're testing in early 2026! 
-                      The more friends you invite now, the more you save when we go live. 
-                      Start sharing your link today! 🚀
-                    </p>
                   </td>
                 </tr>
                 
