@@ -119,19 +119,25 @@ export default async function handler(req) {
     How it works:
   </p>
   <p style="color: #ffffff; font-size: 14px; margin: 0 0 6px 0;">
-    ✓ Your friend joins → Gets 1 month FREE
+     Your friend joins → they get 1 month FREE
   </p>
   <p style="color: #ffffff; font-size: 14px; margin: 0;">
-    ✓ You unlock → +1 EXTRA month at 50% OFF
+     You unlock +1 EXTRA month at 50% OFF per friend
   </p>
   <p style="color: rgba(255,255,255,0.8); font-size: 13px; margin: 10px 0 0 0;">
     Invite 6 friends = 6 months for the price of 3! 💰
   </p>
 </div>
-                      <a href="https://cineoai.com/?ref=${referralCode}" 
-                         style="display: inline-block; background-color: #ffffff; color: #b91c1c; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; margin-top: 10px;">
-                        Share Your Link & Start Earning →
-                      </a>
+                      
+                      <!-- Copyable Link Box -->
+                      <div style="background: rgba(255,255,255,0.15); border: 2px dashed rgba(255,255,255,0.4); border-radius: 8px; padding: 16px; margin: 20px 0;">
+                        <p style="color: #ffffff; font-size: 13px; margin: 0 0 8px 0; font-weight: 600;">
+                          📋 Your Referral Link (click to select & copy):
+                        </p>
+                        <p style="color: #ffffff; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; font-size: 14px; margin: 0; word-break: break-all; user-select: all; cursor: text; font-family: 'Courier New', monospace;">
+                          https://cineoai.com/?ref=${referralCode}
+                        </p>
+                      </div>
                     </div>
                     `
                         : ""
