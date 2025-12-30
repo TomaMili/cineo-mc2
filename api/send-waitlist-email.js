@@ -134,9 +134,9 @@ export default async function handler(req) {
                         <p style="color: #ffffff; font-size: 13px; margin: 0 0 8px 0; font-weight: 600;">
                           📋 Your Referral Link (click to select & copy):
                         </p>
-                        <p style="color: #ffffff; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; font-size: 14px; margin: 0; word-break: break-all; user-select: all; cursor: text; font-family: 'Courier New', monospace;">
-                          https://cineoai.com/?ref=${referralCode}
-                        </p>
+                        <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; margin: 0;">
+                          <a href="https://cineoai.com/?ref=${referralCode}" style="color: #ffffff !important; font-size: 14px; word-break: break-all; user-select: all; cursor: text; font-family: 'Courier New', monospace; text-decoration: none; display: block;">https://cineoai.com/?ref=${referralCode}</a>
+                        </div>
                       </div>
                     </div>
                     `
