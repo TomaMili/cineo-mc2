@@ -96,51 +96,42 @@ export default async function handler(req) {
                       You're in! We're building an AI-powered movie companion that actually understands your taste. You'll get <strong style="color: #ffffff;">beta access</strong> when testing begins.
                     </p>
                     
-                    <!-- Early Supporter Rewards -->
-                    <div style="background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%); border: 1px solid #3a3a3a; border-radius: 12px; padding: 25px; margin: 30px 0; text-align: center;">
-                      <h2 style="color: #b91c1c; font-size: 20px; margin: 0 0 15px 0; font-weight: 600;">
-                        🎁 Your Early Supporter Rewards
-                      </h2>
-                      <p style="color: #d1d1d1; font-size: 15px; margin: 0 0 15px 0;">
-                        At public launch, you'll unlock:
-                      </p>
-                      <p style="color: #ffffff; font-size: 16px; margin: 0 0 8px 0;">
-                         1 MONTH FREE Premium
-                      </p>
-                      <p style="color: #ffffff; font-size: 16px; margin: 0 0 8px 0;">
-                         + 50% OFF for each friend you refer
-                      </p>
-                      <p style="color: #a1a1a1; font-size: 13px; margin: 0;">
-                        (up to 6 months)
-                      </p>
-                    </div>
-
+                    
                     ${
                       referralCode
                         ? `
-                    <!-- Referral Box -->
-                    <div style="background: linear-gradient(135deg, #b91c1c 0%, #7c1212 100%); border-radius: 12px; padding: 30px; margin: 30px 0; text-align: center;">
-                      <p style="color: #ffffff; font-size: 22px; margin: 0 0 12px 0; font-weight: 700;">
-                        🚀 Start Inviting — Rewards Stack!
+                    <!-- Rewards & Referral Box Combined -->
+                    <div style="background: linear-gradient(135deg, #3a1a1a 0%, #2a1515 100%); border: 1px solid #4a2020; border-radius: 12px; padding: 30px; margin: 30px 0; text-align: center;">
+                      <h2 style="color: #ff0000; font-size: 22px; margin: 0 0 20px 0; font-weight: 600;">
+                        🎁 Your Early Supporter Rewards
+                      </h2>
+                      
+                      <p style="color: #d1d1d1; font-size: 15px; margin: 0 0 15px 0; font-weight: 600;">
+                        At public launch:
                       </p>
-                      <div style="background: rgba(0,0,0,0.25); padding: 16px; border-radius: 8px; margin: 0 0 20px 0;">
-  <p style="color: #ffffff; font-size: 14px; margin: 0 0 8px 0;">
-     Each friend gets 1 month FREE
-  </p>
-  <p style="color: #ffffff; font-size: 14px; margin: 0 0 10px 0;">
-     You unlock +1 EXTRA month at 50% OFF
-  </p>
-  <p style="color: rgba(255,255,255,0.8); font-size: 13px; margin: 0;">
-    Max 6 referrals = 7 months of premium<br />(1 free + 6 at 50% OFF) 💰
-  </p>
-</div>
+                      
+                      <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px; margin: 0 0 20px 0; text-align: left;">
+                        <p style="color: #ffffff; font-size: 16px; margin: 0 0 12px 0;">
+                          ✓ <strong>1 MONTH FREE</strong> - just for signing up
+                        </p>
+                        <p style="color: #ffffff; font-size: 16px; margin: 0 0 15px 0;">
+                          ✓ <strong>+1 MONTH at 50% OFF</strong> - for each friend you invite
+                        </p>
+                        <p style="color: #e87d7d; font-size: 16px; font-weight: 600; margin: 0;text-align: center;">
+                          Invite 6 friends = 7 months of Premium 🚀
+                        </p>
+                      </div>
+                      
+                      <p style="color: #b8b8b8; font-size: 13px; margin: 0 0 20px 0; font-style: italic;">
+                        (P.S. Your friends get 1 month FREE too!)
+                      </p>
                       
                       <!-- Copyable Link Box -->
-                      <div style="background: rgba(255,255,255,0.15); border: 2px dashed rgba(255,255,255,0.4); border-radius: 8px; padding: 16px; margin: 20px 0;">
+                      <div style="background: rgba(255,255,255,0.1); border: 2px dashed rgba(232, 125, 125, 0.4); border-radius: 8px; padding: 16px; margin: 20px 0 0 0;">
                         <p style="color: #ffffff; font-size: 13px; margin: 0 0 8px 0; font-weight: 600;">
                           📋 Your Referral Link (click to select & copy):
                         </p>
-                        <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 6px; margin: 0;">
+                        <div style="background: rgba(0,0,0,0.4); padding: 12px; border-radius: 6px; margin: 0;">
                           <a href="https://cineoai.com/?ref=${referralCode}" style="color: #ffffff !important; font-size: 14px; word-break: break-all; user-select: all; cursor: text; font-family: 'Courier New', monospace; text-decoration: none; display: block;">https://cineoai.com/?ref=${referralCode}</a>
                         </div>
                       </div>
@@ -212,7 +203,7 @@ export default async function handler(req) {
       body: JSON.stringify({
         from: "Cineo <info@cineoai.com>",
         to: [email],
-        subject: "Welcome to Cineo - Your FREE month is waiting! 🎬",
+        subject: "Welcome to Cineo - You're on the list! 🎬",
         html: emailHtml,
       }),
     });
