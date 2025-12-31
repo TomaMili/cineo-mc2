@@ -360,7 +360,7 @@ const Waitlist = () => {
                     disabled={isHeroSubmitting}
                     className="w-full md:w-auto px-4 py-2.5 bg-bordo-500 hover:bg-bordo-400 text-white font-semibold rounded-lg shadow-lg shadow-bordo-500/30 hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer text-sm"
                   >
-                    {isHeroSubmitting ? "Joining..." : "Join waitlist"}
+                    {isHeroSubmitting ? "Joining..." : "Join the Beta"}
                   </button>
                 </div>
               </form>
@@ -372,26 +372,32 @@ const Waitlist = () => {
               >
                 <div className="bg-gradient-to-r from-bordo-500/30 to-black/20 border border-bordo-500/50 rounded-xl p-4 mb-3">
                   <p className="text-white text-center font-bold text-lg mb-3">
-                    You're on the list! 🎉
+                    You're in! 🎉
                   </p>
-                  <div className="bg-black/30 rounded-lg p-3 mb-3">
-                    <p className="text-white text-center font-bold text-base mb-2">
-                      1 MONTH FREE Premium at Launch
+                  <p className="text-siva-200 text-center text-sm mb-4">
+                    You'll get beta access when testing begins.
+                  </p>
+                  <div className="bg-black/30 rounded-lg p-4 mb-3 border border-siva-700/50">
+                    <p className="text-white text-center font-bold text-base mb-3">
+                      🎁 Your Early Supporter Rewards
                     </p>
-                    <p className="text-siva-200 text-center text-sm font-semibold">
-                      🚀 Unlock 50% OFF for 6 Months:
+                    <p className="text-siva-200 text-center text-sm mb-3">
+                      At public launch, you'll unlock:
+                    </p>
+                    <p className="text-siva-100 text-center text-sm mb-2">
+                      <strong> 1 MONTH FREE</strong> Premium
+                    </p>
+                    <p className="text-siva-100 text-center text-sm mb-3">
+                      <strong>+ 50% OFF</strong> for each friend you refer
+                      <br />
+                      <span className="text-siva-300 text-xs">
+                        (up to 6 months)
+                      </span>
+                    </p>
+                    <p className="text-siva-400 text-center text-xs">
+                      Start inviting now - rewards stack!
                     </p>
                   </div>
-                  <p className="text-siva-200 text-center text-sm mb-2">
-                    Each friend ={" "}
-                    <span className="text-siva-100 font-bold underline">
-                      +1 EXTRA month at 50% OFF
-                    </span>
-                  </p>
-                  <p className="text-siva-400 text-center text-sm">
-                    Max 6 referrals = 7 months of premium (1 free + 6 at 50%
-                    OFF)
-                  </p>
                 </div>
 
                 {heroReferralCode && (
@@ -497,10 +503,6 @@ const Waitlist = () => {
             <Icon icon="mdi:lock" className="w-4 h-4" />
             <span>Your privacy matters — we never sell your data</span>
           </div>
-          <p className="text-gray-400 text-lg lg:text-md font-light mb-8">
-            Drop your email or simply register your interest and be first in
-            line when we launch.
-          </p>
           <div className="w-full">
             <WaitlistCard />
           </div>

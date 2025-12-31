@@ -93,16 +93,25 @@ export default async function handler(req) {
                     </h1>
                     
                     <p style="color: #d1d1d1; font-size: 16px; line-height: 1.8; margin: 0 0 30px 0; text-align: center;">
-                      You're on the waitlist! We're building an AI-powered movie companion that actually understands your taste. You'll be <strong style="color: #ffffff;">first in line</strong> when we launch in early 2026.
+                      You're in! We're building an AI-powered movie companion that actually understands your taste. You'll get <strong style="color: #ffffff;">beta access</strong> when testing begins.
                     </p>
                     
-                    <!-- Launch Reward -->
+                    <!-- Early Supporter Rewards -->
                     <div style="background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%); border: 1px solid #3a3a3a; border-radius: 12px; padding: 25px; margin: 30px 0; text-align: center;">
-                      <h2 style="color: #b91c1c; font-size: 20px; margin: 0 0 8px 0; font-weight: 600;">
-                        🎁 Your Launch Reward:
+                      <h2 style="color: #b91c1c; font-size: 20px; margin: 0 0 15px 0; font-weight: 600;">
+                        🎁 Your Early Supporter Rewards
                       </h2>
-                      <p style="color: #ffffff; font-size: 24px; font-weight: bold; margin: 0;">
-                        1 MONTH FREE Premium
+                      <p style="color: #d1d1d1; font-size: 15px; margin: 0 0 15px 0;">
+                        At public launch, you'll unlock:
+                      </p>
+                      <p style="color: #ffffff; font-size: 16px; margin: 0 0 8px 0;">
+                         1 MONTH FREE Premium
+                      </p>
+                      <p style="color: #ffffff; font-size: 16px; margin: 0 0 8px 0;">
+                         + 50% OFF for each friend you refer
+                      </p>
+                      <p style="color: #a1a1a1; font-size: 13px; margin: 0;">
+                        (up to 6 months)
                       </p>
                     </div>
 
@@ -112,20 +121,17 @@ export default async function handler(req) {
                     <!-- Referral Box -->
                     <div style="background: linear-gradient(135deg, #b91c1c 0%, #7c1212 100%); border-radius: 12px; padding: 30px; margin: 30px 0; text-align: center;">
                       <p style="color: #ffffff; font-size: 22px; margin: 0 0 12px 0; font-weight: 700;">
-                        🚀 Unlock 50% OFF for 6 Months
+                        🚀 Start Inviting — Rewards Stack!
                       </p>
                       <div style="background: rgba(0,0,0,0.25); padding: 16px; border-radius: 8px; margin: 0 0 20px 0;">
-  <p style="color: #ffffff; font-size: 15px; margin: 0 0 8px 0; font-weight: 600;">
-    How it works:
+  <p style="color: #ffffff; font-size: 14px; margin: 0 0 8px 0;">
+     Each friend gets 1 month FREE
   </p>
-  <p style="color: #ffffff; font-size: 14px; margin: 0 0 6px 0;">
-     Your friend joins → they get 1 month FREE
+  <p style="color: #ffffff; font-size: 14px; margin: 0 0 10px 0;">
+     You unlock +1 EXTRA month at 50% OFF
   </p>
-  <p style="color: #ffffff; font-size: 14px; margin: 0;">
-     You unlock +1 EXTRA month at 50% OFF per friend
-  </p>
-  <p style="color: rgba(255,255,255,0.8); font-size: 13px; margin: 10px 0 0 0;">
-    Invite 6 friends = 6 months for the price of 3! 💰
+  <p style="color: rgba(255,255,255,0.8); font-size: 13px; margin: 0;">
+    Max 6 referrals = 7 months of premium<br />(1 free + 6 at 50% OFF) 💰
   </p>
 </div>
                       

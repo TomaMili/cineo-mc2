@@ -239,11 +239,13 @@ const WaitlistCard = () => {
               </div>
 
               <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-slate-50 tracking-tight">
-                Join the waitlist
+                Join the Beta
               </h2>
 
               <p className="text-slate-300 mb-7 text-base md:text-lg font-light leading-relaxed">
-                Be the first to experience Cineo when we launch.
+                Be among the first to test Cineo and shape its future.
+                <br />
+                Beta testers get exclusive rewards when we officially launch.
               </p>
 
               {/* EMAIL + OPTIONAL NAME INPUTS */}
@@ -271,7 +273,7 @@ const WaitlistCard = () => {
                   disabled={isSubmitting}
                   className="w-auto mx-auto cursor-pointer bg-bordo-500 hover:bg-bordo-400 disabled:opacity-70 disabled:cursor-not-allowed text-white font-medium px-7 py-3 text-base rounded-lg shadow-md shadow-bordo-500/30 transition-transform duration-200 hover:scale-[1.04] focus:outline-none focus:ring-2 focus:ring-bordo-400/60 block"
                 >
-                  {isSubmitting ? "Joining..." : "Join waitlist"}
+                  {isSubmitting ? "Joining..." : "Join the Beta"}
                 </button>
               </form>
             </motion.div>
@@ -292,42 +294,44 @@ const WaitlistCard = () => {
               </motion.div>
 
               <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-slate-50 tracking-tight">
-                You're on the list! 🎉
+                You're in! 🎉
               </h2>
 
               <p className="text-slate-300 text-base md:text-lg font-light mb-4 leading-relaxed">
-                We'll contact you as soon as we launch.
+                You'll get beta access when testing begins.
               </p>
 
-              {/* 50% OFF Gift messaging */}
+              {/* Early Supporter Rewards */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
                 className="bg-gradient-to-br from-bordo-900/40 to-siva-300/20 border border-bordo-500/40 rounded-2xl p-5 mb-6 max-w-md mx-auto"
               >
-                <div className="flex items-center justify-center gap-2 mb-3">
+                <div className="flex items-center justify-center gap-2 mb-4">
                   <Gift className="w-5 h-5 text-bordo-400" />
                   <h3 className="text-lg font-semibold text-white">
-                    1 MONTH FREE Premium at Launch
+                    Your Early Supporter Rewards
                   </h3>
                 </div>
 
-                <div className="bg-black/30 rounded-lg p-3 mb-3">
-                  <p className="text-sm text-siva-200 mb-2 font-semibold">
-                    🚀 Unlock 50% OFF for 6 months:
+                <p className="text-sm text-siva-200 mb-3 text-center">
+                  At public launch, you'll unlock:
+                </p>
+
+                <div className="bg-black/30 rounded-lg p-4 mb-3 space-y-2">
+                  <p className="text-sm text-siva-100">
+                    {" "}
+                    <strong>1 MONTH FREE</strong> Premium
                   </p>
-                  <p className="text-sm text-white mb-2">
-                    Each friend gets{" "}
-                    <span className="font-bold">1 month FREE</span> and you get{" "}
-                    <span className="text-siva-100 font-bold">
-                      1 EXTRA month at 50% OFF!
-                    </span>
+                  <p className="text-sm text-siva-100">
+                    <strong>+ 50% OFF</strong> for each friend you refer
                   </p>
+                  <p className="text-xs text-siva-300 pl-4">(up to 6 months)</p>
                 </div>
 
-                <p className="text-sm font-light text-siva-400">
-                  Max 6 referrals = 7 months of premium (1 free + 6 at 50% OFF)
+                <p className="text-sm font-light text-siva-400 text-center">
+                  Start inviting now — rewards stack!
                 </p>
               </motion.div>
 
