@@ -112,17 +112,17 @@ export default async function handler(req) {
                       
                       <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px; margin: 0 0 20px 0; text-align: left;">
                         <p style="color: #ffffff; font-size: 16px; margin: 0 0 12px 0;">
-                          ✓ <strong>1 MONTH FREE</strong> - just for signing up
+                           <strong>1 MONTH FREE</strong> - just for signing up
                         </p>
                         <p style="color: #ffffff; font-size: 16px; margin: 0 0 15px 0;">
-                          ✓ <strong>+1 MONTH at 50% OFF</strong> - for each friend you invite
+                           <strong>+1 MONTH at 50% OFF</strong> - for each friend you invite
                         </p>
                         <p style="color: #e87d7d; font-size: 16px; font-weight: 600; margin: 0;text-align: center;">
-                          Invite 6 friends = 7 months of Premium 🚀
+                          Invite 6 friends = 6 months of Premium for the price of 3 🚀
                         </p>
                       </div>
                       
-                      <p style="color: #b8b8b8; font-size: 13px; margin: 0 0 20px 0; font-style: italic;">
+                      <p style="color: #ffffff; font-size: 13px; margin: 0 0 20px 0; font-style: italic;">
                         (P.S. Your friends get 1 month FREE too!)
                       </p>
                       
