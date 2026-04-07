@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://cineo-mc2.vercel.app/sitemap.xml
+Sitemap: https://cineoai.com/sitemap.xml

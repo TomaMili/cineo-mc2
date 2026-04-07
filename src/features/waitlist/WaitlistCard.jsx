@@ -103,11 +103,6 @@ const WaitlistCard = () => {
             .eq("email", email)
             .single();
 
-          console.log(
-            "Fetched existing referral code:",
-            existingData?.referral_code
-          );
-
           if (existingData?.referral_code) {
             setReferralCode(existingData.referral_code);
           }
@@ -167,7 +162,7 @@ const WaitlistCard = () => {
     ? `https://cineoai.com/?ref=${referralCode}`
     : `https://cineoai.com/?ref=invite`;
   const shareText =
-    "Check out Cineo - AI-powered movie discovery that actually understands your taste! Join the waitlist and get TWO MONTHS FREE when we launch.";
+    "Check out Cineo - AI-powered movie discovery that actually understands your taste! Join the waitlist and get 1 MONTH FREE + earn 50% OFF for up to 6 more months!";
 
   const handleCopyLink = async () => {
     trackPixelEvent("Share");
@@ -244,11 +239,13 @@ const WaitlistCard = () => {
               </div>
 
               <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-slate-50 tracking-tight">
-                Join the waitlist
+                Join the Beta
               </h2>
 
               <p className="text-slate-300 mb-7 text-base md:text-lg font-light leading-relaxed">
-                Be the first to experience Cineo when we launch.
+                Be among the first to test Cineo and shape its future.
+                <br />
+                Beta testers get exclusive rewards when we officially launch.
               </p>
 
               {/* EMAIL + OPTIONAL NAME INPUTS */}
@@ -276,7 +273,7 @@ const WaitlistCard = () => {
                   disabled={isSubmitting}
                   className="w-auto mx-auto cursor-pointer bg-bordo-500 hover:bg-bordo-400 disabled:opacity-70 disabled:cursor-not-allowed text-white font-medium px-7 py-3 text-base rounded-lg shadow-md shadow-bordo-500/30 transition-transform duration-200 hover:scale-[1.04] focus:outline-none focus:ring-2 focus:ring-bordo-400/60 block"
                 >
-                  {isSubmitting ? "Joining..." : "Join waitlist"}
+                  {isSubmitting ? "Joining..." : "Join the Beta"}
                 </button>
               </form>
             </motion.div>
@@ -297,36 +294,44 @@ const WaitlistCard = () => {
               </motion.div>
 
               <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-slate-50 tracking-tight">
-                You're on the list!
+                You're in! 🎉
               </h2>
 
               <p className="text-slate-300 text-base md:text-lg font-light mb-4 leading-relaxed">
-                We'll contact you as soon as we launch.
+                You'll get beta access when testing begins.
               </p>
 
-              {/* 50% OFF Gift messaging */}
+              {/* Early Supporter Rewards */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="bg-gradient-to-br from-bordo-900/40 to-purple-900/20 border border-bordo-500/40 rounded-2xl p-5 mb-6 max-w-md mx-auto"
+                className="bg-gradient-to-br from-bordo-900/40 to-siva-300/20 border border-bordo-500/40 rounded-2xl p-5 mb-6 max-w-md mx-auto"
               >
-                <div className="flex items-center justify-center gap-2 mb-2">
+                <div className="flex items-center justify-center gap-2 mb-4">
                   <Gift className="w-5 h-5 text-bordo-400" />
                   <h3 className="text-lg font-semibold text-white">
-                    Unlock your reward
+                    Your Early Supporter Rewards
                   </h3>
                 </div>
 
-                <p className="text-sm text-siva-200 mb-1 font-medium">
-                  Share Cineo with friends and <strong> BOTH </strong> get
-                </p>
-                <p className="text-base text-white font-bold mb-3">
-                  TWO MONTHS FREE
+                <p className="text-sm text-siva-200 mb-3 text-center">
+                  At public launch, you'll unlock:
                 </p>
 
-                <p className="text-xs font-light text-siva-400">
-                  No limit • Share as much as you want
+                <div className="bg-black/30 rounded-lg p-4 mb-3 space-y-2">
+                  <p className="text-sm text-siva-100">
+                    {" "}
+                    <strong>1 MONTH FREE</strong> Premium
+                  </p>
+                  <p className="text-sm text-siva-100">
+                    <strong>+ 50% OFF</strong> for each friend you refer
+                  </p>
+                  <p className="text-xs text-siva-300 pl-4">(up to 6 months)</p>
+                </div>
+
+                <p className="text-sm font-light text-siva-400 text-center">
+                  Start inviting now — rewards stack!
                 </p>
               </motion.div>
 
